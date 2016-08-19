@@ -1,0 +1,31 @@
+{
+   "abstract" : "Perl extension to add XPath support to XML::DOM, using XML::XPath engine",
+   "author" : [
+      "Michel Rodriguez <mirod@cpan.org>"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "ExtUtils::MakeMaker version 6.44, CPAN::Meta::Converter version 2.133380",
+   "license" : [
+      "unknown"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "XML-DOM-XPath",
+   "prereqs" : {
+      "build" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "0"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "XML::DOM" : "0",
+            "XML::XPathEngine" : "0.1"
+         }
+      }
+   },
+   "release_status" : "stable",
+   "version" : "0.14"
+}

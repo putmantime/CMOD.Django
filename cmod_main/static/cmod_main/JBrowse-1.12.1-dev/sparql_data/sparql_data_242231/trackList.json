@@ -1,0 +1,1 @@
+{"formatVersion":1,"tracks":[{"key":"Reference sequence","category":"Reference sequence","storeClass":"JBrowse/Store/Sequence/StaticChunked","urlTemplate":"seq/{refseq_dirpath}/{refseq}-","chunkSize":20000,"label":"DNA","type":"SequenceTrack"}]}

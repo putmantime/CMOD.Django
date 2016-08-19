@@ -1,0 +1,12 @@
+/Users/timputman/BioHackathon/Fresh/organism/static/organism/jbrowse2/JBrowse-1.12.1-dev/extlib/bin/gff3_from_fasta
+/Users/timputman/BioHackathon/Fresh/organism/static/organism/jbrowse2/JBrowse-1.12.1-dev/extlib/lib/perl5/Bio/GFF3/LowLevel.pm
+/Users/timputman/BioHackathon/Fresh/organism/static/organism/jbrowse2/JBrowse-1.12.1-dev/extlib/lib/perl5/Bio/GFF3/LowLevel/Parser.pm
+/Users/timputman/BioHackathon/Fresh/organism/static/organism/jbrowse2/JBrowse-1.12.1-dev/extlib/lib/perl5/Bio/GFF3/LowLevel/Parser/1_0_backcompat.pm
+/Users/timputman/BioHackathon/Fresh/organism/static/organism/jbrowse2/JBrowse-1.12.1-dev/extlib/lib/perl5/Bio/GFF3/Transform/FromFasta.pm
+/Users/timputman/BioHackathon/Fresh/organism/static/organism/jbrowse2/JBrowse-1.12.1-dev/extlib/lib/perl5/Bio/GFF3/Transform/SyncDirectives.pm
+/Users/timputman/BioHackathon/Fresh/organism/static/organism/jbrowse2/JBrowse-1.12.1-dev/extlib/man/man1/gff3_from_fasta.1
+/Users/timputman/BioHackathon/Fresh/organism/static/organism/jbrowse2/JBrowse-1.12.1-dev/extlib/man/man3/Bio::GFF3::LowLevel.3pm
+/Users/timputman/BioHackathon/Fresh/organism/static/organism/jbrowse2/JBrowse-1.12.1-dev/extlib/man/man3/Bio::GFF3::LowLevel::Parser.3pm
+/Users/timputman/BioHackathon/Fresh/organism/static/organism/jbrowse2/JBrowse-1.12.1-dev/extlib/man/man3/Bio::GFF3::LowLevel::Parser::1_0_backcompat.3pm
+/Users/timputman/BioHackathon/Fresh/organism/static/organism/jbrowse2/JBrowse-1.12.1-dev/extlib/man/man3/Bio::GFF3::Transform::FromFasta.3pm
+/Users/timputman/BioHackathon/Fresh/organism/static/organism/jbrowse2/JBrowse-1.12.1-dev/extlib/man/man3/Bio::GFF3::Transform::SyncDirectives.3pm

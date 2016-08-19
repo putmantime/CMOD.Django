@@ -1,0 +1,70 @@
+{
+   "names" : {
+      "url" : "names/",
+      "type" : "Hash"
+   },
+   "plugins" : [
+      "NeatHTMLFeatures",
+      "NeatCanvasFeatures",
+      "HideTrackLabels"
+   ],
+   "dataset_id" : "yeast",
+   "tracks" : [
+      {
+         "chunkSize" : 20000,
+         "category" : "Reference sequence",
+         "label" : "DNA",
+         "urlTemplate" : "seq/{refseq_dirpath}/{refseq}-",
+         "type" : "SequenceTrack",
+         "storeClass" : "JBrowse/Store/Sequence/StaticChunked",
+         "key" : "Reference sequence"
+      },
+      {
+         "urlTemplate" : "tracks/Genes/{refseq}/trackData.json",
+         "category" : "Genes",
+         "compress" : 0,
+         "autocomplete" : "all",
+         "style" : {
+            "arrowheadClass" : "transcript-arrowhead",
+            "subfeatureClasses" : {
+               "CDS" : "transcript-CDS"
+            },
+            "className" : "feature5"
+         },
+         "label" : "Genes",
+         "feature" : [
+            "gene"
+         ],
+         "track" : "Genes",
+         "key" : "Protein-coding genes",
+         "storeClass" : "JBrowse/Store/SeqFeature/NCList",
+         "type" : "FeatureTrack",
+         "subfeatures" : true
+      },
+      {
+         "key" : "Exonerate predictions (misconfigured for test, and with a long description)",
+         "storeClass" : "JBrowse/Store/SeqFeature/NCList",
+         "type" : "FeatureTrack",
+         "subfeatures" : true,
+         "label" : "transcript_with_no_features",
+         "feature" : [
+            "mRNA"
+         ],
+         "track" : "transcript_with_no_features",
+         "description" : 1,
+         "autocomplete" : "all",
+         "compress" : 0,
+         "style" : {
+            "subfeatureClasses" : {
+               "UTR" : "transcript-UTR",
+               "CDS" : "transcript-CDS"
+            },
+            "arrowheadClass" : "transcript-arrowhead",
+            "className" : "transcript"
+         },
+         "urlTemplate" : "tracks/transcript_with_no_features/{refseq}/trackData.json",
+         "category" : "Genes"
+      }
+   ],
+   "formatVersion" : 1
+}

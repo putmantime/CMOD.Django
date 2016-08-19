@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CMOD</title>
+    {% load static %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" type='text/css' href="{%  static 'cmod_main/css/main.css'%}"/>
+    <link rel='stylesheet' type='text/css' href="{%  static 'cmod_main/css/jquery-ui.theme.css'%}"/>
+    <link rel='stylesheet' type='text/css' href="{%  static 'cmod_main/css/jquery-ui.structure.css'%}"/>
+    <link rel='stylesheet' type='text/css' href="{%  static 'cmod_main/css/jquery-ui.css'%}"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="{%  static 'cmod_main/js/queries.js'%}"></script>
+    <script src="{%  static 'cmod_main/js/js.cookie.js'%}"></script>
+    <script src="{%  static 'cmod_main/js/landingpage.js'%}"></script>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="main-landing-page">
+        <div class="row">
+            <div class="col-md-12"><h1>Welcome to The Centralized Model Organism Database</h1></div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <div id="indexFormModule">
+                    <h4>Start typing the name of a bacteria to continue...</h4>
+
+                    <form class="main-form-div  ui-widget">
+                        <div class="form-group">
+                            <label for="indexForm"></label>
+                            <input type="text" class="form-control formborders" id="indexForm"
+                                   placeholder="e.g. Helicobacter pylori 26695" name="orgFormItem">
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6"><img id="hpylori" src="{%  static 'cmod_main/img/Hpylori2.png'%}"></div>
+            <div class="col-md-3"></div>
+        </div>
+
+    </div>
+
+</div>
+</body>
+</html>
