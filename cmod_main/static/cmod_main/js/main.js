@@ -166,12 +166,14 @@ $(document).ready(function () {
         goFormData: {},
         endpoint: "https://query.wikidata.org/sparql?format=json&query=",
         init: function (subjectQID) {
+            this.goFormData['subject'] = subjectQID;
             this.cacheDOM();
             this.goTermsAC();
             this.evidenceCodesAC();
-            //this.pmid_form();
-            this.goFormData['subject'] = subjectQID;
+            this.pmidForm();
+            this.goClassRadio();
             this.editWD();
+
 
         },
         cacheDOM: function () {
@@ -179,6 +181,7 @@ $(document).ready(function () {
             this.$goForm = this.$goTermForm.find('#goTermForm');
             this.$goEviForm = this.$goTermForm.find('#eviCodeForm');
             this.$pmidForm = this.$goTermForm.find('#pmidForm');
+            this.$radiobutton = this.$goTermForm.find('#go-radio');
             this.$editWDButton = this.$goTermForm.find('#editWDButton');
             console.log(this.$editWDButton);
         },
@@ -216,9 +219,6 @@ $(document).ready(function () {
                 },
                 select: function (event, ui) {
                     goFormAll.goFormData['goTerm'] = ui.item.qid;
-                    $('form').each(function () {
-                        this.reset()
-                    });
 
 
                 }
@@ -272,11 +272,6 @@ $(document).ready(function () {
                 },
                 select: function (event, ui) {
                     goFormAll.goFormData['evidenceCode'] = ui.item.qid;
-                    $('form').each(function () {
-                        this.reset()
-                    });
-
-
                 }
             })
                 .autocomplete("instance")._renderItem = function (ul, item) {
@@ -286,12 +281,70 @@ $(document).ready(function () {
                     .appendTo(ul);
             };
         },
+        pmidForm: function () {
+            this.$pmidForm.autocomplete({
+                delay: 900,
+                autoFocus: true,
+                minLength: 3,
+                appendTo: null,
+                source: function (request, response) {
+                    $.ajax({
+                        type: "GET",
+                        url: 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&retmode=json&id=' + request.term,
+                        datatype: 'json',
+                        success: function (data) {
+                            var data_array = [];
+                            var data_hash = {};
+                            $.each(data['result'], function (key, element) {
+                                data_hash = {
+                                    'label': element['title'],
+                                    'value': element['uid'],
+                                    'id': element['uid'],
+                                    'first_author': element['sortfirstauthor'],
+                                    'journal': element['fulljournalname'],
+                                    'year': element['pubdate']
+
+                                };
+                                data_array.push(data_hash);
+                            });
+                            response([data_array[0]]);
+
+                        }
+                    });
+                    console.log(request.term);
+                },
+                select: function (event, ui) {
+                    goFormAll.goFormData['PMID'] = ui.item.id;
+                }
+            })
+                .autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div class='main-data' style=\"border-bottom: solid black 1px\"><strong><u>" + item.label +
+                    "</u></strong><br>PMID" + item.id + "<br>" + item.first_author + "<i> et al. </i>" + item.year +
+                    "</u></strong><br>Publication:" + item.journal + "</div>")
+                    .appendTo(ul);
+            };
+
+        },
+        goClassRadio: function () {
+            this.$radiobutton.click(function () {
+                var radioValue = $("input[name='optradio']:checked").parent().text();
+                if (radioValue) {
+                    console.log(radioValue);
+                    goFormAll.goFormData['goClass'] = radioValue;
+
+                }
+            });
+
+        },
         editWD: function () {
             this.$editWDButton.on("click", function (e) {
                 e.preventDefault();
                 console.log(goFormAll.goFormData);
-
-                // the rest of your code ...
+                djangoServer.init(goFormAll.goFormData, '/wd_go_edit');
+                $('form').each(function () {
+                    this.reset()
+                });
             });
 
 
@@ -506,14 +559,13 @@ $(document).ready(function () {
             var csrftoken = this.getCookie('csrftoken');
             $.ajax({
                 type: "POST",
-                url: window.location.pathname + 'urlsuf',
+                url: window.location.pathname + urlsuf,
                 data: data,
                 dataType: 'json',
                 headers: {'X-CSRFToken': csrftoken},
                 success: function (data) {
                     console.log("success");
                     console.log(data);
-                    window.location.href = "main_page";
 
                 },
                 error: function (data) {
