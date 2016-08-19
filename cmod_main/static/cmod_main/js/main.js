@@ -1,11 +1,10 @@
-
 $(document).ready(function () {
     var currentTaxa = {
-    "Name": OrgName,
-    "Taxid": OrgTID,
-    "QID": OrgQID,
-    "RefSeq": OrgRefSeq
-};
+        "Name": OrgName,
+        "Taxid": OrgTID,
+        "QID": OrgQID,
+        "RefSeq": OrgRefSeq
+    };
 
 //////////////////////////////////////////Begin Global variables////////////////////////////////////////////////////////
 //
@@ -135,11 +134,12 @@ $(document).ready(function () {
 
                         //get GO Terms for this gene/protein
                         goData.init(this.currentProtein[1]);
-
                         //Render the data into the gene and protein boxes
                         geneData.init(this.currentGene);
                         proteinData.init(this.currentProtein);
-
+                        //initialize the goform
+                        console.log(this.currentProtein[2]);
+                        goFormAll.init(this.currentProtein[2]);
                         //focus jbrowse on selected gene
                         var gstart = this.currentGene[4] - 400;
                         var gend = this.currentGene[5] - (-400);
@@ -160,26 +160,30 @@ $(document).ready(function () {
 
     };
 
-
-//////Go form module//////
-    var goForm = {
+//////////////////////goformdev//////////////////////////
+    //////Go form module//////
+    var goFormAll = {
+        goFormData: {},
         endpoint: "https://query.wikidata.org/sparql?format=json&query=",
-        init: function () {
+        init: function (subjectQID) {
             this.cacheDOM();
-            this.goTermsAC(this.$mfForm);
-            this.goTermsAC(this.$bpForm);
-            this.goTermsAC(this.$ccForm);
+            this.goTermsAC();
+            this.evidenceCodesAC();
+            //this.pmid_form();
+            this.goFormData['subject'] = subjectQID;
+            this.editWD();
 
         },
         cacheDOM: function () {
-            this.$goTermForm = $(".main-go-form");
-            this.$mfForm = this.$goTermForm.find("#molfuncform");
-            this.$bpForm = this.$goTermForm.find("#bioprocform");
-            this.$ccForm = this.$goTermForm.find("#celcompform");
-
+            this.$goTermForm = $('#main-go-form');
+            this.$goForm = this.$goTermForm.find('#goTermForm');
+            this.$goEviForm = this.$goTermForm.find('#eviCodeForm');
+            this.$pmidForm = this.$goTermForm.find('#pmidForm');
+            this.$editWDButton = this.$goTermForm.find('#editWDButton');
+            console.log(this.$editWDButton);
         },
-        goTermsAC: function (form_element) {
-            form_element.autocomplete({
+        goTermsAC: function () {
+            this.$goForm.autocomplete({
                 delay: 900,
                 autoFocus: true,
                 minLength: 3,
@@ -187,7 +191,7 @@ $(document).ready(function () {
                 source: function (request, response) {
                     $.ajax({
                         type: "GET",
-                        url: goForm.endpoint + ["SELECT DISTINCT ?goTerm ?goTermLabel ?goID WHERE { ?goTerm wdt:P686 ?goID.",
+                        url: goFormAll.endpoint + ["SELECT DISTINCT ?goTerm ?goTermLabel ?goID WHERE { ?goTerm wdt:P686 ?goID.",
                             "SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". ?goTerm rdfs:label ?goTermLabel.}",
                             "FILTER(CONTAINS(LCASE(?goTermLabel), \"" + request.term + "\"))}"].join(" "),
                         datatype: 'json',
@@ -211,10 +215,10 @@ $(document).ready(function () {
                     //console.log(request.term);
                 },
                 select: function (event, ui) {
+                    goFormAll.goFormData['goTerm'] = ui.item.qid;
                     $('form').each(function () {
                         this.reset()
                     });
-                    //console.log(ui.item.id);
 
 
                 }
@@ -226,31 +230,8 @@ $(document).ready(function () {
                     .appendTo(ul);
             };
         },
-
-    };
-    goForm.init();
-
-
-//////Evidence Code Form Module//////
-
-    var evidenceCodeForm = {
-        endpoint: "https://query.wikidata.org/sparql?format=json&query=",
-        init: function () {
-            this.cacheDOM();
-            this.evidenceCodesAC(this.$mfForm);
-            this.evidenceCodesAC(this.$bpForm);
-            this.evidenceCodesAC(this.$ccForm);
-
-        },
-        cacheDOM: function () {
-            this.$evidenceForm = $(".main-go-form");
-            this.$mfForm = this.$evidenceForm.find("#mfecform");
-            this.$bpForm = this.$evidenceForm.find("#bpecform");
-            this.$ccForm = this.$evidenceForm.find("#ccecform");
-
-        },
-        evidenceCodesAC: function (form_element) {
-            form_element.autocomplete({
+        evidenceCodesAC: function () {
+            this.$goEviForm.autocomplete({
                 delay: 900,
                 autoFocus: true,
                 minLength: 3,
@@ -258,7 +239,7 @@ $(document).ready(function () {
                 source: function (request, response) {
                     $.ajax({
                         type: "GET",
-                        url: goForm.endpoint + [
+                        url: goFormAll.endpoint + [
                             "select distinct ?evidence_code ?evidence_codeLabel ?alias where {" +
                             "?evidence_code wdt:P31 wd:Q23173209. " +
                             "?evidence_code skos:altLabel ?alias." +
@@ -290,9 +271,11 @@ $(document).ready(function () {
                     //console.log(request.term);
                 },
                 select: function (event, ui) {
+                    goFormAll.goFormData['evidenceCode'] = ui.item.qid;
                     $('form').each(function () {
                         this.reset()
                     });
+
 
                 }
             })
@@ -302,9 +285,21 @@ $(document).ready(function () {
                     "</u></strong><br>Evidence Code: " + item.id + "<br>Wikidata: " + item.qid + "</div>")
                     .appendTo(ul);
             };
+        },
+        editWD: function () {
+            this.$editWDButton.on("click", function (e) {
+                e.preventDefault();
+                console.log(goFormAll.goFormData);
+
+                // the rest of your code ...
+            });
+
+
         }
     };
-    evidenceCodeForm.init();
+
+
+//////////////////////goformdev//////////////////////////
 
 
 //////////////////////////////////////////End form modules//////////////////////////////////////////////////////////////
@@ -503,7 +498,7 @@ $(document).ready(function () {
 
 
     var djangoServer = {
-        init: function(data, urlsuf){
+        init: function (data, urlsuf) {
             this.sendToServer(data, urlsuf)
 
         },
@@ -543,8 +538,6 @@ $(document).ready(function () {
             return cookieValue;
         }
     };
-
-
 
 
 /////////////////////////////////////////////////Begin Wikidata API/////////////////////////////////////////////////////
