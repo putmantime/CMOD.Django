@@ -97,13 +97,13 @@ def wd_credentials(request):
         creddata = json.dumps(request.POST)
 
         user_pass = json.loads(creddata)
-
-        try:
-            PBB_login.WDLogin(user_pass['userName'], user_pass['password'])
+        login = PBB_login.WDLogin(user_pass['userName'], user_pass['password'])
+        print(login.login_reply)
+        if login.login_reply['login']['result'] == 'Failed':
+            user_pass["login"] = "error"
+        else:
             user_pass["login"] = "success"
 
-        except Exception as e:
-            user_pass["login"] = "error"
 
         return HttpResponse(json.dumps(user_pass), content_type='application/json')
         # return render(request, "cmod_main/main_page.html", )
