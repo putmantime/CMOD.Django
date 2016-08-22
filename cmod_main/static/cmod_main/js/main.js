@@ -1,4 +1,5 @@
 $(document).ready(function () {
+//////////////////////////////////////////Begin Global variables////////////////////////////////////////////////////////
     var currentTaxa = {
         "Name": OrgName,
         "Taxid": OrgTID,
@@ -6,14 +7,6 @@ $(document).ready(function () {
         "RefSeq": OrgRefSeq
     };
 
-//////////////////////////////////////////Begin Global variables////////////////////////////////////////////////////////
-//
-//    var currentTaxa = {
-//        'Name': 'Chlamydia trachomatis 434/BU',
-//        'Taxid': '471472',
-//        'QID': 'Q20800254',
-//        'RefSeq': 'NC_010287.1'
-//    };
 ///////////////////////////////////////////End Global Variables/////////////////////////////////////////////////////////
 ///////////////////////////////////////////Begin form modules///////////////////////////////////////////////////////////
 //////organism selection form module//////
@@ -166,7 +159,7 @@ $(document).ready(function () {
         goFormData: {},
         endpoint: "https://query.wikidata.org/sparql?format=json&query=",
         init: function (subjectQID) {
-            this.goFormData['subject'] = subjectQID;
+            this.goFormData["subject"] = subjectQID;
             this.cacheDOM();
             this.goTermsAC();
             this.evidenceCodesAC();
@@ -218,7 +211,7 @@ $(document).ready(function () {
                     //console.log(request.term);
                 },
                 select: function (event, ui) {
-                    goFormAll.goFormData['goTerm'] = ui.item.qid;
+                    goFormAll.goFormData["goTerm"] = ui.item.qid;
 
 
                 }
@@ -271,7 +264,7 @@ $(document).ready(function () {
                     //console.log(request.term);
                 },
                 select: function (event, ui) {
-                    goFormAll.goFormData['evidenceCode'] = ui.item.qid;
+                    goFormAll.goFormData["evidenceCode"] = ui.item.qid;
                 }
             })
                 .autocomplete("instance")._renderItem = function (ul, item) {
@@ -314,7 +307,7 @@ $(document).ready(function () {
                     console.log(request.term);
                 },
                 select: function (event, ui) {
-                    goFormAll.goFormData['PMID'] = ui.item.id;
+                    goFormAll.goFormData["PMID"] = ui.item.id;
                 }
             })
                 .autocomplete("instance")._renderItem = function (ul, item) {
@@ -331,7 +324,7 @@ $(document).ready(function () {
                 var radioValue = $("input[name='optradio']:checked").parent().text();
                 if (radioValue) {
                     console.log(radioValue);
-                    goFormAll.goFormData['goClass'] = radioValue;
+                    goFormAll.goFormData["goClass"] = radioValue;
 
                 }
             });
@@ -593,101 +586,23 @@ $(document).ready(function () {
 
 
 /////////////////////////////////////////////////Begin Wikidata API/////////////////////////////////////////////////////
+    var wdLogin = {
+        init: function () {
+        },
+        cacheDOM: function () {
+            this.$loginForm = $('#main-login-form');
+            this.$userName = this.$loginForm.find('#wduserName');
+            this.$password = this.$loginForm.find('#wdPassword');
+            this.$loginButton = this.$loginButton.find('#editWDButton');
 
+        },
+        sendCredentials: function(){
+            var UN = input[name='wduserNameItem'].val();
+            var PW = input[name='wdPasswordItem'].val();
 
-//var WDAPI = {
-//    init: function (user, password) {
-//        this.server = "www.wikidata.org";
-//        this.user = user;
-//        this.password = password;
-//        this.edit_token = '';
-//        this.token_renew_period = 1800;
-//        this.getEditCredentials();
-//    },
-//    getEditCredentials: function () {
-//        //$.ajax({
-//        //    url: 'https://www.wikidata.org/w/api.php',
-//        //    //    type: 'POST',
-//        //    //    data: {
-//        //    //        action: 'query',
-//        //    //        format: 'json',
-//        //    //        meta: "tokens",
-//        //    //        type: "login"
-//        //    //    },
-//        //    data: {
-//        //        action: 'query',
-//        //        meta: 'tokens',
-//        //        format: 'json',
-//        //        type: 'login'
-//        //
-//        //        //origin: 'https://www.mediawiki.org'
-//        //    },
-//        //    xhrFields: {
-//        //        withCredentials: true
-//        //    },
-//        //    dataType: 'jsonp' // will probably use 'json' now that I'm server-side
-//        //}).done(function (data) {
-//        //    console.log(data);
-//        //});
-////'https://www.wikidata.org/w/api.php?action=query&meta=tokens&type=login&format=json'
-//    $.ajax({
-//        url: 'https://www.wikidata.org/w/api.php',
-//        type: 'POST',
-//        data: {
-//            action: 'query',
-//            format: 'json',
-//            meta: "tokens",
-//            type: "login"
-//        },
-//        xhrFields: {
-//            withCredentials: true
-//        },
-//        dataType: 'json',
-//        success: function (data) {
-//            //console.log(data);
-//            console.log("Its good");
-//            // will probably use 'json' now that I'm server-side
-//        },
-//        error: function(){
-//
-//        }
-//    });
-//    //
-//    ////api.php?action=clientlogin&username=Example&password=ExamplePassword&loginreturnurl=http://example.org/&logintoken=123ABC
-//    //$.ajax({
-//    //    url: "https://en.wikipedia.org/w/api.php",
-//    //    type: "POST",
-//    //    jsonp: "callback",
-//    //    dataType: 'jsonp',
-//    //    data: {
-//    //        action: "login",
-//    //        lgname: "MicrobeBot",
-//    //        lgpassword: "tK4CdCQv4IeU",
-//    //        format: "json"
-//    //    },
-//    //    xhrFields: {withCredentials: true},
-//    //    success: function(data,success,xhr){
-//    //        console.log(data);
-//    //        console.log("ok good");
-//    //        console.log(xhr.url);
-//    //    }
-//    //
-//    //});
-//    //$.ajax({
-//    //    type: "POST",
-//    //    url: this.url,
-//    //    datatype: 'json',
-//    //    success: function (data, status, xhr) {
-//    //        console.log(xhr);
-//    //    }
-//    //
-//    //});
-//    }
-//
-//
-//};
-//
-//WDAPI.init("MicrobeBot", "tK4CdCQv4IeU");
+        }
+
+    };
 
 
 /////////////////////////////////////////////////End Wikidata API///////////////////////////////////////////////////////
