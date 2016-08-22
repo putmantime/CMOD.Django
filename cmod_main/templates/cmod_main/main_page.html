@@ -23,11 +23,7 @@
         var OrgQID = "{{ QID }}";
         var OrgRefSeq = "{{ RefSeq }}"
     </script>
-    <script type="text/javascript">
-    $(window).load(function(){
-        $('#wdLoginModal').modal('show');
-    });
-</script>
+
 </head>
 <body>
 {#wd credentials modal#}
@@ -41,7 +37,7 @@
                 <h4 class="modal-title" id="myModalLabel">Login to Wikidata</h4>
             </div>
             <div class="modal-body">
-              <form id="main-login-form" class="ui-widget ui-front form-inline">
+                <form id="main-login-form" class="ui-widget ui-front form-inline">
                     <div class="form-group">
                         <input type="text" class="form-control"
                                id="wduserName"
@@ -79,9 +75,12 @@
                 <form id="main-go-form" class="ui-widget ui-front">
                     <div class="form-group">
                         <div id='go-radio' style="text-align: center">
-                            <label id="mfRadio" class="radio-inline"><input type="radio" name="optradio">Molecular Function</label>
-                            <label id="bpRadio" class="radio-inline"><input type="radio" name="optradio">Biological Process</label>
-                            <label id="ccRadio" class="radio-inline"><input type="radio" name="optradio">Cellular Component</label>
+                            <label id="mfRadio" class="radio-inline"><input type="radio" name="optradio">Molecular
+                                Function</label>
+                            <label id="bpRadio" class="radio-inline"><input type="radio" name="optradio">Biological
+                                Process</label>
+                            <label id="ccRadio" class="radio-inline"><input type="radio" name="optradio">Cellular
+                                Component</label>
                         </div>
                         <input id="goTermForm" type="text" class="form-control"
                                placeholder="Gene Ontology Term"
@@ -263,6 +262,8 @@
                                             data-target="#goModal">
                                         Add a Gene Ontology Term
                                     </button>
+
+
                                 </div>
 
                             </div>
@@ -277,8 +278,10 @@
         <div class="col-md-12 main-gutter-padding">
             <div class="main-footer">
                 <div style="min-height: 50px" class="main-title">
-
-
+                    <button id="wd-login-button" type="button" class="btn btn-primary" data-toggle="modal"
+                            data-target="#wdLoginModal">
+                        Login to Wikidata
+                    </button>
 
                 </div>
             </div>

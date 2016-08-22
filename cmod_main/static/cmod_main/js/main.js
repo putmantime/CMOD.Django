@@ -376,9 +376,9 @@ $(document).ready(function () {
                 'organism': taxData,
                 'thing': 'thing'
             };
-            this.$tid.html("<span><h4>NCBI Taxonomy ID:</h4>" + data['organism']['Taxid'] + "</span>");
-            this.$qid.html("<span><h4>Wikidata Item ID</h4>" + data['organism']['QID'] + "</span>");
-            this.$rsid.html("<span><h4>NCBI RefSeq ID</h4>" + data['organism']['RefSeq'] + "</span>");
+            this.$tid.html("<span><h4>NCBI Taxonomy ID:</h4>" + data['organism']['Taxid']  + "</span>");
+            this.$qid.html("<span><h4>Wikidata Item ID</h4>"  + data['organism']['QID']    + "</span>");
+            this.$rsid.html("<span><h4>NCBI RefSeq ID</h4>"   + data['organism']['RefSeq'] + "</span>");
 
         }
     };
@@ -404,15 +404,15 @@ $(document).ready(function () {
             var data = {
                 'gene': gene
             };
-
+            console.log(data.gene[1]);
 
             this.$geneD.html(
                 "<div class='main-data'> <h5>Gene Name:    </h5>     " + data.gene[0] + "</div>" +
-                "<div class='main-data'> <h5>Entrez ID:    </h5>     " + data.gene[1] + "</div>" +
-                "<div class='main-data'> <h5>Wikidata ID:  </h5>   " + data.gene[2] + "</div>" +
-                "<div class='main-data'> <h5>Locus Tag:    </h5>     " + data.gene[3] + "</div>" +
-                "<div class='main-data'> <h5>Genomic Start:</h5> " + data.gene[4] + "</div>" +
-                "<div class='main-data'> <h5>Genomic End:  </h5>   " + data.gene[5] + "</div>"
+                "<div class='main-data'> <h5>Entrez ID:    </h5> <a href='http://www.ncbi.nlm.nih.gov/gene/?term=" +  data.gene[1] + "'>" + data.gene[1] + "</a></div>" +
+                "<div class='main-data'> <h5>Wikidata ID:  </h5> <a href='https://www.wikidata.org/wiki/" + data.gene[2] + "'>" + data.gene[2] + "</a></div>" +
+                "<div class='main-data'> <h5>Locus Tag:    </h5> <a href='http://www.ncbi.nlm.nih.gov/gene/?term=" + data.gene[3] + "'>" + data.gene[3] + "</a></div>" +
+                "<div class='main-data'> <h5>Genomic Start:</h5>     " + data.gene[4] + "</div>" +
+                "<div class='main-data'> <h5>Genomic End:  </h5>     " + data.gene[5] + "</div>"
             );
 
 

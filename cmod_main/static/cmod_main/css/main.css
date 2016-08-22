@@ -262,3 +262,8 @@ html, body {
 #indexFormModule {
     margin-top: 100px
 }
+
+#wd-login-button{
+    background: whitesmoke;
+    color:#385d94;
+    }
