@@ -545,7 +545,8 @@ $(document).ready(function () {
 
     var djangoServer = {
         init: function (data, urlsuf) {
-            this.sendToServer(data, urlsuf)
+            this.sendToServer(data, urlsuf);
+            console.log("attempting to send data to server");
 
         },
         sendToServer: function (data, urlsuf) {
@@ -559,11 +560,13 @@ $(document).ready(function () {
                 success: function (data) {
                     console.log("success");
                     console.log(data);
+                    //alert("Successful interaction with the server");
 
                 },
                 error: function (data) {
                     console.log("error");
                     console.log(data);
+                    //alert("Something went wrong interacting with the server");
                 }
             });
         },
@@ -588,23 +591,40 @@ $(document).ready(function () {
 /////////////////////////////////////////////////Begin Wikidata API/////////////////////////////////////////////////////
     var wdLogin = {
         init: function () {
+            this.cacheDOM();
+            this.sendCredentials();
+
+
         },
         cacheDOM: function () {
             this.$loginForm = $('#main-login-form');
             this.$userName = this.$loginForm.find('#wduserName');
             this.$password = this.$loginForm.find('#wdPassword');
-            this.$loginButton = this.$loginButton.find('#editWDButton');
+            this.$loginButton = this.$loginForm.find('#editWDButton');
+
+
 
         },
-        sendCredentials: function(){
-            var UN = input[name='wduserNameItem'].val();
-            var PW = input[name='wdPasswordItem'].val();
+        sendCredentials: function () {
+
+            wdLogin.$loginButton.on("click", function (e) {
+                e.preventDefault();
+                var credentials = {
+                    "userName": wdLogin.$userName.val(),
+                    "password": wdLogin.$password.val()
+                };
+                djangoServer.init(credentials, '/wd_credentials');
+
+                $('form').each(function () {
+                    this.reset()
+                });
+            });
 
         }
 
     };
 
-
+wdLogin.init();
 /////////////////////////////////////////////////End Wikidata API///////////////////////////////////////////////////////
 
 

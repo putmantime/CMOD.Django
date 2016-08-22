@@ -23,11 +23,49 @@
         var OrgQID = "{{ QID }}";
         var OrgRefSeq = "{{ RefSeq }}"
     </script>
+    <script type="text/javascript">
+    $(window).load(function(){
+        $('#wdLoginModal').modal('show');
+    });
+</script>
 </head>
 <body>
+{#wd credentials modal#}
+<!-- Modal -->
+<div class="modal" id="wdLoginModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <img class="wd-logo" src="{% static 'cmod_main/img/GeneWikidata-logo-en.png' %}">
+                <h4 class="modal-title" id="myModalLabel">Login to Wikidata</h4>
+            </div>
+            <div class="modal-body">
+              <form id="main-login-form" class="ui-widget ui-front form-inline">
+                    <div class="form-group">
+                        <input type="text" class="form-control"
+                               id="wduserName"
+                               placeholder="Wikidata User Name"
+                               name="wduserNameItem">
+                        <input type="text" class="form-control"
+                               id="wdPassword"
+                               placeholder="Wikidata Password" name="wdPasswordItem">
+                        <button data-dismiss="modal" id="editWDButton"
+                                class="btn btn-primary"
+                                type="submit">
+                            Login to WD
+                        </button>
 
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+
+            </div>
+        </div>
+    </div>
+</div>
 <!--?molfunc modal form -->
-
 <!-- Modal -->
 <div class="modal" id="goModal" tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel" aria-hidden="true">
@@ -239,23 +277,8 @@
         <div class="col-md-12 main-gutter-padding">
             <div class="main-footer">
                 <div style="min-height: 50px" class="main-title">
-                    <form id="main-login-form" class="ui-widget ui-front form-inline">
-                    <div class="form-group">
-                        <input type="text" class="form-control"
-                               id="wduserName"
-                               placeholder="Wikidata User Name"
-                               name="wduserNameItem">
-                        <input type="text" class="form-control"
-                               id="wdPassword"
-                               placeholder="Wikidata Password" name="wdPasswordItem">
-                        <button id="editWDButton"
-                                class="btn btn-primary"
-                                type="submit">
-                            Login to WD
-                        </button>
 
-                    </div>
-                </form>
+
 
                 </div>
             </div>
