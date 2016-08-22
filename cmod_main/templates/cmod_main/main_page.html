@@ -89,7 +89,7 @@
                         <input type="text" class="form-control"
                                id="pmidForm"
                                placeholder="PMID" name="pmidrefFormItem">
-                        <button id="editWDButton"
+                        <button data-dismiss="modal" id="editWDButton"
                                 class="btn btn-primary main-go-buttons"
                                 type="submit">
                             Edit Wikidata Item
@@ -99,9 +99,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary"
-                        data-dismiss="modal">Close
-                </button>
+
             </div>
         </div>
     </div>
@@ -272,17 +270,21 @@
     </div>
 
     <div class="row">
-        <div class="col-md-12 main-gutter-padding">
+        <div class="main-gutter-padding">
             <div class="main-footer">
                 <div style="min-height: 50px" class="main-title">
+                    <div class="col-md-1">
                     <button id="wd-login-button" type="button" class="btn btn-primary" data-toggle="modal"
                             data-target="#wdLoginModal">
                         Login to Wikidata
                     </button>
-
+                    </div>
+                    <div class="col-md-1 main-gutter-padding"><div id="userLogin"></div></div>
+                    <div class="col-md-10 main-gutter-padding"></div>
                 </div>
             </div>
         </div>
+
     </div>
 
 </div>

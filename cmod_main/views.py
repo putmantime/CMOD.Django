@@ -30,6 +30,7 @@ def get_orgs(request):
 
 def wd_go_edit(request):
     if request.method == 'POST':
+
         # statementData = json.loads(json.dumps(request.POST))
         statementData = json.dumps(request.POST)
         request.session['go'] = statementData
@@ -39,7 +40,6 @@ def wd_go_edit(request):
             login = PBB_login.WDLogin(credentials['userName'], credentials['password'])
             print(login)
             credentials["login"] = "success"
-
             statementDict = json.loads(statementData)
             print(statementDict['subject'])
             goProp = {
@@ -68,8 +68,7 @@ def wd_go_edit(request):
             try:
                 # find the appropriate item in wd or make a new one
                 wd_item_protein = PBB_Core.WDItemEngine(wd_item_id=statementDict['subject'], domain='proteins',
-                                                        data=[goStatement],
-                                                        use_sparql=True)
+                                                        data=[goStatement], use_sparql=True, append_value=[goProp[statementDict['goClass']]])
                 print("found the item")
                 credentials["item_search"] = "success"
                 print("Found item " + wd_item_protein.get_label())
@@ -90,14 +89,22 @@ def wd_go_edit(request):
 
         return HttpResponse(json.dumps(credentials), content_type='application/json')
 
-    else:
-        return HttpResponse("Hi")
+        # return render(request, "cmod_main/main_page.html",  credentials)
 
 
 def wd_credentials(request):
     if request.method == 'POST':
         creddata = json.dumps(request.POST)
-        request.session['credentials'] = creddata
-        print(creddata)
-        print(request.session['credentials'])
-        return HttpResponse(request.session['credentials'], content_type='application/json')
+
+        user_pass = json.loads(creddata)
+
+        try:
+            PBB_login.WDLogin(user_pass['userName'], user_pass['password'])
+            user_pass["login"] = "success"
+
+        except Exception as e:
+            user_pass["login"] = "error"
+
+        return HttpResponse(json.dumps(user_pass), content_type='application/json')
+        # return render(request, "cmod_main/main_page.html", )
+
