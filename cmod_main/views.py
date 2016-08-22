@@ -32,7 +32,7 @@ def wd_go_edit(request):
         # statementData = json.loads(json.dumps(request.POST))
         statementData = json.dumps(request.POST)
         request.session['go'] = statementData
-        login = PBB_login.WDLogin("MicrobeBot", "tK4CdCQv4IeU")
+        login = PBB_login.WDLogin()
         statementDict = json.loads(statementData)
         goProp = {
             "Molecular Function": "P680",
