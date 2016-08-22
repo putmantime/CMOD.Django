@@ -11,6 +11,7 @@ html, body {
 
 .main-landing-page, .container-fluid {
     height: 100%;
+    min-height: 1000px;
 
 }
 
@@ -163,7 +164,7 @@ html, body {
 
 }
 
-.main-go-form {
+#main-go-form {
     margin-bottom: 15px;
 }
 
@@ -219,7 +220,7 @@ html, body {
 }
 
 .main-modal-div {
-    padding-left: 20px;
+    padding-left: 10px;
     padding-top: 10px;
     padding-bottom: 10px;
 }
@@ -261,3 +262,8 @@ html, body {
 #indexFormModule {
     margin-top: 100px
 }
+
+#wd-login-button{
+    background: whitesmoke;
+    color:#385d94;
+    }
