@@ -88,14 +88,15 @@ $(document).ready(function () {
         currentProtein: [],
         init: function (taxid) {
             this.cacheDOM();
-            this.geneData(taxid);
+            this.geneDataAC(taxid);
+
         },
         cacheDOM: function () {
             this.$gf = $("#geneFormModule");
             this.$input = this.$gf.find('input');
 
         },
-        geneData: function (taxid) {
+        geneDataAC: function (taxid) {
             var geneinput = this.$input;
             getGenes(taxid, function (geneTags) {
                 geneinput.autocomplete({
@@ -147,7 +148,24 @@ $(document).ready(function () {
                         "</u></strong><br>Entrez ID:" + item.id + "<br>Wikidata: " + item.gqid + "</div>")
                         .appendTo(ul);
                 };
+                var first_gene = [
+                    geneTags[0].label,
+                    geneTags[0].id,
+                    geneTags[0].gqid,
+                    geneTags[0].locustag,
+                    geneTags[0].genomicstart,
+                    geneTags[0].genomicend
+                ];
+                var first_protein = [
+                            geneTags[0].proteinLabel,
+                            geneTags[0].uniprot,
+                            geneTags[0].protein,
+                            geneTags[0].refseqProtein
 
+                        ];
+                geneData.init(first_gene);
+                proteinData.init(first_protein);
+                goData.init(first_protein[1]);
             })
         }
 
@@ -354,10 +372,10 @@ $(document).ready(function () {
                     console.log("go data success");
                     console.log(data);
                     //alert("Successful interaction with the server");
-                    if (data['write'] === "success"){
-                        alert("Wikidata item succesfully edited!  It may take a few minutes for it to show up here.")
+                    if (data['write'] === "success") {
+                        alert("Wikidata item succesfully edited!\nIt may take a few minutes for it to show up here.")
                     }
-                    else{
+                    else {
                         alert("Could not login");
                     }
 
@@ -368,7 +386,7 @@ $(document).ready(function () {
                     //alert("Something went wrong interacting with the server");
                 }
             });
-        },
+        }
     };
 
 
@@ -667,7 +685,7 @@ $(document).ready(function () {
         sendToServer: function (data, urlsuf) {
             var csrftoken = getCookie('csrftoken');
             $.ajax({
-                beforeSend: function(){
+                beforeSend: function () {
                     wdLogin.$loggedin.html("<img src=" + loader + ">");
 
                 },
@@ -679,10 +697,10 @@ $(document).ready(function () {
                 success: function (data) {
                     console.log("success");
                     console.log(data);
-                    if (data['login'] === "success"){
+                    if (data['login'] === "success") {
                         $("#userLogin").html("<h5>" + "Logged in as " + data['userName']);
                     }
-                    else{
+                    else {
 
                         $("#userLogin").html("<h5>" + "Could not log in. Please try again");
                     }
