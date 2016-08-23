@@ -644,6 +644,7 @@ $(document).ready(function () {
             this.$userName = this.$loginForm.find('#wduserName');
             this.$password = this.$loginForm.find('#wdPassword');
             this.$loginButton = this.$loginForm.find('#editWDButton');
+            this.$loggedin = $('#userLogin');
 
 
         },
@@ -666,6 +667,10 @@ $(document).ready(function () {
         sendToServer: function (data, urlsuf) {
             var csrftoken = getCookie('csrftoken');
             $.ajax({
+                beforeSend: function(){
+                    wdLogin.$loggedin.html("<img src=" + loader + ">");
+
+                },
                 type: "POST",
                 url: window.location.pathname + urlsuf,
                 data: data,
@@ -678,7 +683,8 @@ $(document).ready(function () {
                         $("#userLogin").html("<h5>" + "Logged in as " + data['userName']);
                     }
                     else{
-                        alert("Could not login");
+
+                        $("#userLogin").html("<h5>" + "Could not log in. Please try again");
                     }
 
                 },

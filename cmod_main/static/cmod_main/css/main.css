@@ -267,3 +267,8 @@ html, body {
     background: whitesmoke;
     color:#385d94;
     }
+#loginSpin{
+    background-image: url('../img/spin.gif');
+    background-position: left center;
+    background-repeat: no-repeat;
+}

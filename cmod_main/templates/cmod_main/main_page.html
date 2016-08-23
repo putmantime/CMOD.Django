@@ -21,8 +21,10 @@
         var OrgName = "{{ Name }}";
         var OrgTID = "{{ Taxid }}";
         var OrgQID = "{{ QID }}";
-        var OrgRefSeq = "{{ RefSeq }}"
+        var OrgRefSeq = "{{ RefSeq }}";
+        var loader = "{% static 'cmod_main/img/spin.gif' %}"
     </script>
+
 
 </head>
 <body>
@@ -43,7 +45,7 @@
                                id="wduserName"
                                placeholder="Wikidata User Name"
                                name="wduserNameItem">
-                        <input type="text" class="form-control"
+                        <input type="password" class="form-control"
                                id="wdPassword"
                                placeholder="Wikidata Password" name="wdPasswordItem">
                         <button data-dismiss="modal" id="editWDButton"
