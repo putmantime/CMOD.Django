@@ -193,7 +193,7 @@ html, body {
     padding: 10px
 }
 
-.goTermForm.ui-autocomplete-loading {
+#goTermForm.ui-autocomplete-loading {
     background-image: url('../img/spin.gif');
     background-position: left center;
     background-repeat: no-repeat;
@@ -267,3 +267,8 @@ html, body {
     background: whitesmoke;
     color:#385d94;
     }
+#loginSpin{
+    background-image: url('../img/spin.gif');
+    background-position: left center;
+    background-repeat: no-repeat;
+}
