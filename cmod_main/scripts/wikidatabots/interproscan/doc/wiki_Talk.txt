@@ -1,0 +1,36 @@
+Hey all, I'm part of Andrew Su's group at TSRI and we're proposing to add protein family and domain information for all proteins. This information would come from the [https://www.ebi.ac.uk/interpro/download.html InterPro Database] and will build upon the ongoing work of incorporating all genes and proteins into wikidata. Adding protein family information would allow several new use cases and would allow linking classes of proteins together across species; for example: finding all 5-hydroxytryptamine receptors (across any species), or finding all human proteins that are G-protein coupled receptors. Furthermore, protein domain information would be added, which would allow for example, finding all proteins containing an [http://www.ebi.ac.uk/interpro/entry/IPR013783 Immunoglobulin-like fold].
+
+An example of how this would look for Human HTR2A is shown in '''Figure 1'''. A new property "InterPro ID" would be required. Human HTR2A and mouse HTR2A are 'subclass of' the 5-Hydroxytryptamine 2A receptor family, which itself is a subclass of the 5-hydroxytryptamine receptor family, and so on. Both human and mouse 5HTR2A (only human shown for simplicity) contain a G protein-coupled receptor, rhodopsin-like domain which is located from residue 91-380. Is it appropriate to use genomic start and stop for this?
+
+[[File:Screenshot at 2016-06-10 11-43-51.png|thumb|right|5-hydroxytryptamine protein families and domains]]
+
+'''Links'''
+
+WikiData: 
+[https://www.wikidata.org/wiki/Q1949517 Human HTR2A]
+[https://www.wikidata.org/wiki/Q14891461 Mouse HTR2A]
+
+InterPro Families: 
+[http://www.ebi.ac.uk/interpro/entry/IPR000455 5-Hydroxytryptamine 2A receptor (IPR000455)]
+[http://www.ebi.ac.uk/interpro/entry/IPR002231 5-hydroxytryptamine receptor family (IPR002231)]
+[http://www.ebi.ac.uk/interpro/entry/IPR000276 G protein-coupled receptor, rhodopsin-like (IPR000276)]
+
+InterPro Domains: 
+[https://www.ebi.ac.uk/interpro/entry/IPR017452 GPCR, rhodopsin-like, 7TM (IPR017452)]
+
+The InterPro page for this human protein is [http://www.ebi.ac.uk/interpro/protein/P28223 here]
+
+'''New Items Added:'''
+
+Initially, we would just annotate human, and then move on to mouse and the [https://www.wikidata.org/wiki/Wikidata_talk:WikiProject_Molecular_biology#Proposal_for_bringing_microbial_genome.2C_gene.2C_and_protein_items_to_Wikidata microbial items] that [https://www.wikidata.org/wiki/User:Putmantime Putmantime] is adding. Each InterPro family/domain would be added as a new item and then referenced to its related proteins.
+
+Total number of InterPro families: 19788 (7615 of which are found in at least 1 human protein)
+
+Total number of InterPro domains: 8439 (4125 of which are found in at least 1 human protein)
+
+'''Items to be modified:'''
+
+There are 27486 human proteins in wikidata, of which 14976 have at least one InterPro Family assigned, 9828 have at least one InterPro domain (but no families), and 24804 have either. 
+
+'''Comments and suggestions welcomed.'''
+

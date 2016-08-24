@@ -1,0 +1,29 @@
+#/etc/nginx/sites-available/default
+
+server {
+	listen 80 default;
+
+	server_name ec2-x-x-x-x.amazonaws.com;
+
+	access_log  /var/log/nginx/genewiki.log;
+
+	location /static/grappelli {
+		autoindex on;
+		alias /opt/sbs-venv/local/lib/python2.7/site-packages/grappelli/static/grappelli/;
+	}
+
+	location /static {
+	  autoindex on;
+	  alias /home/ubuntu/webapps/1qbitTest/static;
+	}
+
+	location / {
+	  proxy_pass_header Server;
+	  proxy_set_header Host $http_host;
+	  proxy_redirect off;
+	  proxy_set_header X-Real-IP $remote_addr;
+	  proxy_set_header X-Scheme $scheme;
+	  proxy_pass http://localhost:8080/;
+	}
+
+}

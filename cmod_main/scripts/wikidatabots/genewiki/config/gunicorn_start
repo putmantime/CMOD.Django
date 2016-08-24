@@ -1,0 +1,31 @@
+#!/bin/bash
+#/bin/gunicorn_start
+
+NAME="genewiki_app"
+LOGFILE=/home/ubuntu/webapps/genewiki/logs/gunicorn.log
+LOGDIR=$(dirname $LOGFILE)
+DJANGO_SETTINGS_MODULE=genewiki.settings
+DJANGO_WSGI_MODULE=genewiki.wsgi
+
+DJANGODIR=/home/ubuntu/webapps/genewiki
+VENVDIR=/opt/genewiki-venv/bin/activate
+
+USER=deploy
+GROUP=deploy
+NUM_WORKERS=3
+
+echo "Starting $NAME as `whoami`"
+
+# Activate the virtual environment
+source $VENVDIR
+
+cd $DJANGODIR
+test -d $LOGDIR || mkdir -p $LOGDIR
+exec /opt/genewiki-venv/bin/gunicorn ${DJANGO_WSGI_MODULE}:application \
+--name $NAME \
+--workers $NUM_WORKERS \
+--user=$USER --group=$GROUP \
+--log-level=debug \
+--bind=0.0.0.0:8080
+--log-file=$LOGFILE
+
