@@ -1,0 +1,7 @@
+requests
+pandas
+numpy
+matplotlib
+tqdm
+SPARQLWrapper
+lxml
