@@ -1,20 +1,12 @@
-
 $(document).ready(function () {
-    var currentTaxa = {
-    "Name": OrgName,
-    "Taxid": OrgTID,
-    "QID": OrgQID,
-    "RefSeq": OrgRefSeq
-};
-
 //////////////////////////////////////////Begin Global variables////////////////////////////////////////////////////////
-//
-//    var currentTaxa = {
-//        'Name': 'Chlamydia trachomatis 434/BU',
-//        'Taxid': '471472',
-//        'QID': 'Q20800254',
-//        'RefSeq': 'NC_010287.1'
-//    };
+    var currentTaxa = {
+        "Name": OrgName,
+        "Taxid": OrgTID,
+        "QID": OrgQID,
+        "RefSeq": OrgRefSeq
+    };
+
 ///////////////////////////////////////////End Global Variables/////////////////////////////////////////////////////////
 ///////////////////////////////////////////Begin form modules///////////////////////////////////////////////////////////
 //////organism selection form module//////
@@ -96,14 +88,15 @@ $(document).ready(function () {
         currentProtein: [],
         init: function (taxid) {
             this.cacheDOM();
-            this.geneData(taxid);
+            this.geneDataAC(taxid);
+
         },
         cacheDOM: function () {
             this.$gf = $("#geneFormModule");
             this.$input = this.$gf.find('input');
 
         },
-        geneData: function (taxid) {
+        geneDataAC: function (taxid) {
             var geneinput = this.$input;
             getGenes(taxid, function (geneTags) {
                 geneinput.autocomplete({
@@ -135,11 +128,12 @@ $(document).ready(function () {
 
                         //get GO Terms for this gene/protein
                         goData.init(this.currentProtein[1]);
-
                         //Render the data into the gene and protein boxes
                         geneData.init(this.currentGene);
                         proteinData.init(this.currentProtein);
-
+                        //initialize the goform
+                        console.log(this.currentProtein[2]);
+                        goFormAll.init(this.currentProtein[2]);
                         //focus jbrowse on selected gene
                         var gstart = this.currentGene[4] - 400;
                         var gend = this.currentGene[5] - (-400);
@@ -154,32 +148,56 @@ $(document).ready(function () {
                         "</u></strong><br>Entrez ID:" + item.id + "<br>Wikidata: " + item.gqid + "</div>")
                         .appendTo(ul);
                 };
+                var first_gene = [
+                    geneTags[0].label,
+                    geneTags[0].id,
+                    geneTags[0].gqid,
+                    geneTags[0].locustag,
+                    geneTags[0].genomicstart,
+                    geneTags[0].genomicend
+                ];
+                var first_protein = [
+                            geneTags[0].proteinLabel,
+                            geneTags[0].uniprot,
+                            geneTags[0].protein,
+                            geneTags[0].refseqProtein
 
+                        ];
+                geneData.init(first_gene);
+                proteinData.init(first_protein);
+                goData.init(first_protein[1]);
             })
         }
 
     };
 
-
-//////Go form module//////
-    var goForm = {
+//////////////////////goformdev//////////////////////////
+    //////Go form module//////
+    var goFormAll = {
+        goFormData: {},
         endpoint: "https://query.wikidata.org/sparql?format=json&query=",
-        init: function () {
+        init: function (subjectQID) {
+            this.goFormData["subject"] = subjectQID;
             this.cacheDOM();
-            this.goTermsAC(this.$mfForm);
-            this.goTermsAC(this.$bpForm);
-            this.goTermsAC(this.$ccForm);
+            this.goTermsAC();
+            this.evidenceCodesAC();
+            this.pmidForm();
+            this.goClassRadio();
+            this.editWD();
+
 
         },
         cacheDOM: function () {
-            this.$goTermForm = $(".main-go-form");
-            this.$mfForm = this.$goTermForm.find("#molfuncform");
-            this.$bpForm = this.$goTermForm.find("#bioprocform");
-            this.$ccForm = this.$goTermForm.find("#celcompform");
-
+            this.$goTermForm = $('#main-go-form');
+            this.$goForm = this.$goTermForm.find('#goTermForm');
+            this.$goEviForm = this.$goTermForm.find('#eviCodeForm');
+            this.$pmidForm = this.$goTermForm.find('#pmidForm');
+            this.$radiobutton = this.$goTermForm.find('#go-radio');
+            this.$editWDButton = this.$goTermForm.find('#editWDButton');
+            console.log(this.$editWDButton);
         },
-        goTermsAC: function (form_element) {
-            form_element.autocomplete({
+        goTermsAC: function () {
+            this.$goForm.autocomplete({
                 delay: 900,
                 autoFocus: true,
                 minLength: 3,
@@ -187,7 +205,7 @@ $(document).ready(function () {
                 source: function (request, response) {
                     $.ajax({
                         type: "GET",
-                        url: goForm.endpoint + ["SELECT DISTINCT ?goTerm ?goTermLabel ?goID WHERE { ?goTerm wdt:P686 ?goID.",
+                        url: goFormAll.endpoint + ["SELECT DISTINCT ?goTerm ?goTermLabel ?goID WHERE { ?goTerm wdt:P686 ?goID.",
                             "SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". ?goTerm rdfs:label ?goTermLabel.}",
                             "FILTER(CONTAINS(LCASE(?goTermLabel), \"" + request.term + "\"))}"].join(" "),
                         datatype: 'json',
@@ -211,10 +229,7 @@ $(document).ready(function () {
                     //console.log(request.term);
                 },
                 select: function (event, ui) {
-                    $('form').each(function () {
-                        this.reset()
-                    });
-                    //console.log(ui.item.id);
+                    goFormAll.goFormData["goTerm"] = ui.item.qid;
 
 
                 }
@@ -226,31 +241,8 @@ $(document).ready(function () {
                     .appendTo(ul);
             };
         },
-
-    };
-    goForm.init();
-
-
-//////Evidence Code Form Module//////
-
-    var evidenceCodeForm = {
-        endpoint: "https://query.wikidata.org/sparql?format=json&query=",
-        init: function () {
-            this.cacheDOM();
-            this.evidenceCodesAC(this.$mfForm);
-            this.evidenceCodesAC(this.$bpForm);
-            this.evidenceCodesAC(this.$ccForm);
-
-        },
-        cacheDOM: function () {
-            this.$evidenceForm = $(".main-go-form");
-            this.$mfForm = this.$evidenceForm.find("#mfecform");
-            this.$bpForm = this.$evidenceForm.find("#bpecform");
-            this.$ccForm = this.$evidenceForm.find("#ccecform");
-
-        },
-        evidenceCodesAC: function (form_element) {
-            form_element.autocomplete({
+        evidenceCodesAC: function () {
+            this.$goEviForm.autocomplete({
                 delay: 900,
                 autoFocus: true,
                 minLength: 3,
@@ -258,7 +250,7 @@ $(document).ready(function () {
                 source: function (request, response) {
                     $.ajax({
                         type: "GET",
-                        url: goForm.endpoint + [
+                        url: goFormAll.endpoint + [
                             "select distinct ?evidence_code ?evidence_codeLabel ?alias where {" +
                             "?evidence_code wdt:P31 wd:Q23173209. " +
                             "?evidence_code skos:altLabel ?alias." +
@@ -290,10 +282,7 @@ $(document).ready(function () {
                     //console.log(request.term);
                 },
                 select: function (event, ui) {
-                    $('form').each(function () {
-                        this.reset()
-                    });
-
+                    goFormAll.goFormData["evidenceCode"] = ui.item.qid;
                 }
             })
                 .autocomplete("instance")._renderItem = function (ul, item) {
@@ -302,9 +291,106 @@ $(document).ready(function () {
                     "</u></strong><br>Evidence Code: " + item.id + "<br>Wikidata: " + item.qid + "</div>")
                     .appendTo(ul);
             };
+        },
+        pmidForm: function () {
+            this.$pmidForm.autocomplete({
+                delay: 900,
+                autoFocus: true,
+                minLength: 3,
+                appendTo: null,
+                source: function (request, response) {
+                    $.ajax({
+                        type: "GET",
+                        url: 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&retmode=json&id=' + request.term,
+                        datatype: 'json',
+                        success: function (data) {
+                            var data_array = [];
+                            var data_hash = {};
+                            $.each(data['result'], function (key, element) {
+                                data_hash = {
+                                    'label': element['title'],
+                                    'value': element['uid'],
+                                    'id': element['uid'],
+                                    'first_author': element['sortfirstauthor'],
+                                    'journal': element['fulljournalname'],
+                                    'year': element['pubdate']
+
+                                };
+                                data_array.push(data_hash);
+                            });
+                            response([data_array[0]]);
+
+                        }
+                    });
+                    console.log(request.term);
+                },
+                select: function (event, ui) {
+                    goFormAll.goFormData["PMID"] = ui.item.id;
+                }
+            })
+                .autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div class='main-data' style=\"border-bottom: solid black 1px\"><strong><u>" + item.label +
+                    "</u></strong><br>PMID" + item.id + "<br>" + item.first_author + "<i> et al. </i>" + item.year +
+                    "</u></strong><br>Publication:" + item.journal + "</div>")
+                    .appendTo(ul);
+            };
+
+        },
+        goClassRadio: function () {
+            this.$radiobutton.click(function () {
+                var radioValue = $("input[name='optradio']:checked").parent().text();
+                if (radioValue) {
+                    console.log(radioValue);
+                    goFormAll.goFormData["goClass"] = radioValue;
+
+                }
+            });
+
+        },
+        editWD: function () {
+            this.$editWDButton.on("click", function (e) {
+                e.preventDefault();
+                console.log(goFormAll.goFormData);
+                goFormAll.sendToServer(goFormAll.goFormData, '/wd_go_edit');
+                $('form').each(function () {
+                    this.reset()
+                });
+            });
+
+
+        },
+        sendToServer: function (data, urlsuf) {
+            var csrftoken = getCookie('csrftoken');
+            $.ajax({
+                type: "POST",
+                url: window.location.pathname + urlsuf,
+                data: data,
+                dataType: 'json',
+                headers: {'X-CSRFToken': csrftoken},
+                success: function (data) {
+                    console.log("go data success");
+                    console.log(data);
+                    //alert("Successful interaction with the server");
+                    if (data['write'] === "success") {
+                        alert("Wikidata item succesfully edited!\nIt may take a few minutes for it to show up here.")
+                    }
+                    else {
+                        alert("Could not login");
+                    }
+
+                },
+                error: function (data) {
+                    console.log("go data error");
+                    console.log(data);
+                    //alert("Something went wrong interacting with the server");
+                }
+            });
         }
     };
-    evidenceCodeForm.init();
+
+
+//////////////////////goformdev//////////////////////////
 
 
 //////////////////////////////////////////End form modules//////////////////////////////////////////////////////////////
@@ -363,15 +449,15 @@ $(document).ready(function () {
             var data = {
                 'gene': gene
             };
-
+            console.log(data.gene[1]);
 
             this.$geneD.html(
                 "<div class='main-data'> <h5>Gene Name:    </h5>     " + data.gene[0] + "</div>" +
-                "<div class='main-data'> <h5>Entrez ID:    </h5>     " + data.gene[1] + "</div>" +
-                "<div class='main-data'> <h5>Wikidata ID:  </h5>   " + data.gene[2] + "</div>" +
-                "<div class='main-data'> <h5>Locus Tag:    </h5>     " + data.gene[3] + "</div>" +
-                "<div class='main-data'> <h5>Genomic Start:</h5> " + data.gene[4] + "</div>" +
-                "<div class='main-data'> <h5>Genomic End:  </h5>   " + data.gene[5] + "</div>"
+                "<div class='main-data'> <h5>Entrez ID:    </h5> <a href='http://www.ncbi.nlm.nih.gov/gene/?term=" + data.gene[1] + "'>" + data.gene[1] + "</a></div>" +
+                "<div class='main-data'> <h5>Wikidata ID:  </h5> <a href='https://www.wikidata.org/wiki/" + data.gene[2] + "'>" + data.gene[2] + "</a></div>" +
+                "<div class='main-data'> <h5>Locus Tag:    </h5> <a href='http://www.ncbi.nlm.nih.gov/gene/?term=" + data.gene[3] + "'>" + data.gene[3] + "</a></div>" +
+                "<div class='main-data'> <h5>Genomic Start:</h5>     " + data.gene[4] + "</div>" +
+                "<div class='main-data'> <h5>Genomic End:  </h5>     " + data.gene[5] + "</div>"
             );
 
 
@@ -502,149 +588,135 @@ $(document).ready(function () {
 /////////////////////////////////////////////////End Jbrowse module/////////////////////////////////////////////////////
 
 
-    var djangoServer = {
-        init: function(data, urlsuf){
-            this.sendToServer(data, urlsuf)
+    //var djangoServer = {
+    //    init: function (data, urlsuf) {
+    //        this.sendToServer(data, urlsuf);
+    //        console.log("attempting to send data to server");
+    //
+    //    },
+    //    sendToServer: function (data, urlsuf) {
+    //        var csrftoken = this.getCookie('csrftoken');
+    //        $.ajax({
+    //            type: "POST",
+    //            url: window.location.pathname + urlsuf,
+    //            data: data,
+    //            dataType: 'json',
+    //            headers: {'X-CSRFToken': csrftoken},
+    //            success: function (data) {
+    //                console.log("success");
+    //                console.log(data);
+    //                //alert("Successful interaction with the server");
+    //
+    //            },
+    //            error: function (data) {
+    //                console.log("error");
+    //                console.log(data);
+    //                //alert("Something went wrong interacting with the server");
+    //            }
+    //        });
+    //    },
+    //    getCookie: function (name) {
+    //        var cookieValue = null;
+    //        if (document.cookie && document.cookie !== '') {
+    //            var cookies = document.cookie.split(';');
+    //            for (var i = 0; i < cookies.length; i++) {
+    //                var cookie = jQuery.trim(cookies[i]);
+    //                // Does this cookie string begin with the name we want?
+    //                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+    //                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+    //                    break;
+    //                }
+    //            }
+    //        }
+    //        return cookieValue;
+    //    }
+    //};
+
+
+    var getCookie = function (name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    };
+
+/////////////////////////////////////////////////Begin Wikidata API/////////////////////////////////////////////////////
+    var wdLogin = {
+        init: function () {
+            this.cacheDOM();
+            this.sendCredentials();
+
+
+        },
+        cacheDOM: function () {
+            this.$loginForm = $('#main-login-form');
+            this.$userName = this.$loginForm.find('#wduserName');
+            this.$password = this.$loginForm.find('#wdPassword');
+            this.$loginButton = this.$loginForm.find('#editWDButton');
+            this.$loggedin = $('#userLogin');
+
+
+        },
+        sendCredentials: function () {
+
+            wdLogin.$loginButton.on("click", function (e) {
+                e.preventDefault();
+                var credentials = {
+                    "userName": wdLogin.$userName.val(),
+                    "password": wdLogin.$password.val()
+                };
+                wdLogin.sendToServer(credentials, '/wd_credentials');
+
+                $('form').each(function () {
+                    this.reset()
+                });
+            });
 
         },
         sendToServer: function (data, urlsuf) {
-            var csrftoken = this.getCookie('csrftoken');
+            var csrftoken = getCookie('csrftoken');
             $.ajax({
+                beforeSend: function () {
+                    wdLogin.$loggedin.html("<img src=" + loader + ">");
+
+                },
                 type: "POST",
-                url: window.location.pathname + 'urlsuf',
+                url: window.location.pathname + urlsuf,
                 data: data,
                 dataType: 'json',
                 headers: {'X-CSRFToken': csrftoken},
                 success: function (data) {
                     console.log("success");
                     console.log(data);
-                    window.location.href = "main_page";
+                    if (data['login'] === "success") {
+                        $("#userLogin").html("<h5>" + "Logged in as " + data['userName']);
+                    }
+                    else {
+
+                        $("#userLogin").html("<h5>" + "Could not log in. Please try again");
+                    }
 
                 },
                 error: function (data) {
                     console.log("error");
                     console.log(data);
+                    //alert("Something went wrong interacting with the server");
                 }
             });
-        },
-        getCookie: function (name) {
-            var cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                var cookies = document.cookie.split(';');
-                for (var i = 0; i < cookies.length; i++) {
-                    var cookie = jQuery.trim(cookies[i]);
-                    // Does this cookie string begin with the name we want?
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
         }
+
     };
 
-
-
-
-/////////////////////////////////////////////////Begin Wikidata API/////////////////////////////////////////////////////
-
-
-//var WDAPI = {
-//    init: function (user, password) {
-//        this.server = "www.wikidata.org";
-//        this.user = user;
-//        this.password = password;
-//        this.edit_token = '';
-//        this.token_renew_period = 1800;
-//        this.getEditCredentials();
-//    },
-//    getEditCredentials: function () {
-//        //$.ajax({
-//        //    url: 'https://www.wikidata.org/w/api.php',
-//        //    //    type: 'POST',
-//        //    //    data: {
-//        //    //        action: 'query',
-//        //    //        format: 'json',
-//        //    //        meta: "tokens",
-//        //    //        type: "login"
-//        //    //    },
-//        //    data: {
-//        //        action: 'query',
-//        //        meta: 'tokens',
-//        //        format: 'json',
-//        //        type: 'login'
-//        //
-//        //        //origin: 'https://www.mediawiki.org'
-//        //    },
-//        //    xhrFields: {
-//        //        withCredentials: true
-//        //    },
-//        //    dataType: 'jsonp' // will probably use 'json' now that I'm server-side
-//        //}).done(function (data) {
-//        //    console.log(data);
-//        //});
-////'https://www.wikidata.org/w/api.php?action=query&meta=tokens&type=login&format=json'
-//    $.ajax({
-//        url: 'https://www.wikidata.org/w/api.php',
-//        type: 'POST',
-//        data: {
-//            action: 'query',
-//            format: 'json',
-//            meta: "tokens",
-//            type: "login"
-//        },
-//        xhrFields: {
-//            withCredentials: true
-//        },
-//        dataType: 'json',
-//        success: function (data) {
-//            //console.log(data);
-//            console.log("Its good");
-//            // will probably use 'json' now that I'm server-side
-//        },
-//        error: function(){
-//
-//        }
-//    });
-//    //
-//    ////api.php?action=clientlogin&username=Example&password=ExamplePassword&loginreturnurl=http://example.org/&logintoken=123ABC
-//    //$.ajax({
-//    //    url: "https://en.wikipedia.org/w/api.php",
-//    //    type: "POST",
-//    //    jsonp: "callback",
-//    //    dataType: 'jsonp',
-//    //    data: {
-//    //        action: "login",
-//    //        lgname: "MicrobeBot",
-//    //        lgpassword: "tK4CdCQv4IeU",
-//    //        format: "json"
-//    //    },
-//    //    xhrFields: {withCredentials: true},
-//    //    success: function(data,success,xhr){
-//    //        console.log(data);
-//    //        console.log("ok good");
-//    //        console.log(xhr.url);
-//    //    }
-//    //
-//    //});
-//    //$.ajax({
-//    //    type: "POST",
-//    //    url: this.url,
-//    //    datatype: 'json',
-//    //    success: function (data, status, xhr) {
-//    //        console.log(xhr);
-//    //    }
-//    //
-//    //});
-//    }
-//
-//
-//};
-//
-//WDAPI.init("MicrobeBot", "tK4CdCQv4IeU");
-
-
+    wdLogin.init();
 /////////////////////////////////////////////////End Wikidata API///////////////////////////////////////////////////////
 
 

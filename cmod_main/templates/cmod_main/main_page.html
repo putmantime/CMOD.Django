@@ -21,90 +21,77 @@
         var OrgName = "{{ Name }}";
         var OrgTID = "{{ Taxid }}";
         var OrgQID = "{{ QID }}";
-        var OrgRefSeq = "{{ RefSeq }}"
+        var OrgRefSeq = "{{ RefSeq }}";
+        var loader = "{% static 'cmod_main/img/spin.gif' %}"
     </script>
+
+
 </head>
 <body>
-
-<!--?molfunc modal form -->
-
+{#wd credentials modal#}
 <!-- Modal -->
-<div class="modal" id="mfModal" tabindex="-1" role="dialog"
+<div class="modal" id="wdLoginModal" tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <img class="wd-logo" src="{% static 'cmod_main/img/GeneWikidata-logo-en.png' %}">
-                <h4 class="modal-title" id="myModalLabel">Add a Molecular
-                    Function to this Protein</h4>
+                <h4 class="modal-title" id="myModalLabel">Login to Wikidata</h4>
             </div>
             <div class="modal-body">
-                <form class="main-go-form ui-widget ui-front">
-                    {#                    {% csrf_token %}#}
+                <form id="main-login-form" class="ui-widget ui-front form-inline">
                     <div class="form-group">
-                        <!--?<label for="molfuncform"></label>-->
-                        <input type="text" class="form-control goTermForm"
-                               id="molfuncform"
-                               placeholder="Molecular Function"
-                               name="molfuncFormItem">
-                        <!--?<label for="mfecform"></label>-->
                         <input type="text" class="form-control"
-                               id="mfecform"
-                               placeholder="GO Evidence Code"
-                               name="evidenceFormItem">
-                        <!--?<label for="molfuncrefform"></label>-->
-                        <input type="text" class="form-control"
-                               id="molfuncrefform"
-                               placeholder="PMID" name="molfuncrefFormItem">
-                        <button id="molfuncbutton"
-                                class="btn btn-primary main-go-buttons"
+                               id="wduserName"
+                               placeholder="Wikidata User Name"
+                               name="wduserNameItem">
+                        <input type="password" class="form-control"
+                               id="wdPassword"
+                               placeholder="Wikidata Password" name="wdPasswordItem">
+                        <button data-dismiss="modal" id="editWDButton"
+                                class="btn btn-primary"
                                 type="submit">
-                            Edit Wikidata Item
+                            Login to WD
                         </button>
 
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary"
-                        data-dismiss="modal">Close
-                </button>
+
             </div>
         </div>
     </div>
 </div>
-
-
-<!--?bioproc modal form-->
-
-<div class="modal" id="bpModal" tabindex="-1" role="dialog"
+<!--?molfunc modal form -->
+<!-- Modal -->
+<div class="modal" id="goModal" tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <img class="wd-logo" src="{% static 'cmod_main/img/GeneWikidata-logo-en.png' %}">
-                <h4 class="modal-title" id="myModalLabel">Add a Biological
-                    Process to this Protein</h4>
+                <h4 class="modal-title" id="myModalLabel">Add a Gene Ontology Term to this Protein</h4>
             </div>
             <div class="modal-body">
-                <form class="main-go-form ui-widget ui-front">
-                    {#                    {% csrf_token %}#}
+                <form id="main-go-form" class="ui-widget ui-front">
                     <div class="form-group">
-                        <!--?<label for="bioprocform"></label>-->
-                        <input type="text" class="form-control goTermForm"
-                               id="bioprocform"
-                               placeholder="Biological Process"
-                               name="bioprocFormItem">
-                        <!--?<label for="bpecform"></label>-->
+                        <div id='go-radio' style="text-align: center">
+                            <label id="mfRadio" class="radio-inline"><input type="radio" name="optradio">Molecular Function</label>
+                            <label id="bpRadio" class="radio-inline"><input type="radio" name="optradio">Biological Process</label>
+                            <label id="ccRadio" class="radio-inline"><input type="radio" name="optradio">Cellular Component</label>
+                        </div>
+                        <input id="goTermForm" type="text" class="form-control"
+                               placeholder="Gene Ontology Term"
+                               name="goFormItem">
                         <input type="text" class="form-control"
-                               id="bpecform"
+                               id="eviCodeForm"
                                placeholder="GO Evidence Code"
                                name="evidenceFormItem">
-                        <!--?<label for="bioprocrefform"></label>-->
                         <input type="text" class="form-control"
-                               id="bioprocrefform"
-                               placeholder="PMID" name="bioprocrefFormItem">
-                        <button id="bioprocbutton"
+                               id="pmidForm"
+                               placeholder="PMID" name="pmidrefFormItem">
+                        <button data-dismiss="modal" id="editWDButton"
                                 class="btn btn-primary main-go-buttons"
                                 type="submit">
                             Edit Wikidata Item
@@ -114,56 +101,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary"
-                        data-dismiss="modal">Close
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!--?celcomp modal form -->
-
-<div class="modal" id="ccModal" tabindex="-1" role="dialog"
-     aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <img class="wd-logo" src="{% static 'cmod_main/img/GeneWikidata-logo-en.png' %}">
-                <h4 class="modal-title" id="myModalLabel">Add a Cellular
-                    Component to this Protein</h4>
-            </div>
-            <div class="modal-body">
-                <form class="main-go-form ui-widget ui-front">
-                    {#                    {% csrf_token %}#}
-                    <div class="form-group">
-                        <!--?<label for="celcompform"></label>-->
-                        <input type="text" class="form-control goTermForm"
-                               id="celcompform"
-                               placeholder="Cellular Component"
-                               name="celcompFormItem">
-                        <!--?<label for="ccecform"></label>-->
-                        <input type="text" class="form-control"
-                               id="ccecform"
-                               placeholder="GO Evidence Code"
-                               name="evidenceFormItem">
-                        <!--?<label for="celcomprefform"></label>-->
-                        <input type="text" class="form-control"
-                               id="celcomprefform"
-                               placeholder="PMID" name="celcomprefFormItem">
-                        <button id="celcompbutton"
-                                class="btn btn-primary main-go-buttons"
-                                type="submit">
-                            Edit Wikidata Item
-                        </button>
-
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary"
-                        data-dismiss="modal">Close
-                </button>
             </div>
         </div>
     </div>
@@ -298,15 +236,6 @@
                                         <div class="col-md-4"><h5>Gene Ontology ID</h5></div>
                                     </div>
                                     <div id="molfuncdata" class="main-go-data"></div>
-                                    <div class="main-modal-div">
-
-                                        <!-- Button trigger modal -->
-                                        <button type="button" class="btn btn-primary" data-toggle="modal"
-                                                data-target="#mfModal">
-                                            Add Molecular Function
-                                        </button>
-                                    </div>
-
                                 </div>
                                 <div class="main-go-box row">
                                     <div class="main-go-boxheader">
@@ -314,15 +243,6 @@
                                         <div class="col-md-4"><h5>Gene Ontology ID</h5></div>
                                     </div>
                                     <div id="bioprocdata" class="main-go-data"></div>
-                                    <div class="main-modal-div">
-                                        <!-- Button trigger modal -->
-                                        <button type="button" class="btn btn-primary" data-toggle="modal"
-                                                data-target="#bpModal">
-                                            Add Biological Process
-                                        </button>
-
-                                        <!-- Modal -->
-                                    </div>
                                 </div>
                                 <div class="main-go-box row">
                                     <div class="main-go-boxheader">
@@ -331,19 +251,17 @@
                                     </div>
                                     <div id="celcompdata" class="main-go-data"></div>
 
+                                </div>
+                                <div class="main-modal-div">
 
                                     <!-- Button trigger modal -->
-                                    <div class="main-modal-div">
-                                        <button type="button" class="btn btn-primary" data-toggle="modal"
-                                                data-target="#ccModal">
-                                            Add Cellular Component
-                                        </button>
-                                    </div>
-                                    <!-- Modal -->
+                                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                                            data-target="#goModal">
+                                        Add a Gene Ontology Term
+                                    </button>
 
 
                                 </div>
-
 
                             </div>
                         </div>
@@ -354,13 +272,22 @@
     </div>
 
     <div class="row">
-        <div class="col-md-12 main-gutter-padding">
+        <div class="main-gutter-padding">
             <div class="main-footer">
                 <div style="min-height: 50px" class="main-title">
-
+                    <div class="col-md-1">
+                    <button id="wd-login-button" type="button" class="btn btn-primary" data-toggle="modal"
+                            data-target="#wdLoginModal">
+                        Login to Wikidata
+                    </button>
+                    </div>
+                    <div class="col-md-1 main-gutter-padding"></div>
+                    <div class="col-md-2 main-gutter-padding"><div id="userLogin"></div></div>
+                    <div class="col-md-8 main-gutter-padding"></div>
                 </div>
             </div>
         </div>
+
     </div>
 
 </div>

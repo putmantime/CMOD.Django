@@ -114,7 +114,7 @@ var getGOTerms = function (uniprot, callBackonSuccess) {
         "FILTER (LANG(?goclass_label) = \"en\")}"
 
     ].join(" ");
-    //console.log(endpoint + goQuery);
+    console.log(endpoint + goQuery);
 
     $.ajax({
         type: "GET",
