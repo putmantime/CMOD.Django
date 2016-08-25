@@ -526,7 +526,7 @@ $(document).ready(function () {
                     //console.log("mf" + element['goterm_label']['value']);
                 });
             } else {
-                mf.append(goData.goInput("No Molecular Function Data Available", "----------"));
+                mf.append(goData.goInput("No Molecular Function Data Available", "----------","----------","----------"));
             }
 
             if (goTerms['biologicalProcess'].length > 0) {
@@ -535,7 +535,7 @@ $(document).ready(function () {
                     //console.log("bp" + element['goterm_label']['value']);
                 });
             } else {
-                bp.append(goData.goInput("No Biological Process Data Available", "----------"));
+                bp.append(goData.goInput("No Biological Process Data Available", "----------","----------","----------"));
             }
             if (goTerms['cellularComponent'].length > 0) {
                 $.each(goTerms['cellularComponent'], function (key, element) {
@@ -556,6 +556,9 @@ $(document).ready(function () {
                 "<button type='button' class='main-button-ref btn btn-primary' ><h6>" + "+" + "</h6>" + "</button></div>" +
                 "</div>" +
                 "</div>";
+        },
+        goRefModal: function(){
+
         }
     };
 
