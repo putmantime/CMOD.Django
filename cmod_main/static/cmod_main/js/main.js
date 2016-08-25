@@ -166,6 +166,7 @@ $(document).ready(function () {
                 ];
                 geneData.init(first_gene);
                 proteinData.init(first_protein);
+                interProData.init(first_protein[1]);
                 goData.init(first_protein[1]);
             })
         }
@@ -502,7 +503,7 @@ $(document).ready(function () {
         goTermData: function (uniprot) {
 
             getGOTerms(uniprot, function (goTerms) {
-                //console.log(goTerms);
+                console.log(goTerms);
                 goData.render(goTerms);
             });
 
@@ -521,15 +522,16 @@ $(document).ready(function () {
             var cc = this.$cc;
             if (goTerms['molecularFunction'].length > 0) {
                 $.each(goTerms['molecularFunction'], function (key, element) {
-                    mf.append(goData.goInput(element['goterm_label']['value'], element['goID']['value']));
+                    mf.append(goData.goInput(element['gotermValueLabel']['value'], element['goID']['value'], element['determination']['value'], element['determinationLabel']['value']));
                     //console.log("mf" + element['goterm_label']['value']);
                 });
             } else {
                 mf.append(goData.goInput("No Molecular Function Data Available", "----------"));
             }
+
             if (goTerms['biologicalProcess'].length > 0) {
                 $.each(goTerms['biologicalProcess'], function (key, element) {
-                    bp.append(goData.goInput(element['goterm_label']['value'], element['goID']['value']));
+                    bp.append(goData.goInput(element['gotermValueLabel']['value'], element['goID']['value'], element['determination']['value'], element['determinationLabel']['value']));
                     //console.log("bp" + element['goterm_label']['value']);
                 });
             } else {
@@ -537,20 +539,23 @@ $(document).ready(function () {
             }
             if (goTerms['cellularComponent'].length > 0) {
                 $.each(goTerms['cellularComponent'], function (key, element) {
-                    cc.append(goData.goInput(element['goterm_label']['value'], element['goID']['value']));
+                    cc.append(goData.goInput(element['gotermValueLabel']['value'], element['goID']['value'], element['determination']['value'], element['determinationLabel']['value']));
                     //console.log("cc" + element['goterm_label']['value']);
                 });
-            } else{
-                cc.append(goData.goInput("No Cellular Component Data Available", "----------"));
+            } else {
+                cc.append(goData.goInput("No Cellular Component Data Available", "----------","----------","----------" ));
             }
         },
-        goInput: function (golable, goid) {
-            return "<div class=\"row main-dataul\"><div class=\"col-md-8\"><h5>" +
-                golable + "</h5></div>" +
-                "<div class=\"col-md-4\">" +
-                "<a target=\"_blank\" href=http://amigo.geneontology.org/amigo/term/" + goid + "><h5>" +
-                goid + "</h5></a>" +
-                "</div></div>";
+        goInput: function (golable, goid, evi_url, evi_label) {
+            return "<div class=\"row main-dataul\"><div class=\"col-md-5\"><h5>" + golable + "</h5></div>" +
+                "<div class=\"col-md-3\">" +
+                "<a target=\"_blank\" href=http://amigo.geneontology.org/amigo/term/" + goid + "><h5>" + goid + "</h5></a>" + "</div>" +
+                "<div class=\"col-md-3\">" +
+                "<a target=\"_blank\" href=" + evi_url  + "><h5>"  + evi_label + "</h5></a>" + "</div>" +
+                "<div id='main-ref-button'class=\"col-md-1\">" +
+                "<button type='button' class='main-button-ref btn btn-primary' ><h6>" + "+" + "</h6>" + "</button></div>" +
+                "</div>" +
+                "</div>";
         }
     };
 
@@ -563,6 +568,7 @@ $(document).ready(function () {
         },
         interProtData: function (uniprot) {
             getInterPro(uniprot, function (ipDomains) {
+                console.log(ipDomains);
                 interProData.render(ipDomains);
             });
 
@@ -590,12 +596,12 @@ $(document).ready(function () {
             }
         },
         ipInput: function (iplable, ipid) {
-            return "<div class=\"row main-dataul\"><div class=\"col-md-8\"><h5>" +
+            return "<div class=\"row main-dataul\"><div class=\"col-md-5\"><h5>" +
                 iplable + "</h5></div>" +
-                "<div class=\"col-md-4\">" +
-                "<a target=\"_blank\" href=http://amigo.geneontology.org/amigo/term/" + ipid + "><h5>" +
-                ipid + "</h5></a>" +
-                "</div></div>";
+                "<div class=\"col-md-3\"><h5>" + ipid + "</h5></a></div>" +
+                "<div class=\"col-md-3\"><h5></h5></a></div>" +
+                "<div class=\"col-md-1\"> <button type='button' class='main-button-ref btn btn-primary' ><h6>" + "+" + "</h6>" + "</button></div>" +
+                "</div>";
         }
     };
 ///////////////////////////////////////End data rendering modules///////////////////////////////////////////////////////
@@ -749,11 +755,11 @@ $(document).ready(function () {
                     console.log("success");
                     //console.log(data);
                     if (data['login'] === "success") {
-                        $("#userLogin").html("<h5>" + "Logged in as " + data['userName']);
+                        $("#userLogin").html("<h5>" + "Logged in as " + data['userName'] + "</h5>");
                     }
                     else {
 
-                        $("#userLogin").html("<h5>" + "Could not log in. Please try again");
+                        $("#userLogin").html("<h5>Could not log in. Please try again</h5>");
                     }
 
                 },

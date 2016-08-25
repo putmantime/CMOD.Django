@@ -80,7 +80,7 @@ def wd_go_edit(request):
                 pprint.pprint(e)
 
         except Exception as e:
-            print("failed to login ")
+            print("Wikidata edit failed")
             credentials["login"] = "error"
             credentials["item_search"] = "error"
             credentials["write"] = "error"

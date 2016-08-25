@@ -99,19 +99,15 @@ var getGenes = function (taxid, callbackOnSuccess) {
 var getGOTerms = function (uniprot, callBackonSuccess) {
     var goTerms = {};
     var goQuery = [
-        "SELECT distinct ?pot_go ?goterm_label ?goID ?goclass ?goclass_label WHERE {",
-        "?protein wdt:P352",
+        "SELECT ?protein ?proteinLabel ?goterm  ?reference_stated_inLabel ?reference_retrievedLabel ?determination " +
+        "?determinationLabel ?gotermValue ?gotermValueLabel ?goclass ?goclassLabel ?goID WHERE { ?protein wdt:P352",
         "\"" + uniprot + "\".",
-        "{?protein wdt:P680 ?pot_go}",
-        "UNION {?protein wdt:P681 ?pot_go}",
-        "UNION {?protein wdt:P682 ?pot_go} .",
-        "?pot_go wdt:P279* ?goclass. ",
-        "?pot_go rdfs:label ?goterm_label.",
-        "?pot_go wdt:P686 ?goID.",
-        "FILTER (LANG(?goterm_label) = \"en\")",
-        "FILTER ( ?goclass = wd:Q2996394 || ?goclass = wd:Q5058355 || ?goclass = wd:Q14860489)",
-        "?goclass rdfs:label ?goclass_label.",
-        "FILTER (LANG(?goclass_label) = \"en\")}"
+        "{?protein p:P680 ?goterm} UNION {?protein p:P681 ?goterm} UNION {?protein p:P682 ?goterm}.  " +
+        "?goterm pq:P459 ?determination .  ?goterm prov:wasDerivedFrom/pr:P248 ?reference_stated_in . " +
+        "?goterm prov:wasDerivedFrom/pr:P813 ?reference_retrieved . " +
+        "{?goterm ps:P680 ?gotermValue} UNION {?goterm ps:P681 ?gotermValue} UNION {?goterm ps:P682 ?gotermValue}.  " +
+        "?gotermValue wdt:P279* ?goclass; wdt:P686 ?goID. FILTER ( ?goclass = wd:Q2996394 || ?goclass = wd:Q5058355 || ?goclass = wd:Q14860489) " +
+        "SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\" .}}"
 
     ].join(" ");
     //console.log(endpoint + goQuery);
@@ -161,10 +157,10 @@ var getInterPro = function (uniprot, callBackonSuccess) {
         "\"" + uniprot + "\";",
         "wdt:P527 ?interPro. " +
         "?interPro wdt:P279 wd:Q898273;" +
-        "wdt:P2926 ?ipID."+
+        "wdt:P2926 ?ipID." +
         "?interPro rdfs:label ?interPro_label filter (lang(?interPro_label) = \"en\") .}"
     ].join(" ");
-    console.log(endpoint + ipQuery);
+    //console.log(endpoint + ipQuery);
 
     $.ajax({
         type: "GET",

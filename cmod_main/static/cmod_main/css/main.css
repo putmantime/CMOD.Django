@@ -276,3 +276,19 @@ html, body {
     background-position: left center;
     background-repeat: no-repeat;
 }
+
+#main-ref-button{
+    padding:5px;
+}
+
+.main-button-ref {
+    border: solid #385d94 1px;
+    border-radius: 5px;
+    max-height:20px;
+    max-width: 20px;
+    background: whitesmoke;
+    color:#385d94;
+    text-align: center;
+    padding:5px;
+    margin-left:25px;
+}

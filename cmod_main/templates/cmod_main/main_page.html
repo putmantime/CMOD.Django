@@ -26,9 +26,11 @@
     </script>
 
 
+
 </head>
 <body>
 {#wd credentials modal#}
+{#dialog#}
 <!-- Modal -->
 <div class="modal" id="wdLoginModal" tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel" aria-hidden="true">
@@ -235,8 +237,10 @@
                             <div id="interProBoxes">
                                 <div class="main-go-box row">
                                     <div class="main-go-boxheader">
-                                        <div class="col-md-8"><h5>InterPro Domain</h5></div>
-                                        <div class="col-md-4"><h5>InterPro ID</h5></div>
+                                        <div class="col-md-5"><h5>InterPro Domain</h5></div>
+                                        <div class="col-md-3"><h5>InterPro ID</h5></div>
+                                         <div class="col-md-3"><h5></h5></div>
+                                        <div class="col-md-1"><h5>Reference</h5></div>
                                     </div>
                                     <div id="interpordata" class="main-go-data"></div>
                                 </div>
@@ -244,22 +248,28 @@
                             <div id="goBoxes">
                                 <div class="main-go-box row">
                                     <div class="main-go-boxheader">
-                                        <div class="col-md-8"><h5>Molecular Function</h5></div>
-                                        <div class="col-md-4"><h5>Gene Ontology ID</h5></div>
+                                        <div class="col-md-5"><h5>Molecular Function</h5></div>
+                                        <div class="col-md-3"><h5>Gene Ontology ID</h5></div>
+                                        <div class="col-md-3"><h5>Evidence Code</h5></div>
+                                        <div class="col-md-1"><h5>Reference</h5></div>
                                     </div>
                                     <div id="molfuncdata" class="main-go-data"></div>
                                 </div>
                                 <div class="main-go-box row">
                                     <div class="main-go-boxheader">
-                                        <div class="col-md-8"><h5>Biological Process</h5></div>
-                                        <div class="col-md-4"><h5>Gene Ontology ID</h5></div>
+                                        <div class="col-md-5"><h5>Biological Process</h5></div>
+                                        <div class="col-md-3"><h5>Gene Ontology ID</h5></div>
+                                        <div class="col-md-3"><h5>Evidence Code</h5></div>
+                                        <div class="col-md-1"><h5>Reference</h5></div>
                                     </div>
                                     <div id="bioprocdata" class="main-go-data"></div>
                                 </div>
                                 <div class="main-go-box row">
                                     <div class="main-go-boxheader">
-                                        <div class="col-md-8"><h5>Cellular Component</h5></div>
-                                        <div class="col-md-4"><h5>Gene Ontology ID</h5></div>
+                                        <div class="col-md-5"><h5>Cellular Component</h5></div>
+                                        <div class="col-md-3"><h5>Gene Ontology ID</h5></div>
+                                        <div class="col-md-3"><h5>Evidence Code</h5></div>
+                                        <div class="col-md-1"><h5>Reference</h5></div>
                                     </div>
                                     <div id="celcompdata" class="main-go-data"></div>
 
