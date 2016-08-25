@@ -62,6 +62,7 @@ $(document).ready(function () {
         },
         sendToServer: function (data) {
             var csrftoken = this.getCookie('csrftoken');
+
             $.ajax({
                 type: "POST",
                 url: window.location.pathname + 'get_orgs', // + 'orginput',

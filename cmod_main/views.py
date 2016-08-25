@@ -22,6 +22,7 @@ def main_page(request):
 def get_orgs(request):
     if request.method == 'POST':
         data = json.dumps(request.POST)
+        print(request.META)
         request.session['org'] = data
         return HttpResponse(request.session['org'], content_type='application/json')
     else:
