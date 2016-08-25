@@ -158,12 +158,12 @@ $(document).ready(function () {
                     geneTags[0].genomicend
                 ];
                 var first_protein = [
-                            geneTags[0].proteinLabel,
-                            geneTags[0].uniprot,
-                            geneTags[0].protein,
-                            geneTags[0].refseqProtein
+                    geneTags[0].proteinLabel,
+                    geneTags[0].uniprot,
+                    geneTags[0].protein,
+                    geneTags[0].refseqProtein
 
-                        ];
+                ];
                 geneData.init(first_gene);
                 proteinData.init(first_protein);
                 goData.init(first_protein[1]);
@@ -519,19 +519,30 @@ $(document).ready(function () {
             var mf = this.$mf;
             var bp = this.$bp;
             var cc = this.$cc;
-            $.each(goTerms['molecularFunction'], function (key, element) {
-                mf.append(goData.goInput(element['goterm_label']['value'], element['goID']['value']));
-                //console.log("mf" + element['goterm_label']['value']);
-            });
-            $.each(goTerms['biologicalProcess'], function (key, element) {
-                bp.append(goData.goInput(element['goterm_label']['value'], element['goID']['value']));
-                //console.log("bp" + element['goterm_label']['value']);
-            });
-            $.each(goTerms['cellularComponent'], function (key, element) {
-                cc.append(goData.goInput(element['goterm_label']['value'], element['goID']['value']));
-                //console.log("cc" + element['goterm_label']['value']);
-            });
-
+            if (goTerms['molecularFunction'].length > 0) {
+                $.each(goTerms['molecularFunction'], function (key, element) {
+                    mf.append(goData.goInput(element['goterm_label']['value'], element['goID']['value']));
+                    //console.log("mf" + element['goterm_label']['value']);
+                });
+            } else {
+                mf.append(goData.goInput("No Molecular Function Data Available", "----------"));
+            }
+            if (goTerms['biologicalProcess'].length > 0) {
+                $.each(goTerms['biologicalProcess'], function (key, element) {
+                    bp.append(goData.goInput(element['goterm_label']['value'], element['goID']['value']));
+                    //console.log("bp" + element['goterm_label']['value']);
+                });
+            } else {
+                bp.append(goData.goInput("No Biological Process Data Available", "----------"));
+            }
+            if (goTerms['cellularComponent'].length > 0) {
+                $.each(goTerms['cellularComponent'], function (key, element) {
+                    cc.append(goData.goInput(element['goterm_label']['value'], element['goID']['value']));
+                    //console.log("cc" + element['goterm_label']['value']);
+                });
+            } else{
+                cc.append(goData.goInput("No Cellular Component Data Available", "----------"));
+            }
         },
         goInput: function (golable, goid) {
             return "<div class=\"row main-dataul\"><div class=\"col-md-8\"><h5>" +
@@ -543,7 +554,7 @@ $(document).ready(function () {
         }
     };
 
-        var interProData = {
+    var interProData = {
         init: function (uniprot) {
             console.log("interpro init" + uniprot);
             this.cacheDOM();
@@ -562,15 +573,21 @@ $(document).ready(function () {
 
         },
         render: function (ipDomains) {
-            console.log(ipDomains['InterPro']);
             var ipD = this.$ipData;
-            $.each(ipDomains['InterPro'], function (key, element) {
-                console.log(element);
-                console.log(element['interPro_label']['value']);
+            if (ipDomains['InterPro'].length > 0) {
+                console.log(ipDomains['InterPro']);
+                console.log("its alive");
 
-                ipD.append(interProData.ipInput(element['interPro_label']['value'], element['ipID']['value']));
-            });
+                $.each(ipDomains['InterPro'], function (key, element) {
+                    console.log(element);
+                    console.log(element['interPro_label']['value']);
 
+                    ipD.append(interProData.ipInput(element['interPro_label']['value'], element['ipID']['value']));
+                });
+            }
+            else {
+                ipD.append(interProData.ipInput("No InterPro Domain Data Available", '---------'));
+            }
         },
         ipInput: function (iplable, ipid) {
             return "<div class=\"row main-dataul\"><div class=\"col-md-8\"><h5>" +
