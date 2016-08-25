@@ -77,9 +77,12 @@
                 <form id="main-go-form" class="ui-widget ui-front">
                     <div class="form-group">
                         <div id='go-radio' style="text-align: center">
-                            <label id="mfRadio" class="radio-inline"><input type="radio" name="optradio">Molecular Function</label>
-                            <label id="bpRadio" class="radio-inline"><input type="radio" name="optradio">Biological Process</label>
-                            <label id="ccRadio" class="radio-inline"><input type="radio" name="optradio">Cellular Component</label>
+                            <label id="mfRadio" class="radio-inline"><input type="radio" name="optradio">Molecular
+                                Function</label>
+                            <label id="bpRadio" class="radio-inline"><input type="radio" name="optradio">Biological
+                                Process</label>
+                            <label id="ccRadio" class="radio-inline"><input type="radio" name="optradio">Cellular
+                                Component</label>
                         </div>
                         <input id="goTermForm" type="text" class="form-control"
                                placeholder="Gene Ontology Term"
@@ -229,6 +232,15 @@
                     <div class="col-md-12">
                         <div id="protDataBox" class="main-data-box">
                             <div id="protData"></div>
+                            <div id="interProBoxes">
+                                <div class="main-go-box row">
+                                    <div class="main-go-boxheader">
+                                        <div class="col-md-8"><h5>InterPro Domain</h5></div>
+                                        <div class="col-md-4"><h5>InterPro ID</h5></div>
+                                    </div>
+                                    <div id="interpordata" class="main-go-data"></div>
+                                </div>
+                            </div>
                             <div id="goBoxes">
                                 <div class="main-go-box row">
                                     <div class="main-go-boxheader">
@@ -276,13 +288,15 @@
             <div class="main-footer">
                 <div style="min-height: 50px" class="main-title">
                     <div class="col-md-1">
-                    <button id="wd-login-button" type="button" class="btn btn-primary" data-toggle="modal"
-                            data-target="#wdLoginModal">
-                        Login to Wikidata
-                    </button>
+                        <button id="wd-login-button" type="button" class="btn btn-primary" data-toggle="modal"
+                                data-target="#wdLoginModal">
+                            Login to Wikidata
+                        </button>
                     </div>
                     <div class="col-md-1 main-gutter-padding"></div>
-                    <div class="col-md-2 main-gutter-padding"><div id="userLogin"></div></div>
+                    <div class="col-md-2 main-gutter-padding">
+                        <div id="userLogin"></div>
+                    </div>
                     <div class="col-md-8 main-gutter-padding"></div>
                 </div>
             </div>

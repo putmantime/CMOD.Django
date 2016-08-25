@@ -193,6 +193,10 @@ html, body {
     padding: 10px
 }
 
+#interProBoxes{
+    padding: 10px;
+}
+
 #goTermForm.ui-autocomplete-loading {
     background-image: url('../img/spin.gif');
     background-position: left center;

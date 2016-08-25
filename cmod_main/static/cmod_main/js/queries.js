@@ -114,7 +114,7 @@ var getGOTerms = function (uniprot, callBackonSuccess) {
         "FILTER (LANG(?goclass_label) = \"en\")}"
 
     ].join(" ");
-    console.log(endpoint + goQuery);
+    //console.log(endpoint + goQuery);
 
     $.ajax({
         type: "GET",
@@ -153,12 +153,46 @@ var getGOTerms = function (uniprot, callBackonSuccess) {
 };
 
 
+var getInterPro = function (uniprot, callBackonSuccess) {
+    var ipDomains = {};
+    var ipQuery = [
+        "SELECT distinct ?protein ?interPro ?interPro_label ?ipID WHERE {" +
+        "?protein wdt:P352 ",
+        "\"" + uniprot + "\";",
+        "wdt:P527 ?interPro. " +
+        "?interPro wdt:P279 wd:Q898273;" +
+        "wdt:P2926 ?ipID."+
+        "?interPro rdfs:label ?interPro_label filter (lang(?interPro_label) = \"en\") .}"
+    ].join(" ");
+    console.log(endpoint + ipQuery);
+
+    $.ajax({
+        type: "GET",
+        url: endpoint + ipQuery,
+        dataType: 'json',
+        success: function (data) {
+            //console.log(data);
+            var ipD = [];
+            $.each(data['results']['bindings'], function (key, element) {
+                ipD.push(element);
+
+            });
+            ipDomains['InterPro'] = ipD;
+
+            //console.log(bp);
+            callBackonSuccess(ipDomains);
+        }
+    });
+
+};
+
+
 var getAllGoTerms = {
-    init: function(input){
-    this.queryAllGoTerms(input)
-},
-    queryAllGoTerms: function(){
-           return  ["SELECT DISTINCT ?goTerm ?goTermLabel ?goID where { ?goTerm wdt:P686 ?goID.",
+    init: function (input) {
+        this.queryAllGoTerms(input)
+    },
+    queryAllGoTerms: function () {
+        return ["SELECT DISTINCT ?goTerm ?goTermLabel ?goID where { ?goTerm wdt:P686 ?goID.",
             "SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". ?goTerm rdfs:label ?goTermLabel.}",
             "FILTER(CONTAINS(LCASE(?goTermLabel), \"" + input + "\"))}"].join(" ");
     }

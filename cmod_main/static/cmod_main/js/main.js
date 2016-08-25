@@ -128,11 +128,12 @@ $(document).ready(function () {
 
                         //get GO Terms for this gene/protein
                         goData.init(this.currentProtein[1]);
+                        interProData.init(this.currentProtein[1]);
                         //Render the data into the gene and protein boxes
                         geneData.init(this.currentGene);
                         proteinData.init(this.currentProtein);
                         //initialize the goform
-                        console.log(this.currentProtein[2]);
+                        //console.log(this.currentProtein[2]);
                         goFormAll.init(this.currentProtein[2]);
                         //focus jbrowse on selected gene
                         var gstart = this.currentGene[4] - 400;
@@ -194,7 +195,6 @@ $(document).ready(function () {
             this.$pmidForm = this.$goTermForm.find('#pmidForm');
             this.$radiobutton = this.$goTermForm.find('#go-radio');
             this.$editWDButton = this.$goTermForm.find('#editWDButton');
-            console.log(this.$editWDButton);
         },
         goTermsAC: function () {
             this.$goForm.autocomplete({
@@ -226,7 +226,6 @@ $(document).ready(function () {
                             response(data_array);
                         }
                     });
-                    //console.log(request.term);
                 },
                 select: function (event, ui) {
                     goFormAll.goFormData["goTerm"] = ui.item.qid;
@@ -279,7 +278,6 @@ $(document).ready(function () {
                             response(data_array);
                         }
                     });
-                    //console.log(request.term);
                 },
                 select: function (event, ui) {
                     goFormAll.goFormData["evidenceCode"] = ui.item.qid;
@@ -322,7 +320,6 @@ $(document).ready(function () {
 
                         }
                     });
-                    console.log(request.term);
                 },
                 select: function (event, ui) {
                     goFormAll.goFormData["PMID"] = ui.item.id;
@@ -341,7 +338,6 @@ $(document).ready(function () {
             this.$radiobutton.click(function () {
                 var radioValue = $("input[name='optradio']:checked").parent().text();
                 if (radioValue) {
-                    console.log(radioValue);
                     goFormAll.goFormData["goClass"] = radioValue;
 
                 }
@@ -351,7 +347,6 @@ $(document).ready(function () {
         editWD: function () {
             this.$editWDButton.on("click", function (e) {
                 e.preventDefault();
-                console.log(goFormAll.goFormData);
                 goFormAll.sendToServer(goFormAll.goFormData, '/wd_go_edit');
                 $('form').each(function () {
                     this.reset()
@@ -370,7 +365,7 @@ $(document).ready(function () {
                 headers: {'X-CSRFToken': csrftoken},
                 success: function (data) {
                     console.log("go data success");
-                    console.log(data);
+                    //console.log(data);
                     //alert("Successful interaction with the server");
                     if (data['write'] === "success") {
                         alert("Wikidata item succesfully edited!\nIt may take a few minutes for it to show up here.")
@@ -382,7 +377,7 @@ $(document).ready(function () {
                 },
                 error: function (data) {
                     console.log("go data error");
-                    console.log(data);
+                    //console.log(data);
                     //alert("Something went wrong interacting with the server");
                 }
             });
@@ -449,7 +444,7 @@ $(document).ready(function () {
             var data = {
                 'gene': gene
             };
-            console.log(data.gene[1]);
+            //console.log(data.gene[1]);
 
             this.$geneD.html(
                 "<div class='main-data'> <h5>Gene Name:    </h5>     " + data.gene[0] + "</div>" +
@@ -547,6 +542,45 @@ $(document).ready(function () {
                 "</div></div>";
         }
     };
+
+        var interProData = {
+        init: function (uniprot) {
+            console.log("interpro init" + uniprot);
+            this.cacheDOM();
+            this.interProtData(uniprot);
+
+        },
+        interProtData: function (uniprot) {
+            getInterPro(uniprot, function (ipDomains) {
+                interProData.render(ipDomains);
+            });
+
+        },
+        cacheDOM: function () {
+            this.$ip = $('#interProBoxes');
+            this.$ipData = this.$ip.find('#interpordata');
+
+        },
+        render: function (ipDomains) {
+            console.log(ipDomains['InterPro']);
+            var ipD = this.$ipData;
+            $.each(ipDomains['InterPro'], function (key, element) {
+                console.log(element);
+                console.log(element['interPro_label']['value']);
+
+                ipD.append(interProData.ipInput(element['interPro_label']['value'], element['ipID']['value']));
+            });
+
+        },
+        ipInput: function (iplable, ipid) {
+            return "<div class=\"row main-dataul\"><div class=\"col-md-8\"><h5>" +
+                iplable + "</h5></div>" +
+                "<div class=\"col-md-4\">" +
+                "<a target=\"_blank\" href=http://amigo.geneontology.org/amigo/term/" + ipid + "><h5>" +
+                ipid + "</h5></a>" +
+                "</div></div>";
+        }
+    };
 ///////////////////////////////////////End data rendering modules///////////////////////////////////////////////////////
 
 
@@ -578,7 +612,7 @@ $(document).ready(function () {
             };
             this.$browser.html("<iframe src=\"" + data.url + "\"><iframe>");
             this.$name.html(name);
-            console.log(data.url);
+            //console.log(data.url);
 
 
         }
@@ -696,7 +730,7 @@ $(document).ready(function () {
                 headers: {'X-CSRFToken': csrftoken},
                 success: function (data) {
                     console.log("success");
-                    console.log(data);
+                    //console.log(data);
                     if (data['login'] === "success") {
                         $("#userLogin").html("<h5>" + "Logged in as " + data['userName']);
                     }
@@ -708,7 +742,7 @@ $(document).ready(function () {
                 },
                 error: function (data) {
                     console.log("error");
-                    console.log(data);
+                    //console.log(data);
                     //alert("Something went wrong interacting with the server");
                 }
             });
