@@ -7,6 +7,7 @@ $(document).ready(function () {
         "RefSeq": OrgRefSeq
     };
 
+
 ///////////////////////////////////////////End Global Variables/////////////////////////////////////////////////////////
 ///////////////////////////////////////////Begin form modules///////////////////////////////////////////////////////////
 //////organism selection form module//////
@@ -503,7 +504,7 @@ $(document).ready(function () {
         goTermData: function (uniprot) {
 
             getGOTerms(uniprot, function (goTerms) {
-                console.log(goTerms);
+                //console.log(goTerms);
                 goData.render(goTerms);
             });
 
@@ -523,27 +524,29 @@ $(document).ready(function () {
             if (goTerms['molecularFunction'].length > 0) {
                 $.each(goTerms['molecularFunction'], function (key, element) {
                     mf.append(goData.goInput(element['gotermValueLabel']['value'], element['goID']['value'], element['determination']['value'], element['determinationLabel']['value']));
-                    //console.log("mf" + element['goterm_label']['value']);
+                    //console.log(mf);
+                    goData.goRefModal(mf, element['reference_stated_inLabel']['value'], element['reference_retrievedLabel']['value']);
                 });
             } else {
-                mf.append(goData.goInput("No Molecular Function Data Available", "----------","----------","----------"));
+                mf.append(goData.goInput("No Molecular Function Data Available", "----------", "----------", "----------"));
             }
 
             if (goTerms['biologicalProcess'].length > 0) {
                 $.each(goTerms['biologicalProcess'], function (key, element) {
                     bp.append(goData.goInput(element['gotermValueLabel']['value'], element['goID']['value'], element['determination']['value'], element['determinationLabel']['value']));
-                    //console.log("bp" + element['goterm_label']['value']);
+                    goData.goRefModal(bp, element['reference_stated_inLabel']['value'], element['reference_retrievedLabel']['value']);
                 });
             } else {
-                bp.append(goData.goInput("No Biological Process Data Available", "----------","----------","----------"));
+                bp.append(goData.goInput("No Biological Process Data Available", "----------", "----------", "----------"));
+
             }
             if (goTerms['cellularComponent'].length > 0) {
                 $.each(goTerms['cellularComponent'], function (key, element) {
                     cc.append(goData.goInput(element['gotermValueLabel']['value'], element['goID']['value'], element['determination']['value'], element['determinationLabel']['value']));
-                    //console.log("cc" + element['goterm_label']['value']);
+                    goData.goRefModal(cc, element['reference_stated_inLabel']['value'], element['reference_retrievedLabel']['value']);
                 });
             } else {
-                cc.append(goData.goInput("No Cellular Component Data Available", "----------","----------","----------" ));
+                cc.append(goData.goInput("No Cellular Component Data Available", "----------", "----------", "----------"));
             }
         },
         goInput: function (golable, goid, evi_url, evi_label) {
@@ -551,20 +554,31 @@ $(document).ready(function () {
                 "<div class=\"col-md-3\">" +
                 "<a target=\"_blank\" href=http://amigo.geneontology.org/amigo/term/" + goid + "><h5>" + goid + "</h5></a>" + "</div>" +
                 "<div class=\"col-md-3\">" +
-                "<a target=\"_blank\" href=" + evi_url  + "><h5>"  + evi_label + "</h5></a>" + "</div>" +
+                "<a target=\"_blank\" href=" + evi_url + "><h5>" + evi_label + "</h5></a>" + "</div>" +
                 "<div id='main-ref-button'class=\"col-md-1\">" +
-                "<button type='button' class='main-button-ref btn btn-primary' ><h6>" + "+" + "</h6>" + "</button></div>" +
+                "<button id='div-ref-but' type='button' class='main-button-ref btn btn-primary' ></button></div>" +
                 "</div>" +
                 "</div>";
         },
-        goRefModal: function(){
+        goRefModal: function (button_element, stated_in, retrieved) {
+            var $refbut = button_element.find('#div-ref-but');
+            $refbut.on("click", function () {
+                $('#main-ref-statedin').html("<span><h5>Stated in: </h5>" + stated_in + "</span>");
+                $('#main-ref-retrieved').html("<span><h5>Retrieved on: </h5>" + retrieved + "</span>");
+                console.log(stated_in, retrieved);
+                $('#wdRefModal').modal('show');
+            });
+            $('#modalRefClose').on('click', function() {
+                console.log("Im clicking and nothing is happening");
+                $('#wdRefModal').modal('hide');
+            });
 
         }
     };
 
     var interProData = {
         init: function (uniprot) {
-            console.log("interpro init" + uniprot);
+            //console.log("interpro init" + uniprot);
             this.cacheDOM();
             this.interProtData(uniprot);
 
@@ -584,12 +598,12 @@ $(document).ready(function () {
         render: function (ipDomains) {
             var ipD = this.$ipData;
             if (ipDomains['InterPro'].length > 0) {
-                console.log(ipDomains['InterPro']);
-                console.log("its alive");
+                //console.log(ipDomains['InterPro']);
+                //console.log("its alive");
 
                 $.each(ipDomains['InterPro'], function (key, element) {
-                    console.log(element);
-                    console.log(element['interPro_label']['value']);
+                    //console.log(element);
+                    //console.log(element['interPro_label']['value']);
 
                     ipD.append(interProData.ipInput(element['interPro_label']['value'], element['ipID']['value']));
                 });
@@ -603,7 +617,7 @@ $(document).ready(function () {
                 iplable + "</h5></div>" +
                 "<div class=\"col-md-3\"><h5>" + ipid + "</h5></a></div>" +
                 "<div class=\"col-md-3\"><h5></h5></a></div>" +
-                "<div class=\"col-md-1\"> <button type='button' class='main-button-ref btn btn-primary' ><h6>" + "+" + "</h6>" + "</button></div>" +
+                "<div class=\"col-md-1\"> <button type='button' class='main-button-ref btn btn-primary' ></button></div>" +
                 "</div>";
         }
     };
