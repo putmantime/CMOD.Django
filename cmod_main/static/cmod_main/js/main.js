@@ -118,8 +118,11 @@ $(document).ready(function () {
                             ui.item.gqid,
                             ui.item.locustag,
                             ui.item.genomicstart,
-                            ui.item.genomicend
+                            ui.item.genomicend,
+                            ui.item.strand,
+                            currentTaxa[3]
                         ];
+                        console.log(ui.item.strand);
                         this.currentProtein = [
                             ui.item.proteinLabel,
                             ui.item.uniprot,
@@ -157,7 +160,9 @@ $(document).ready(function () {
                     geneTags[0].gqid,
                     geneTags[0].locustag,
                     geneTags[0].genomicstart,
-                    geneTags[0].genomicend
+                    geneTags[0].genomicend,
+                    geneTags[0].strand
+
                 ];
                 var first_protein = [
                     geneTags[0].proteinLabel,
@@ -438,6 +443,8 @@ $(document).ready(function () {
             this.$gd = $("#geneDataModule");
             this.$ul = this.$gd.find('ul');
             this.$geneD = this.$gd.find('#geneData');
+            this.$annotations = this.$gd.find('#geneannotationdata');
+
 
 
             this.template = this.$gd.find('#gene-template').html();
@@ -453,11 +460,22 @@ $(document).ready(function () {
             this.$geneD.html(
                 "<div class='main-data'> <h5>Gene Name:    </h5>     " + data.gene[0] + "</div>" +
                 "<div class='main-data'> <h5>Entrez ID:    </h5> <a href='http://www.ncbi.nlm.nih.gov/gene/?term=" + data.gene[1] + "'>" + data.gene[1] + "</a></div>" +
-                "<div class='main-data'> <h5>Wikidata ID:  </h5> <a href='https://www.wikidata.org/wiki/" + data.gene[2] + "'>" + data.gene[2] + "</a></div>" +
-                "<div class='main-data'> <h5>Locus Tag:    </h5> <a href='http://www.ncbi.nlm.nih.gov/gene/?term=" + data.gene[3] + "'>" + data.gene[3] + "</a></div>" +
-                "<div class='main-data'> <h5>Genomic Start:</h5>     " + data.gene[4] + "</div>" +
-                "<div class='main-data'> <h5>Genomic End:  </h5>     " + data.gene[5] + "</div>"
+                "<div class='main-data'> <h5>Wikidata ID:  </h5> <a href='https://www.wikidata.org/wiki/" + data.gene[2] + "'>" + data.gene[2] + "</a></div>"
+
             );
+            this.$annotations.html(
+                "<div id='main-annotationBox' class='row'>" +
+                "<div class='col-md-3'><a href='http://www.ncbi.nlm.nih.gov/gene/?term=" + data.gene[3] + "'>" + data.gene[3] + "</a></div>"+
+                "<div class='col-md-3'>"+ data.gene[4] +"</div>" +
+                "<div class='col-md-3'>"+ data.gene[5] +"</div>" +
+                "<div class='col-md-2'>"+ data.gene[6] +"</div>" +
+                "<div id='main-ref-button'class=\"col-md-1\">" +
+                "<button type='button' class='main-button-ref btn btn-primary div-ref-but' ></button></div>" +
+                "</div>"
+
+
+
+            )
 
 
         }

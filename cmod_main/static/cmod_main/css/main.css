@@ -152,6 +152,14 @@ html, body {
     color: #385d94;
 
 }
+.main-annotaion-box{
+    min-height: 40px;
+    border: solid #cce0ff 2px;
+    border-radius: 10px;
+    margin-top: 5px;
+    color: #385d94;
+
+}
 
 .main-go-boxheader {
     background-color: #cce0ff;
@@ -196,7 +204,9 @@ html, body {
 #interProBoxes{
     padding: 10px;
 }
-
+#geneAnnotationBoxes{
+    padding: 10px;
+}
 #goTermForm.ui-autocomplete-loading {
     background-image: url('../img/spin.gif');
     background-position: left center;
@@ -292,3 +302,4 @@ html, body {
     padding:5px;
     margin-left:25px;
 }
+

@@ -62,14 +62,16 @@
                 <h4 class="modal-title" id="refModal">Wikidata Statement Reference</h4>
             </div>
             <div class="modal-body">
+                <h5>Stated in:</h5>
                 <div class='main-data' id="main-ref-statedin">
                 </div>
-                <div class='main-data' id="main-ref-retrieved">
-                </div>
+                <h5>Publication Date:</h5>
                 <div class='main-data' id="main-ref-pubDate">
                 </div>
+                <h5>Software Version:</h5>
                 <div class='main-data' id="main-ref-version">
                 </div>
+                <h5>Reference URL:</h5>
                 <div class='main-data' id="main-ref-url">
                 </div>
             </div>
@@ -263,6 +265,18 @@
                     <div class="col-md-12">
                         <div id="geneDataBox" class="main-data-box">
                             <div id="geneData"></div>
+                            <div id="geneAnnotationBoxes">
+                                <div class="main-annotaion-box row">
+                                    <div class="main-go-boxheader">
+                                        <div id="#locusTag" class="col-md-3"><h5>Locus Tag</h5></div>
+                                        <div id="#genstart" class="col-md-3"><h5>Genomic Start</h5></div>
+                                        <div id="#genend" class="col-md-3"><h5>Genomic End</h5></div>
+                                        <div id="#strand" class="col-md-2"><h5>Strand</h5></div>
+                                        <div id="#annotationRefBut" class="col-md-1"><h5>Reference</h5></div>
+                                    </div>
+                                    <div id="geneannotationdata" class="main-go-data"></div>
+                                </div>
+                            </div>
 
                         </div>
                     </div>
