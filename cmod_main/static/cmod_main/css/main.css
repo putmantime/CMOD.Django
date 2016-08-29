@@ -155,7 +155,7 @@ html, body {
 
 .main-go-boxheader {
     background-color: #cce0ff;
-    height: 40px;
+    min-height: 40px;
     border-top-right-radius: 8px;
     border-top-left-radius: 8px;
 

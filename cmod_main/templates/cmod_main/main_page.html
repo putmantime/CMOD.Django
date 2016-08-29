@@ -30,8 +30,8 @@
 <body>
 {#wd credentials modal#}
 {#dialog#}
-<!--reference Modal-->
-<div class="modal" id="wdRefModal" tabindex="-1" role="dialog"
+<!--go reference Modal-->
+<div class="modal" id="wdGoRefModal" tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -43,7 +43,34 @@
                 <div class='main-data' id="main-ref-statedin">
                 </div>
                 <div class='main-data' id="main-ref-retrieved">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id='modalRefClose' type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 
+            </div>
+        </div>
+    </div>
+</div>
+<!--ip reference Modal-->
+<div class="modal" id="wdIPRefModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <img class="wd-logo" src="{% static 'cmod_main/img/GeneWikidata-logo-en.png' %}">
+                <h4 class="modal-title" id="refModal">Wikidata Statement Reference</h4>
+            </div>
+            <div class="modal-body">
+                <div class='main-data' id="main-ref-statedin">
+                </div>
+                <div class='main-data' id="main-ref-retrieved">
+                </div>
+                <div class='main-data' id="main-ref-pubDate">
+                </div>
+                <div class='main-data' id="main-ref-version">
+                </div>
+                <div class='main-data' id="main-ref-url">
                 </div>
             </div>
             <div class="modal-footer">
@@ -263,7 +290,7 @@
                                         <div class="col-md-3"><h5></h5></div>
                                         <div class="col-md-1"><h5>Reference</h5></div>
                                     </div>
-                                    <div id="interpordata" class="main-go-data"></div>
+                                    <div id="interprodata" class="main-go-data"></div>
                                 </div>
                             </div>
                             <div id="goBoxes">
@@ -286,7 +313,7 @@
                                     <div id="bioprocdata" class="main-go-data"></div>
                                 </div>
                                 <div class="main-go-box row">
-                                    <div class="main-go-boxheader">
+                                    <div class="main-go-boxheader main-gutter-padding">
                                         <div class="col-md-5"><h5>Cellular Component</h5></div>
                                         <div class="col-md-3"><h5>Gene Ontology ID</h5></div>
                                         <div class="col-md-3"><h5>Evidence Code</h5></div>

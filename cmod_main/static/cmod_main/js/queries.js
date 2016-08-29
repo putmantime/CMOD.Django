@@ -141,7 +141,6 @@ var getGOTerms = function (uniprot, callBackonSuccess) {
             goTerms['molecularFunction'] = mf;
             goTerms['biologicalProcess'] = bp;
             goTerms['cellularComponent'] = cc;
-            //console.log(bp);
             callBackonSuccess(goTerms);
         }
     });
@@ -152,15 +151,21 @@ var getGOTerms = function (uniprot, callBackonSuccess) {
 var getInterPro = function (uniprot, callBackonSuccess) {
     var ipDomains = {};
     var ipQuery = [
-        "SELECT distinct ?protein ?interPro ?interPro_label ?ipID WHERE {" +
-        "?protein wdt:P352 ",
+        "SELECT distinct ?protein ?interPro_item ?interPro_label ?ipID ?reference_stated_in ?pubDate ?version ?refURL WHERE {" +
+        "?protein wdt:P352",
         "\"" + uniprot + "\";",
-        "wdt:P527 ?interPro. " +
-        "?interPro wdt:P279 wd:Q898273;" +
-        "wdt:P2926 ?ipID." +
-        "?interPro rdfs:label ?interPro_label filter (lang(?interPro_label) = \"en\") .}"
+        "p:P527 ?interPro." +
+        "?interPro ps:P527 ?interPro_item;" +
+        "prov:wasDerivedFrom/pr:P248 ?reference_stated_in ;" +  //#where stated
+        "prov:wasDerivedFrom/pr:P577 ?pubDate ;" + //#when published
+        "prov:wasDerivedFrom/pr:P348 ?version ;" + //#software veresion
+        "prov:wasDerivedFrom/pr:P854 ?refURL . " + //#reference URL
+        "?interPro_item wdt:P2926 ?ipID;" +
+        "rdfs:label ?interPro_label. " +
+        "filter (lang(?interPro_label) = \"en\") .}"
+
     ].join(" ");
-    //console.log(endpoint + ipQuery);
+    console.log(endpoint + ipQuery);
 
     $.ajax({
         type: "GET",

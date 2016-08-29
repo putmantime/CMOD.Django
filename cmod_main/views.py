@@ -16,7 +16,6 @@ def main_page(request):
     org_data = json.loads(request.session['org'])
     # template = loader.get_template("cmod_main/main_page.html")
     return render(request, "cmod_main/main_page.html", org_data)
-    # return HttpResponse(template.render())
 
 
 def get_orgs(request):

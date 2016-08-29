@@ -24,11 +24,12 @@ $(document).ready(function () {
 
 
         },
+        // populate organism form with list of bacteria to choose from
         acsource: function (orginput) {
             getOrgs(function (orgTags) {
                 orginput.autocomplete({
                     minLength: 0,
-                    source: orgTags,
+                    source: orgTags, //sparql query callback
                     autoFocus: true,
 
                     select: function (event, ui) {
@@ -169,6 +170,7 @@ $(document).ready(function () {
                 proteinData.init(first_protein);
                 interProData.init(first_protein[1]);
                 goData.init(first_protein[1]);
+                goFormAll.init(first_protein[2]);
             })
         }
 
@@ -486,9 +488,9 @@ $(document).ready(function () {
 
             this.$protD.html(
                 "<div class='main-data'><h5>Protein Name: </h5>" + data.protein[0] + "</div>" +
-                "<div class='main-data'><h5>UniProt ID:   </h5>" + data.protein[1] + "</div>" +
-                "<div class='main-data'><h5>Wikidata ID:  </h5>" + data.protein[2] + "</div>" +
-                "<div class='main-data'><h5>RefSeq ID:    </h5>" + data.protein[3] + "</div>"
+                "<div class='main-data'><h5>UniProt ID:   </h5> <a href='http://purl.uniprot.org/uniprot/" + data.protein[1] + "'>" + data.protein[1] +  "</a></div>" +
+                "<div class='main-data'><h5>Wikidata ID:  </h5> <a href='https://www.wikidata.org/wiki/" +  data.protein[2] + "'>" + data.protein[2] +  "</a></div>" +
+                "<div class='main-data'><h5>RefSeq ID:    </h5> <a href='http://www.ncbi.nlm.nih.gov/protein/" + data.protein[3] + "'>" +  data.protein[3] + "</a></div>"
             );
         }
 
@@ -524,8 +526,7 @@ $(document).ready(function () {
             if (goTerms['molecularFunction'].length > 0) {
                 $.each(goTerms['molecularFunction'], function (key, element) {
                     mf.append(goData.goInput(element['gotermValueLabel']['value'], element['goID']['value'], element['determination']['value'], element['determinationLabel']['value']));
-                    //console.log(mf);
-                    goData.goRefModal(mf, element['reference_stated_inLabel']['value'], element['reference_retrievedLabel']['value']);
+                    goRefModal_obj.init(mf, element['reference_stated_inLabel']['value'], element['reference_retrievedLabel']['value']);
                 });
             } else {
                 mf.append(goData.goInput("No Molecular Function Data Available", "----------", "----------", "----------"));
@@ -534,7 +535,8 @@ $(document).ready(function () {
             if (goTerms['biologicalProcess'].length > 0) {
                 $.each(goTerms['biologicalProcess'], function (key, element) {
                     bp.append(goData.goInput(element['gotermValueLabel']['value'], element['goID']['value'], element['determination']['value'], element['determinationLabel']['value']));
-                    goData.goRefModal(bp, element['reference_stated_inLabel']['value'], element['reference_retrievedLabel']['value']);
+                    goRefModal_obj.init(bp, element['reference_stated_inLabel']['value'], element['reference_retrievedLabel']['value']);
+
                 });
             } else {
                 bp.append(goData.goInput("No Biological Process Data Available", "----------", "----------", "----------"));
@@ -543,7 +545,7 @@ $(document).ready(function () {
             if (goTerms['cellularComponent'].length > 0) {
                 $.each(goTerms['cellularComponent'], function (key, element) {
                     cc.append(goData.goInput(element['gotermValueLabel']['value'], element['goID']['value'], element['determination']['value'], element['determinationLabel']['value']));
-                    goData.goRefModal(cc, element['reference_stated_inLabel']['value'], element['reference_retrievedLabel']['value']);
+                    goRefModal_obj.init(cc, element['reference_stated_inLabel']['value'], element['reference_retrievedLabel']['value']);
                 });
             } else {
                 cc.append(goData.goInput("No Cellular Component Data Available", "----------", "----------", "----------"));
@@ -556,24 +558,45 @@ $(document).ready(function () {
                 "<div class=\"col-md-3\">" +
                 "<a target=\"_blank\" href=" + evi_url + "><h5>" + evi_label + "</h5></a>" + "</div>" +
                 "<div id='main-ref-button'class=\"col-md-1\">" +
-                "<button id='div-ref-but' type='button' class='main-button-ref btn btn-primary' ></button></div>" +
+                "<button type='button' class='main-button-ref btn btn-primary div-ref-but' ></button></div>" +
                 "</div>" +
                 "</div>";
-        },
-        goRefModal: function (button_element, stated_in, retrieved) {
-            var $refbut = button_element.find('#div-ref-but');
-            $refbut.on("click", function () {
-                $('#main-ref-statedin').html("<span><h5>Stated in: </h5>" + stated_in + "</span>");
-                $('#main-ref-retrieved').html("<span><h5>Retrieved on: </h5>" + retrieved + "</span>");
-                console.log(stated_in, retrieved);
-                $('#wdRefModal').modal('show');
-            });
-            $('#modalRefClose').on('click', function() {
-                console.log("Im clicking and nothing is happening");
-                $('#wdRefModal').modal('hide');
-            });
-
         }
+
+    };
+
+    var goRefModal_obj = {
+        init: function(element, stated_in, retrieved){
+            this.cacheDom();
+            this.openModal(element, stated_in, retrieved);
+            this.closeModal();
+        },
+        cacheDom: function(){
+            this.$modal = $('#wdGoRefModal');
+            this.$modalClose = this.$modal.find('#modalRefClose');
+            this.$refStated = this.$modal.find('#main-ref-statedin');
+            this.$refRetrieved = this.$modal.find('#main-ref-retrieved');
+
+        },
+        openModal: function(element, stated_in, retrieved){
+            var $modal = this.$modal;
+            var $stated = this.$refStated;
+            var $retrieved = this.$refRetrieved;
+            console.log(element.find('.div-ref-but'));
+            element.find('.div-ref-but').on('click', function(){
+                console.log("clicking ref button");
+                $stated.html(stated_in);
+                $retrieved.html(retrieved);
+                $modal.modal('show');
+            });
+        },
+        closeModal: function(){
+
+            this.$modalClose.on('click', function(){
+
+            });
+        }
+
     };
 
     var interProData = {
@@ -585,14 +608,13 @@ $(document).ready(function () {
         },
         interProtData: function (uniprot) {
             getInterPro(uniprot, function (ipDomains) {
-                console.log(ipDomains);
                 interProData.render(ipDomains);
             });
 
         },
         cacheDOM: function () {
             this.$ip = $('#interProBoxes');
-            this.$ipData = this.$ip.find('#interpordata');
+            this.$ipData = this.$ip.find('#interprodata');
 
         },
         render: function (ipDomains) {
@@ -606,6 +628,8 @@ $(document).ready(function () {
                     //console.log(element['interPro_label']['value']);
 
                     ipD.append(interProData.ipInput(element['interPro_label']['value'], element['ipID']['value']));
+                    interProRefModal_obj.init(ipD, element['reference_stated_in']['value'], element['pubDate']['value'],
+                        element['version']['value'], element['refURL']['value']);
                 });
             }
             else {
@@ -617,9 +641,50 @@ $(document).ready(function () {
                 iplable + "</h5></div>" +
                 "<div class=\"col-md-3\"><h5>" + ipid + "</h5></a></div>" +
                 "<div class=\"col-md-3\"><h5></h5></a></div>" +
-                "<div class=\"col-md-1\"> <button type='button' class='main-button-ref btn btn-primary' ></button></div>" +
+                "<div class=\"col-md-1\"> <button type='button' class='main-button-ref btn btn-primary div-ref-but' ></button></div>" +
                 "</div>";
         }
+    };
+
+        var interProRefModal_obj = {
+        init: function(element, stated_in, pubdate, version, refurl){
+            this.cacheDom();
+            this.openModal(element, stated_in, pubdate, version, refurl);
+            this.closeModal();
+        },
+        cacheDom: function(){
+            this.$modal = $('#wdIPRefModal');
+            this.$modalClose = this.$modal.find('#modalRefClose');
+            this.$refStated = this.$modal.find('#main-ref-statedin');
+            this.$refPubDate = this.$modal.find('#main-ref-pubDate');
+            this.$refVersion= this.$modal.find('#main-ref-version');
+            this.$refURL = this.$modal.find('#main-ref-url');
+
+        },
+        openModal: function(element, stated_in, pubdate, version, refurl){
+            var $modal = this.$modal;
+            var $stated = this.$refStated;
+            var $pubdate = this.$refPubDate;
+            var $refVersion = this.$refVersion;
+            var $refURL = this.$refURL;
+
+            element.find('.div-ref-but').on('click', function(){
+                console.log("clicking ref button");
+                $stated.html(stated_in);
+                $pubdate.html(pubdate);
+                $refVersion.html(version);
+                $refURL.html(refurl);
+
+                $modal.modal('show');
+            });
+        },
+        closeModal: function(){
+
+            this.$modalClose.on('click', function(){
+
+            });
+        }
+
     };
 ///////////////////////////////////////End data rendering modules///////////////////////////////////////////////////////
 
@@ -798,22 +863,6 @@ $(document).ready(function () {
     jbrowse.init(currentTaxa['Taxid'], currentTaxa['RefSeq'], ':100000..200000&tracks=genes_canvas_mod', currentTaxa['Name']);
     orgData.init(currentTaxa);
     geneForm.init(currentTaxa['Taxid']);
-    //geneData.init([
-    //    '2-oxoglutarate dehydrogenase complex subunit dihydrolipoyllysine-residue succinyltransferase CTL0311',
-    //    '5858187',
-    //    'http://www.wikidata.org/entity/Q21168910',
-    //    'CTL0311',
-    //    '385948',
-    //    '387045'
-    //]);
-    //
-    //proteinData.init([
-    //    '2-oxoglutarate dehydrogenase complex subunit dihydrolipoyllysine-residue succinyltransferase CTL0311',
-    //    'A0A0H3MBK1',
-    //    'http://www.wikidata.org/entity/Q21172795',
-    //    'YP_001654394'
-    //]);
-    //goData.init('A0A0H3MBK1');
 //////////////////////////////////////////////////////End data preload//////////////////////////////////////////////////
 });
 
