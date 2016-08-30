@@ -152,7 +152,8 @@ html, body {
     color: #385d94;
 
 }
-.main-annotaion-box{
+
+.main-annotaion-box {
     min-height: 40px;
     border: solid #cce0ff 2px;
     border-radius: 10px;
@@ -201,25 +202,21 @@ html, body {
     padding: 10px
 }
 
-#interProBoxes{
+#interProBoxes {
     padding: 10px;
 }
-#geneAnnotationBoxes{
+
+#geneAnnotationBoxes {
     padding: 10px;
 }
+
 #goTermForm.ui-autocomplete-loading {
     background-image: url('../img/spin.gif');
     background-position: left center;
     background-repeat: no-repeat;
 }
 
-.ui-autocomplete {
-    max-height: 600px;
-    max-width: 600px;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    z-index: 0;
-}
+
 
 .form-control {
     padding-left: 25px;
@@ -277,29 +274,89 @@ html, body {
     margin-top: 100px
 }
 
-#wd-login-button{
+#wd-login-button {
     background: whitesmoke;
-    color:#385d94;
-    }
-#loginSpin{
+    color: #385d94;
+}
+
+#loginSpin {
     background-image: url('../img/spin.gif');
     background-position: left center;
     background-repeat: no-repeat;
 }
 
-#main-ref-button{
-    padding:5px;
+#main-ref-button {
+    padding: 5px;
 }
 
 .main-button-ref {
     border: solid #385d94 1px;
     border-radius: 5px;
-    max-height:20px;
+    max-height: 20px;
     max-width: 20px;
     background: whitesmoke;
-    color:#385d94;
+    color: #385d94;
     text-align: center;
-    padding:5px;
-    margin-left:25px;
+    padding: 5px;
+    margin-left: 25px;
 }
 
+.ui-autocomplete {
+    max-height: 600px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    z-index: 0;
+}
+
+.ui-autocomplete {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    float: left;
+    display: none;
+    min-width: 160px;
+    padding: 4px 0;
+    margin: 0 0 10px 25px;
+    list-style: none;
+    background-color: whitesmoke;
+    border-color: #385d94;
+
+    border-style: solid;
+    border-width: 1px;
+    -webkit-border-bottom-left-radius: 10px;
+    -webkit-border-bottom-right-radius: 10px;
+    -moz-border-radius: 10px;
+
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding;
+    background-clip: padding-box;
+    *border-right-width: 2px;
+    *border-bottom-width: 2px;
+}
+
+.ui-menu-item > a.ui-corner-all {
+    display: block;
+    padding: 3px 15px;
+    clear: both;
+    font-weight: normal;
+    line-height: 18px;
+    color: #555555;
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+.ui-state-hover, .ui-state-active {
+    color: #ffffff;
+    text-decoration: none;
+    background-color: #0088cc;
+    border-radius: 0px;
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    background-image: none;
+}

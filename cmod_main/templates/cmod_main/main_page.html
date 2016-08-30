@@ -30,6 +30,30 @@
 <body>
 {#wd credentials modal#}
 {#dialog#}
+<!--gene reference Modal-->
+<div class="modal" id="wdGeneRefModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <img class="wd-logo" src="{% static 'cmod_main/img/GeneWikidata-logo-en.png' %}">
+                <h4 class="modal-title" id="refModal">Wikidata Statement Reference</h4>
+            </div>
+            <div class="modal-body">
+                <h5>Stated in:</h5>
+                <div class='main-data' id="main-ref-statedin">
+                </div>
+                <h5>Retrieved:</h5>
+                <div class='main-data' id="main-ref-retrieved">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id='modalRefClose' type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
 <!--go reference Modal-->
 <div class="modal" id="wdGoRefModal" tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel" aria-hidden="true">
@@ -40,8 +64,10 @@
                 <h4 class="modal-title" id="refModal">Wikidata Statement Reference</h4>
             </div>
             <div class="modal-body">
+                <h5>Stated in:</h5>
                 <div class='main-data' id="main-ref-statedin">
                 </div>
+                <h5>Retrieved:</h5>
                 <div class='main-data' id="main-ref-retrieved">
                 </div>
             </div>
@@ -269,10 +295,10 @@
                                 <div class="main-annotaion-box row">
                                     <div class="main-go-boxheader">
                                         <div id="#locusTag" class="col-md-3"><h5>Locus Tag</h5></div>
-                                        <div id="#genstart" class="col-md-3"><h5>Genomic Start</h5></div>
-                                        <div id="#genend" class="col-md-3"><h5>Genomic End</h5></div>
-                                        <div id="#strand" class="col-md-2"><h5>Strand</h5></div>
-                                        <div id="#annotationRefBut" class="col-md-1"><h5>Reference</h5></div>
+                                        <div id="#genstart" class="col-md-2"><h5>Start</h5></div>
+                                        <div id="#genend" class="col-md-2"><h5>End</h5></div>
+                                        <div id="#strand" class="col-md-3"><h5>Strand</h5></div>
+                                        <div id="#annotationRefBut" class="col-md-2"><h5>Reference</h5></div>
                                     </div>
                                     <div id="geneannotationdata" class="main-go-data"></div>
                                 </div>
@@ -301,8 +327,8 @@
                                     <div class="main-go-boxheader">
                                         <div class="col-md-5"><h5>InterPro Domain</h5></div>
                                         <div class="col-md-3"><h5>InterPro ID</h5></div>
-                                        <div class="col-md-3"><h5></h5></div>
-                                        <div class="col-md-1"><h5>Reference</h5></div>
+                                        <div class="col-md-2"><h5></h5></div>
+                                        <div class="col-md-2"><h5>Reference</h5></div>
                                     </div>
                                     <div id="interprodata" class="main-go-data"></div>
                                 </div>
@@ -312,8 +338,8 @@
                                     <div class="main-go-boxheader">
                                         <div class="col-md-5"><h5>Molecular Function</h5></div>
                                         <div class="col-md-3"><h5>Gene Ontology ID</h5></div>
-                                        <div class="col-md-3"><h5>Evidence Code</h5></div>
-                                        <div class="col-md-1"><h5>Reference</h5></div>
+                                        <div class="col-md-2"><h5>Evidence</h5></div>
+                                        <div class="col-md-2"><h5>Reference</h5></div>
                                     </div>
                                     <div id="molfuncdata" class="main-go-data"></div>
                                 </div>
@@ -321,8 +347,8 @@
                                     <div class="main-go-boxheader">
                                         <div class="col-md-5"><h5>Biological Process</h5></div>
                                         <div class="col-md-3"><h5>Gene Ontology ID</h5></div>
-                                        <div class="col-md-3"><h5>Evidence Code</h5></div>
-                                        <div class="col-md-1"><h5>Reference</h5></div>
+                                        <div class="col-md-2"><h5>Evidence</h5></div>
+                                        <div class="col-md-2"><h5>Reference</h5></div>
                                     </div>
                                     <div id="bioprocdata" class="main-go-data"></div>
                                 </div>
@@ -330,8 +356,8 @@
                                     <div class="main-go-boxheader main-gutter-padding">
                                         <div class="col-md-5"><h5>Cellular Component</h5></div>
                                         <div class="col-md-3"><h5>Gene Ontology ID</h5></div>
-                                        <div class="col-md-3"><h5>Evidence Code</h5></div>
-                                        <div class="col-md-1"><h5>Reference</h5></div>
+                                        <div class="col-md-2"><h5>Evidence</h5></div>
+                                        <div class="col-md-2"><h5>Reference</h5></div>
                                     </div>
                                     <div id="celcompdata" class="main-go-data"></div>
 

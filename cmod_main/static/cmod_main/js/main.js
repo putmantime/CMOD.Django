@@ -446,7 +446,6 @@ $(document).ready(function () {
             this.$annotations = this.$gd.find('#geneannotationdata');
 
 
-
             this.template = this.$gd.find('#gene-template').html();
 
         },
@@ -459,28 +458,24 @@ $(document).ready(function () {
 
             this.$geneD.html(
                 "<div class='main-data'> <h5>Gene Name:    </h5>     " + data.gene[0] + "</div>" +
-                "<div class='main-data'> <h5>Entrez ID:    </h5> <a href='http://www.ncbi.nlm.nih.gov/gene/?term=" + data.gene[1] + "'>" + data.gene[1] + "</a></div>" +
-                "<div class='main-data'> <h5>Wikidata ID:  </h5> <a href='https://www.wikidata.org/wiki/" + data.gene[2] + "'>" + data.gene[2] + "</a></div>"
-
+                "<div class='main-data'> <h5>Entrez ID:    </h5> <a href='http://www.ncbi.nlm.nih.gov/gene/?term=" +
+                data.gene[1] + "'>" + data.gene[1] + "</a></div>" +
+                "<div class='main-data'> <h5>Wikidata ID:  </h5> <a href='https://www.wikidata.org/wiki/" +
+                data.gene[2] + "'>" + data.gene[2] + "</a></div>"
             );
             this.$annotations.html(
                 "<div id='main-annotationBox' class='row'>" +
-                "<div class='col-md-3'><a href='http://www.ncbi.nlm.nih.gov/gene/?term=" + data.gene[3] + "'>" + data.gene[3] + "</a></div>"+
-                "<div class='col-md-3'>"+ data.gene[4] +"</div>" +
-                "<div class='col-md-3'>"+ data.gene[5] +"</div>" +
-                "<div class='col-md-2'>"+ data.gene[6] +"</div>" +
-                "<div id='main-ref-button'class=\"col-md-1\">" +
+                "<div class='col-md-3'><a href='http://www.ncbi.nlm.nih.gov/gene/?term=" + data.gene[3] + "'>" +
+                data.gene[3] + "</a></div>" +
+                "<div class='col-md-2'>" + data.gene[4] + "</div>" +
+                "<div class='col-md-2'>" + data.gene[5] + "</div>" +
+                "<div class='col-md-3'>" + data.gene[6] + "</div>" +
+                "<div id='main-ref-button'class=\"col-md-2\">" +
                 "<button type='button' class='main-button-ref btn btn-primary div-ref-but' ></button></div>" +
                 "</div>"
-
-
-
-            )
-
-
+            );
+            geneRefModal_obj.init(this.$annotations, '-------', '-------');
         }
-
-
     };
 //////render the protein dat in the Protein box///////
     var proteinData = {
@@ -506,9 +501,9 @@ $(document).ready(function () {
 
             this.$protD.html(
                 "<div class='main-data'><h5>Protein Name: </h5>" + data.protein[0] + "</div>" +
-                "<div class='main-data'><h5>UniProt ID:   </h5> <a href='http://purl.uniprot.org/uniprot/" + data.protein[1] + "'>" + data.protein[1] +  "</a></div>" +
-                "<div class='main-data'><h5>Wikidata ID:  </h5> <a href='https://www.wikidata.org/wiki/" +  data.protein[2] + "'>" + data.protein[2] +  "</a></div>" +
-                "<div class='main-data'><h5>RefSeq ID:    </h5> <a href='http://www.ncbi.nlm.nih.gov/protein/" + data.protein[3] + "'>" +  data.protein[3] + "</a></div>"
+                "<div class='main-data'><h5>UniProt ID:   </h5> <a href='http://purl.uniprot.org/uniprot/" + data.protein[1] + "'>" + data.protein[1] + "</a></div>" +
+                "<div class='main-data'><h5>Wikidata ID:  </h5> <a href='https://www.wikidata.org/wiki/" + data.protein[2] + "'>" + data.protein[2] + "</a></div>" +
+                "<div class='main-data'><h5>RefSeq ID:    </h5> <a href='http://www.ncbi.nlm.nih.gov/protein/" + data.protein[3] + "'>" + data.protein[3] + "</a></div>"
             );
         }
 
@@ -570,52 +565,19 @@ $(document).ready(function () {
             }
         },
         goInput: function (golable, goid, evi_url, evi_label) {
-            return "<div class=\"row main-dataul\"><div class=\"col-md-5\"><h5>" + golable + "</h5></div>" +
-                "<div class=\"col-md-3\">" +
-                "<a target=\"_blank\" href=http://amigo.geneontology.org/amigo/term/" + goid + "><h5>" + goid + "</h5></a>" + "</div>" +
-                "<div class=\"col-md-3\">" +
-                "<a target=\"_blank\" href=" + evi_url + "><h5>" + evi_label + "</h5></a>" + "</div>" +
-                "<div id='main-ref-button'class=\"col-md-1\">" +
-                "<button type='button' class='main-button-ref btn btn-primary div-ref-but' ></button></div>" +
-                "</div>" +
-                "</div>";
+            return  "<div class=\"row main-dataul\"><div class=\"col-md-5\"><h5>" + golable + "</h5></div>" +
+                    "<div class=\"col-md-3\">" +
+                    "<a target=\"_blank\" href=http://amigo.geneontology.org/amigo/term/" + goid + "><h5>" + goid + "</h5></a>" + "</div>" +
+                    "<div class=\"col-md-2\">" +
+                    "<a target=\"_blank\" href=" + evi_url + "><h5>" + evi_label + "</h5></a>" + "</div>" +
+                    "<div id='main-ref-button'class=\"col-md-2\">" +
+                    "<button type='button' class='main-button-ref btn btn-primary div-ref-but' ></button></div>" +
+                    "</div>" +
+                    "</div>";
         }
 
     };
 
-    var goRefModal_obj = {
-        init: function(element, stated_in, retrieved){
-            this.cacheDom();
-            this.openModal(element, stated_in, retrieved);
-            this.closeModal();
-        },
-        cacheDom: function(){
-            this.$modal = $('#wdGoRefModal');
-            this.$modalClose = this.$modal.find('#modalRefClose');
-            this.$refStated = this.$modal.find('#main-ref-statedin');
-            this.$refRetrieved = this.$modal.find('#main-ref-retrieved');
-
-        },
-        openModal: function(element, stated_in, retrieved){
-            var $modal = this.$modal;
-            var $stated = this.$refStated;
-            var $retrieved = this.$refRetrieved;
-            console.log(element.find('.div-ref-but'));
-            element.find('.div-ref-but').on('click', function(){
-                console.log("clicking ref button");
-                $stated.html(stated_in);
-                $retrieved.html(retrieved);
-                $modal.modal('show');
-            });
-        },
-        closeModal: function(){
-
-            this.$modalClose.on('click', function(){
-
-            });
-        }
-
-    };
 
     var interProData = {
         init: function (uniprot) {
@@ -658,35 +620,107 @@ $(document).ready(function () {
             return "<div class=\"row main-dataul\"><div class=\"col-md-5\"><h5>" +
                 iplable + "</h5></div>" +
                 "<div class=\"col-md-3\"><h5>" + ipid + "</h5></a></div>" +
-                "<div class=\"col-md-3\"><h5></h5></a></div>" +
-                "<div class=\"col-md-1\"> <button type='button' class='main-button-ref btn btn-primary div-ref-but' ></button></div>" +
+                "<div class=\"col-md-2\"><h5></h5></a></div>" +
+                "<div id='main-ref-button' class=\"col-md-2\"> <button type='button' class='main-button-ref btn btn-primary div-ref-but' ></button></div>" +
                 "</div>";
         }
     };
 
-        var interProRefModal_obj = {
-        init: function(element, stated_in, pubdate, version, refurl){
+
+///////////////////////////////////////End data rendering modules///////////////////////////////////////////////////////
+// /////////////////////////////////////Begin reference modules///////////////////////////////////////////////////////
+
+    var geneRefModal_obj = {
+        init: function (element, stated_in, retrieved) {
+            this.cacheDom();
+            this.openModal(element, stated_in, retrieved);
+            this.closeModal();
+        },
+        cacheDom: function () {
+            this.$modal = $('#wdGeneRefModal');
+            this.$modalClose = this.$modal.find('#modalRefClose');
+            this.$refStated = this.$modal.find('#main-ref-statedin');
+            this.$refRetrieved = this.$modal.find('#main-ref-retrieved');
+
+        },
+        openModal: function (element, stated_in, retrieved) {
+            var $modal = this.$modal;
+            var $stated = this.$refStated;
+            var $retrieved = this.$refRetrieved;
+            console.log(element.find('.div-ref-but'));
+            element.find('.div-ref-but').on('click', function () {
+                console.log("clicking ref button");
+                $stated.html(stated_in);
+                $retrieved.html(retrieved);
+                $modal.modal('show');
+            });
+        },
+        closeModal: function () {
+
+            this.$modalClose.on('click', function () {
+
+            });
+        }
+
+    };
+
+    var goRefModal_obj = {
+        init: function (element, stated_in, retrieved) {
+            this.cacheDom();
+            this.openModal(element, stated_in, retrieved);
+            this.closeModal();
+        },
+        cacheDom: function () {
+            this.$modal = $('#wdGoRefModal');
+            this.$modalClose = this.$modal.find('#modalRefClose');
+            this.$refStated = this.$modal.find('#main-ref-statedin');
+            this.$refRetrieved = this.$modal.find('#main-ref-retrieved');
+
+        },
+        openModal: function (element, stated_in, retrieved) {
+            var $modal = this.$modal;
+            var $stated = this.$refStated;
+            var $retrieved = this.$refRetrieved;
+            console.log(element.find('.div-ref-but'));
+            element.find('.div-ref-but').on('click', function () {
+                console.log("clicking ref button");
+                $stated.html(stated_in);
+                $retrieved.html(retrieved);
+                $modal.modal('show');
+            });
+        },
+        closeModal: function () {
+
+            this.$modalClose.on('click', function () {
+
+            });
+        }
+
+    };
+
+    var interProRefModal_obj = {
+        init: function (element, stated_in, pubdate, version, refurl) {
             this.cacheDom();
             this.openModal(element, stated_in, pubdate, version, refurl);
             this.closeModal();
         },
-        cacheDom: function(){
+        cacheDom: function () {
             this.$modal = $('#wdIPRefModal');
             this.$modalClose = this.$modal.find('#modalRefClose');
             this.$refStated = this.$modal.find('#main-ref-statedin');
             this.$refPubDate = this.$modal.find('#main-ref-pubDate');
-            this.$refVersion= this.$modal.find('#main-ref-version');
+            this.$refVersion = this.$modal.find('#main-ref-version');
             this.$refURL = this.$modal.find('#main-ref-url');
 
         },
-        openModal: function(element, stated_in, pubdate, version, refurl){
+        openModal: function (element, stated_in, pubdate, version, refurl) {
             var $modal = this.$modal;
             var $stated = this.$refStated;
             var $pubdate = this.$refPubDate;
             var $refVersion = this.$refVersion;
             var $refURL = this.$refURL;
 
-            element.find('.div-ref-but').on('click', function(){
+            element.find('.div-ref-but').on('click', function () {
                 console.log("clicking ref button");
                 $stated.html(stated_in);
                 $pubdate.html(pubdate);
@@ -696,16 +730,17 @@ $(document).ready(function () {
                 $modal.modal('show');
             });
         },
-        closeModal: function(){
+        closeModal: function () {
 
-            this.$modalClose.on('click', function(){
+            this.$modalClose.on('click', function () {
 
             });
         }
 
     };
-///////////////////////////////////////End data rendering modules///////////////////////////////////////////////////////
 
+
+/////////////////////////////////////////End reference modules//////////////////////////////////////////////////////////
 
 //////////////////////////////////////////Begin JBrowse Module//////////////////////////////////////////////////////////
 
@@ -743,51 +778,7 @@ $(document).ready(function () {
 
     };
 /////////////////////////////////////////////////End Jbrowse module/////////////////////////////////////////////////////
-
-
-    //var djangoServer = {
-    //    init: function (data, urlsuf) {
-    //        this.sendToServer(data, urlsuf);
-    //        console.log("attempting to send data to server");
-    //
-    //    },
-    //    sendToServer: function (data, urlsuf) {
-    //        var csrftoken = this.getCookie('csrftoken');
-    //        $.ajax({
-    //            type: "POST",
-    //            url: window.location.pathname + urlsuf,
-    //            data: data,
-    //            dataType: 'json',
-    //            headers: {'X-CSRFToken': csrftoken},
-    //            success: function (data) {
-    //                console.log("success");
-    //                console.log(data);
-    //                //alert("Successful interaction with the server");
-    //
-    //            },
-    //            error: function (data) {
-    //                console.log("error");
-    //                console.log(data);
-    //                //alert("Something went wrong interacting with the server");
-    //            }
-    //        });
-    //    },
-    //    getCookie: function (name) {
-    //        var cookieValue = null;
-    //        if (document.cookie && document.cookie !== '') {
-    //            var cookies = document.cookie.split(';');
-    //            for (var i = 0; i < cookies.length; i++) {
-    //                var cookie = jQuery.trim(cookies[i]);
-    //                // Does this cookie string begin with the name we want?
-    //                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-    //                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-    //                    break;
-    //                }
-    //            }
-    //        }
-    //        return cookieValue;
-    //    }
-    //};
+// ///////////////////////////////////////////////Begin Authentication module///////////////////////////////////////////
 
 
     var getCookie = function (name) {
@@ -805,7 +796,7 @@ $(document).ready(function () {
         }
         return cookieValue;
     };
-
+// ///////////////////////////////////////////////End Authentication module///////////////////////////////////////////
 /////////////////////////////////////////////////Begin Wikidata API/////////////////////////////////////////////////////
     var wdLogin = {
         init: function () {
