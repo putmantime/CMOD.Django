@@ -41,7 +41,7 @@ $(document).ready(function () {
                         $("#geneData, #protData, .main-go-data").html("");
 
                         currentTaxa = {
-                            'Name': ui.item.label,
+                            'Name': ui.item.name,
                             'Taxid': ui.item.taxid,
                             'QID': ui.item.qid,
                             'RefSeq': ui.item.refseq
@@ -74,7 +74,7 @@ $(document).ready(function () {
                     .autocomplete("instance")._renderItem = function (ul, item) {
                     return $("<li>")
                         .append("<div class='main-data' style=\"border-bottom: solid black 1px\"><i><u><strong>" +
-                        item.label + "</strong></u></i><br>Taxid: " + item.taxid + "<br>Wikidata: " +
+                        item.name + "</strong></u></i><br>Taxid: " + item.taxid + "<br>Wikidata: " +
                         item.qid + "</div>")
                         .appendTo(ul);
                 };
@@ -113,7 +113,7 @@ $(document).ready(function () {
                         geneinput.val("");
 
                         this.currentGene = [
-                            ui.item.label,
+                            ui.item.name,
                             ui.item.id,
                             ui.item.gqid,
                             ui.item.locustag,
@@ -150,12 +150,12 @@ $(document).ready(function () {
                     //custom template for gene search box
                     .autocomplete("instance")._renderItem = function (ul, item) {
                     return $("<li>")
-                        .append("<div class='main-data' style=\"border-bottom: solid black 1px\"><strong><u>" + item.label +
+                        .append("<div class='main-data' style=\"border-bottom: solid black 1px\"><strong><u>" + item.name +
                         "</u></strong><br>Entrez ID:" + item.id + "<br>Wikidata: " + item.gqid + "</div>")
                         .appendTo(ul);
                 };
                 var first_gene = [
-                    geneTags[0].label,
+                    geneTags[0].name,
                     geneTags[0].id,
                     geneTags[0].gqid,
                     geneTags[0].locustag,

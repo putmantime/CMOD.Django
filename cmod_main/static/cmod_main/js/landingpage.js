@@ -39,7 +39,7 @@ $(document).ready(function () {
                         $("#geneData, #protData, .main-go-data").html("");
 
                         currentTaxa = {
-                            "Name": ui.item.label,
+                            "Name": ui.item.name,
                             "Taxid": ui.item.taxid,
                             "QID": ui.item.qid,
                             "RefSeq": ui.item.refseq
@@ -53,7 +53,7 @@ $(document).ready(function () {
                     .autocomplete("instance")._renderItem = function (ul, item) {
                     return $("<li>")
                         .append("<div class='main-data' style=\"border-bottom: solid black 1px\"><i><u><strong>" +
-                        item.label + "</strong></u></i><br>Taxid: " + item.taxid + "<br>Wikidata: " +
+                        item.name + "</strong></u></i><br>Taxid: " + item.taxid + "<br>Wikidata: " +
                         item.qid + "</div>")
                         .appendTo(ul);
                 };

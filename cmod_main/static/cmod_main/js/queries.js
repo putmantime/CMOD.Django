@@ -19,8 +19,8 @@ var getOrgs = function (callbackOnSuccess) {
                 var wdid = element['species']['value'].split("/");
                 var qid = wdid.slice(-1)[0];
                 taxids = {
-                    "label": element['speciesLabel']['value'],
-                    "value": element['speciesLabel']['value'],
+                    "name": element['speciesLabel']['value'],
+                    "value": element['speciesLabel']['value'] + " | " + element['taxid']['value']  + " | " +  element['RefSeq']['value'] + " | " + qid,
                     "taxid": element['taxid']['value'],
                     "refseq": element['RefSeq']['value'],
                     'qid': qid
@@ -75,7 +75,8 @@ var getGenes = function (taxid, callbackOnSuccess) {
                         }
 
                 genes = {
-                    'label': element['geneLabel']['value'],
+                    'name': element['geneLabel']['value'],
+                    'value': element['geneLabel']['value'] + " | " + element['locustag']['value'] + " | " +gqid  + " | " +   element['entrezid']['value'],
                     'locustag': element['locustag']['value'],
                     'id': element['entrezid']['value'],
                     'genomicstart': element['genomicstart']['value'],
