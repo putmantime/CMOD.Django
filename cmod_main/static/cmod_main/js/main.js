@@ -154,6 +154,7 @@ $(document).ready(function () {
                         "</u></strong><br>Entrez ID:" + item.id + "<br>Wikidata: " + item.gqid + "</div>")
                         .appendTo(ul);
                 };
+                //initialize gene and protein boxes on page load with random gene/protein
                 var first_gene = [
                     geneTags[0].name,
                     geneTags[0].id,
@@ -171,6 +172,7 @@ $(document).ready(function () {
                     geneTags[0].refseqProtein
 
                 ];
+                //initialize all modules on organism load
                 geneData.init(first_gene);
                 proteinData.init(first_protein);
                 interProData.init(first_protein[1]);
@@ -300,6 +302,7 @@ $(document).ready(function () {
             };
         },
         pmidForm: function () {
+            //form for looking a publication to provide as a reference using eutils
             this.$pmidForm.autocomplete({
                 delay: 900,
                 autoFocus: true,
@@ -464,7 +467,7 @@ $(document).ready(function () {
                 data.gene[2] + "'>" + data.gene[2] + "</a></div>"
             );
             this.$annotations.html(
-                "<div id='main-annotationBox' class='row'>" +
+                "<div id='main-annotationBox' class='row main-dataul'>" +
                 "<div class='col-md-3'><a href='http://www.ncbi.nlm.nih.gov/gene/?term=" + data.gene[3] + "'>" +
                 data.gene[3] + "</a></div>" +
                 "<div class='col-md-2'>" + data.gene[4] + "</div>" +
@@ -529,6 +532,8 @@ $(document).ready(function () {
             this.$mf = this.$go.find('#molfuncdata');
             this.$bp = this.$go.find('#bioprocdata');
             this.$cc = this.$go.find('#celcompdata');
+            this.$ec = $('#enzymeBoxes');
+            this.$ecnum = this.$ec.find('#enzymeprodata');
 
         },
         render: function (goTerms) {
@@ -536,10 +541,17 @@ $(document).ready(function () {
             var mf = this.$mf;
             var bp = this.$bp;
             var cc = this.$cc;
+            var enzclass = this.$ecnum;
+            console.log(enzclass);
+            console.log(goTerms);
             if (goTerms['molecularFunction'].length > 0) {
                 $.each(goTerms['molecularFunction'], function (key, element) {
                     mf.append(goData.goInput(element['gotermValueLabel']['value'], element['goID']['value'], element['determination']['value'], element['determinationLabel']['value']));
                     goRefModal_obj.init(mf, element['reference_stated_inLabel']['value'], element['reference_retrievedLabel']['value']);
+                    if (element['ecnumber']['value']){
+                        enzclass.append(goData.ecInput(element['ecnumber']['value']));
+                    }
+
                 });
             } else {
                 mf.append(goData.goInput("No Molecular Function Data Available", "----------", "----------", "----------"));
@@ -550,6 +562,7 @@ $(document).ready(function () {
                     bp.append(goData.goInput(element['gotermValueLabel']['value'], element['goID']['value'], element['determination']['value'], element['determinationLabel']['value']));
                     goRefModal_obj.init(bp, element['reference_stated_inLabel']['value'], element['reference_retrievedLabel']['value']);
 
+
                 });
             } else {
                 bp.append(goData.goInput("No Biological Process Data Available", "----------", "----------", "----------"));
@@ -559,10 +572,12 @@ $(document).ready(function () {
                 $.each(goTerms['cellularComponent'], function (key, element) {
                     cc.append(goData.goInput(element['gotermValueLabel']['value'], element['goID']['value'], element['determination']['value'], element['determinationLabel']['value']));
                     goRefModal_obj.init(cc, element['reference_stated_inLabel']['value'], element['reference_retrievedLabel']['value']);
+
                 });
             } else {
                 cc.append(goData.goInput("No Cellular Component Data Available", "----------", "----------", "----------"));
             }
+
         },
         goInput: function (golable, goid, evi_url, evi_label) {
             return  "<div class=\"row main-dataul\"><div class=\"col-md-5\"><h5>" + golable + "</h5></div>" +
@@ -574,7 +589,18 @@ $(document).ready(function () {
                     "<button type='button' class='main-button-ref btn btn-primary div-ref-but' ></button></div>" +
                     "</div>" +
                     "</div>";
+        },
+        ecInput: function (ec_number){
+            return "<div class=\"row main-dataul\"><div class=\"col-md-2\"><h5>" + ec_number + "</h5></div>" +
+                    "<div class=\"col-md-4\"></div>" +
+                    "<div class=\"col-md-2\"></div>" +
+                    "<div class=\"col-md-2\"></div>" +
+                    "<div id='main-ref-button'class=\"col-md-2\">" +
+                    "<button type='button' class='main-button-ref btn btn-primary div-ref-but' ></button></div>" +
+                    "</div>" +
+                    "</div>";
         }
+
 
     };
 

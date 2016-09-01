@@ -202,6 +202,9 @@ html, body {
     padding: 10px
 }
 
+#enzymeBoxes {
+    padding: 10px;
+}
 #interProBoxes {
     padding: 10px;
 }
@@ -359,4 +362,9 @@ html, body {
     -webkit-border-radius: 0px;
     -moz-border-radius: 0px;
     background-image: none;
+}
+
+.main-goButton{
+width: 200px;
+
 }

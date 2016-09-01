@@ -20,7 +20,7 @@ var getOrgs = function (callbackOnSuccess) {
                 var qid = wdid.slice(-1)[0];
                 taxids = {
                     "name": element['speciesLabel']['value'],
-                    "value": element['speciesLabel']['value'] + " | " + element['taxid']['value']  + " | " +  element['RefSeq']['value'] + " | " + qid,
+                    "value": element['speciesLabel']['value'] + " | " + element['taxid']['value'] + " | " + element['RefSeq']['value'] + " | " + qid,
                     "taxid": element['taxid']['value'],
                     "refseq": element['RefSeq']['value'],
                     'qid': qid
@@ -58,7 +58,7 @@ var getGenes = function (taxid, callbackOnSuccess) {
         "bd:serviceParam wikibase:language \"en\" .",
         "}}"
     ].join(" ");
-    //console.log(endpoint + queryGenes);
+    //console.log(queryGenes);
     $.ajax({
         type: "GET",
         url: endpoint + queryGenes,
@@ -68,15 +68,15 @@ var getGenes = function (taxid, callbackOnSuccess) {
             $.each(geneData, function (key, element) {
                 var gdid = element['gene']['value'].split("/");
                 var gqid = gdid.slice(-1)[0];
-                if (element['strand']['value'] === 'http://www.wikidata.org/entity/Q22809711'){
-                            genes['strand'] =  'Reverse';
-                        }else{
-                            genes['strand'] =  'Forward';
-                        }
+                if (element['strand']['value'] === 'http://www.wikidata.org/entity/Q22809711') {
+                    genes['strand'] = 'Reverse';
+                } else {
+                    genes['strand'] = 'Forward';
+                }
 
                 genes = {
                     'name': element['geneLabel']['value'],
-                    'value': element['geneLabel']['value'] + " | " + element['locustag']['value'] + " | " +gqid  + " | " +   element['entrezid']['value'],
+                    'value': element['geneLabel']['value'] + " | " + element['locustag']['value'] + " | " + gqid + " | " + element['entrezid']['value'],
                     'locustag': element['locustag']['value'],
                     'id': element['entrezid']['value'],
                     'genomicstart': element['genomicstart']['value'],
@@ -106,18 +106,19 @@ var getGenes = function (taxid, callbackOnSuccess) {
 var getGOTerms = function (uniprot, callBackonSuccess) {
     var goTerms = {};
     var goQuery = [
-        "SELECT ?protein ?proteinLabel ?goterm  ?reference_stated_inLabel ?reference_retrievedLabel ?determination " +
-        "?determinationLabel ?gotermValue ?gotermValueLabel ?goclass ?goclassLabel ?goID WHERE { ?protein wdt:P352",
+        "SELECT ?protein ?proteinLabel ?goterm  ?reference_stated_inLabel ?reference_retrievedLabel ?determination  " +
+        "?determinationLabel ?gotermValue ?gotermValueLabel ?goclass ?goclassLabel ?goID ?ecnumber WHERE { ?protein wdt:P352",
         "\"" + uniprot + "\".",
         "{?protein p:P680 ?goterm} UNION {?protein p:P681 ?goterm} UNION {?protein p:P682 ?goterm}.  " +
         "?goterm pq:P459 ?determination .  ?goterm prov:wasDerivedFrom/pr:P248 ?reference_stated_in . " +
         "?goterm prov:wasDerivedFrom/pr:P813 ?reference_retrieved . " +
         "{?goterm ps:P680 ?gotermValue} UNION {?goterm ps:P681 ?gotermValue} UNION {?goterm ps:P682 ?gotermValue}.  " +
         "?gotermValue wdt:P279* ?goclass; wdt:P686 ?goID. FILTER ( ?goclass = wd:Q2996394 || ?goclass = wd:Q5058355 || ?goclass = wd:Q14860489) " +
+        "OPTIONAL {?gotermValue wdt:P591 ?ecnumber.}" +
         "SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\" .}}"
 
     ].join(" ");
-    //console.log(endpoint + goQuery);
+    console.log(endpoint + goQuery);
 
     $.ajax({
         type: "GET",
@@ -172,7 +173,7 @@ var getInterPro = function (uniprot, callBackonSuccess) {
         "filter (lang(?interPro_label) = \"en\") .}"
 
     ].join(" ");
-    console.log(endpoint + ipQuery);
+    //console.log(endpoint + ipQuery);
 
     $.ajax({
         type: "GET",
