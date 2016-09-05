@@ -362,7 +362,8 @@ $(document).ready(function () {
 
         },
         editWD: function () {
-            this.$editWDButton.on("click", function (e) {
+
+            this.$editWDButton.off("click").click(function (e) {
                 e.preventDefault();
                 goFormAll.sendToServer(goFormAll.goFormData, '/wd_go_edit');
                 $('form').each(function () {
@@ -388,7 +389,7 @@ $(document).ready(function () {
                         alert("Wikidata item succesfully edited!\nIt may take a few minutes for it to show up here.")
                     }
                     else {
-                        //alert("Could not edit Wikidata at this time");
+                        alert("Could not edit Wikidata at this time");
                     }
 
                 },
