@@ -547,20 +547,34 @@ $(document).ready(function () {
             var bp = this.$bp;
             var cc = this.$cc;
             var enzclass = this.$ecnum;
-            console.log(enzclass);
-            console.log(goTerms);
 
+            console.log(goTerms);
             var ec_count = 0;
+
+            var pmid_ref = function (goclass, results) {
+                console.log(goclass);
+                if (results.hasOwnProperty('pmid')) {
+                    console.log(results['pmid']['value']);
+                    goRefModal_obj.init(goclass, results['reference_stated_inLabel']['value'], results['reference_retrievedLabel']['value'], results['pmid']['value']);
+                //
+                } else {
+                    console.log('hello');
+                    goRefModal_obj.init(goclass, results['reference_stated_inLabel']['value'], results['reference_retrievedLabel']['value'], 'None');
+                }
+            };
+
+
             if (goTerms['molecularFunction'].length > 0) {
                 $.each(goTerms['molecularFunction'], function (key, element) {
                     mf.append(goData.goInput(element['gotermValueLabel']['value'], element['goID']['value'], element['determination']['value'], element['determinationLabel']['value']));
-                    goRefModal_obj.init(mf, element['reference_stated_inLabel']['value'], element['reference_retrievedLabel']['value']);
+                    pmid_ref(mf, element);
+
                     if (element.hasOwnProperty("ecnumber")) {
                         enzclass.append(goData.ecInput(element['ecnumber']['value']));
                     }
                 });
             } else {
-                console.log("no go data ");
+                //console.log("no go data ");
                 mf.append(goData.goInput("No Molecular Function Data Available", "----------", "----------", "----------"));
                 ec_count += 1;
             }
@@ -568,14 +582,14 @@ $(document).ready(function () {
             if (goTerms['biologicalProcess'].length > 0) {
                 $.each(goTerms['biologicalProcess'], function (key, element) {
                     bp.append(goData.goInput(element['gotermValueLabel']['value'], element['goID']['value'], element['determination']['value'], element['determinationLabel']['value']));
-                    goRefModal_obj.init(bp, element['reference_stated_inLabel']['value'], element['reference_retrievedLabel']['value']);
+                    pmid_ref(bp, element);
                     if (element.hasOwnProperty("ecnumber")) {
                         enzclass.append(goData.ecInput(element['ecnumber']['value']));
                     }
 
                 });
             } else {
-                console.log("no go data ");
+                //console.log("no go data ");
                 bp.append(goData.goInput("No Biological Process Data Available", "----------", "----------", "----------"));
                 ec_count += 1;
 
@@ -583,18 +597,18 @@ $(document).ready(function () {
             if (goTerms['cellularComponent'].length > 0) {
                 $.each(goTerms['cellularComponent'], function (key, element) {
                     cc.append(goData.goInput(element['gotermValueLabel']['value'], element['goID']['value'], element['determination']['value'], element['determinationLabel']['value']));
-                    goRefModal_obj.init(cc, element['reference_stated_inLabel']['value'], element['reference_retrievedLabel']['value']);
+                    pmid_ref(cc, element);
                     if (element.hasOwnProperty("ecnumber")) {
                         enzclass.append(goData.ecInput(element['ecnumber']['value']));
                     }
 
                 });
             } else {
-                console.log("no go data ");
+                //console.log("no go data ");
                 cc.append(goData.goInput("No Cellular Component Data Available", "----------", "----------", "----------"));
                 ec_count += 1;
             }
-            if (ec_count == 3) {
+            if (ec_count === 3) {
                 enzclass.append(goData.ecInput("No Enzyme Data", "----------", "----------", "----------"));
             }
 
@@ -711,9 +725,9 @@ $(document).ready(function () {
     };
 
     var goRefModal_obj = {
-        init: function (element, stated_in, retrieved) {
+        init: function (element, stated_in, retrieved, pmid) {
             this.cacheDom();
-            this.openModal(element, stated_in, retrieved);
+            this.openModal(element, stated_in, retrieved, pmid);
             this.closeModal();
         },
         cacheDom: function () {
@@ -721,17 +735,20 @@ $(document).ready(function () {
             this.$modalClose = this.$modal.find('#modalRefClose');
             this.$refStated = this.$modal.find('#main-ref-statedin');
             this.$refRetrieved = this.$modal.find('#main-ref-retrieved');
+            this.$pmid = this.$modal.find('#main-ref-pmid');
 
         },
-        openModal: function (element, stated_in, retrieved) {
+        openModal: function (element, stated_in, retrieved, pmid) {
             var $modal = this.$modal;
             var $stated = this.$refStated;
             var $retrieved = this.$refRetrieved;
+            var $pmid = this.$pmid;
             console.log(element.find('.div-ref-but'));
             element.find('.div-ref-but').on('click', function () {
                 console.log("clicking ref button");
                 $stated.html(stated_in);
                 $retrieved.html(retrieved);
+                $pmid.html(pmid);
                 $modal.modal('show');
             });
         },
