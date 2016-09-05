@@ -174,10 +174,15 @@ $(document).ready(function () {
                 ];
                 //initialize all modules on organism load
                 geneData.init(first_gene);
+
                 proteinData.init(first_protein);
                 interProData.init(first_protein[1]);
                 goData.init(first_protein[1]);
                 goFormAll.init(first_protein[2]);
+                var gstart = first_gene[4] - 400;
+                var gend = first_gene[5] - (-400);
+                console.log(gend);
+                jbrowse.init(currentTaxa.Taxid, currentTaxa.RefSeq, ":" + gstart + ".." + gend, currentTaxa.Name);
             })
         }
 
@@ -544,61 +549,76 @@ $(document).ready(function () {
             var enzclass = this.$ecnum;
             console.log(enzclass);
             console.log(goTerms);
+
+            var ec_count = 0
             if (goTerms['molecularFunction'].length > 0) {
                 $.each(goTerms['molecularFunction'], function (key, element) {
                     mf.append(goData.goInput(element['gotermValueLabel']['value'], element['goID']['value'], element['determination']['value'], element['determinationLabel']['value']));
                     goRefModal_obj.init(mf, element['reference_stated_inLabel']['value'], element['reference_retrievedLabel']['value']);
-                    if (element['ecnumber']['value']){
+                    if (element.hasOwnProperty("ecnumber")) {
                         enzclass.append(goData.ecInput(element['ecnumber']['value']));
                     }
-
                 });
             } else {
+                console.log("no go data ");
                 mf.append(goData.goInput("No Molecular Function Data Available", "----------", "----------", "----------"));
+                ec_count += 1;
             }
 
             if (goTerms['biologicalProcess'].length > 0) {
                 $.each(goTerms['biologicalProcess'], function (key, element) {
                     bp.append(goData.goInput(element['gotermValueLabel']['value'], element['goID']['value'], element['determination']['value'], element['determinationLabel']['value']));
                     goRefModal_obj.init(bp, element['reference_stated_inLabel']['value'], element['reference_retrievedLabel']['value']);
-
+                    if (element.hasOwnProperty("ecnumber")) {
+                        enzclass.append(goData.ecInput(element['ecnumber']['value']));
+                    }
 
                 });
             } else {
+                console.log("no go data ");
                 bp.append(goData.goInput("No Biological Process Data Available", "----------", "----------", "----------"));
+                ec_count += 1;
 
             }
             if (goTerms['cellularComponent'].length > 0) {
                 $.each(goTerms['cellularComponent'], function (key, element) {
                     cc.append(goData.goInput(element['gotermValueLabel']['value'], element['goID']['value'], element['determination']['value'], element['determinationLabel']['value']));
                     goRefModal_obj.init(cc, element['reference_stated_inLabel']['value'], element['reference_retrievedLabel']['value']);
+                    if (element.hasOwnProperty("ecnumber")) {
+                        enzclass.append(goData.ecInput(element['ecnumber']['value']));
+                    }
 
                 });
             } else {
+                console.log("no go data ");
                 cc.append(goData.goInput("No Cellular Component Data Available", "----------", "----------", "----------"));
+                ec_count += 1;
+            }
+            if (ec_count == 3) {
+                enzclass.append(goData.ecInput("No Enzyme Data", "----------", "----------", "----------"));
             }
 
         },
         goInput: function (golable, goid, evi_url, evi_label) {
-            return  "<div class=\"row main-dataul\"><div class=\"col-md-5\"><h5>" + golable + "</h5></div>" +
-                    "<div class=\"col-md-3\">" +
-                    "<a target=\"_blank\" href=http://amigo.geneontology.org/amigo/term/" + goid + "><h5>" + goid + "</h5></a>" + "</div>" +
-                    "<div class=\"col-md-2\">" +
-                    "<a target=\"_blank\" href=" + evi_url + "><h5>" + evi_label + "</h5></a>" + "</div>" +
-                    "<div id='main-ref-button'class=\"col-md-2\">" +
-                    "<button type='button' class='main-button-ref btn btn-primary div-ref-but' ></button></div>" +
-                    "</div>" +
-                    "</div>";
+            return "<div class=\"row main-dataul\"><div class=\"col-md-5\"><h5>" + golable + "</h5></div>" +
+                "<div class=\"col-md-3\">" +
+                "<a target=\"_blank\" href=http://amigo.geneontology.org/amigo/term/" + goid + "><h5>" + goid + "</h5></a>" + "</div>" +
+                "<div class=\"col-md-2\">" +
+                "<a target=\"_blank\" href=" + evi_url + "><h5>" + evi_label + "</h5></a>" + "</div>" +
+                "<div id='main-ref-button'class=\"col-md-2\">" +
+                "<button type='button' class='main-button-ref btn btn-primary div-ref-but' ></button></div>" +
+                "</div>" +
+                "</div>";
         },
-        ecInput: function (ec_number){
+        ecInput: function (ec_number) {
             return "<div class=\"row main-dataul\"><div class=\"col-md-2\"><h5>" + ec_number + "</h5></div>" +
-                    "<div class=\"col-md-4\"></div>" +
-                    "<div class=\"col-md-2\"></div>" +
-                    "<div class=\"col-md-2\"></div>" +
-                    "<div id='main-ref-button'class=\"col-md-2\">" +
-                    "<button type='button' class='main-button-ref btn btn-primary div-ref-but' ></button></div>" +
-                    "</div>" +
-                    "</div>";
+                "<div class=\"col-md-4\"></div>" +
+                "<div class=\"col-md-2\"></div>" +
+                "<div class=\"col-md-2\"></div>" +
+                "<div id='main-ref-button'class=\"col-md-2\">" +
+                "<button type='button' class='main-button-ref btn btn-primary div-ref-but' ></button></div>" +
+                "</div>" +
+                "</div>";
         }
 
 
@@ -895,9 +915,15 @@ $(document).ready(function () {
 
 
 ////////////////////////////////////////////////////Begin preload///////////////////////////////////////////////////////
-    jbrowse.init(currentTaxa['Taxid'], currentTaxa['RefSeq'], ':100000..200000&tracks=genes_canvas_mod', currentTaxa['Name']);
+
     orgData.init(currentTaxa);
     geneForm.init(currentTaxa['Taxid']);
 //////////////////////////////////////////////////////End data preload//////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////Experimental /////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////Experimental /////////////////////////////////////////////////
+
+
 });
 
