@@ -388,7 +388,7 @@ $(document).ready(function () {
                         alert("Wikidata item succesfully edited!\nIt may take a few minutes for it to show up here.")
                     }
                     else {
-                        alert("Could not login");
+                        //alert("Could not edit Wikidata at this time");
                     }
 
                 },
@@ -550,7 +550,7 @@ $(document).ready(function () {
             console.log(enzclass);
             console.log(goTerms);
 
-            var ec_count = 0
+            var ec_count = 0;
             if (goTerms['molecularFunction'].length > 0) {
                 $.each(goTerms['molecularFunction'], function (key, element) {
                     mf.append(goData.goInput(element['gotermValueLabel']['value'], element['goID']['value'], element['determination']['value'], element['determinationLabel']['value']));
@@ -654,7 +654,7 @@ $(document).ready(function () {
                     //console.log(element['interPro_label']['value']);
 
                     ipD.append(interProData.ipInput(element['interPro_label']['value'], element['ipID']['value']));
-                    interProRefModal_obj.init(ipD, element['reference_stated_in']['value'], element['pubDate']['value'],
+                    interProRefModal_obj.init(ipD, element['reference_stated_inLabel']['value'], element['pubDate']['value'],
                         element['version']['value'], element['refURL']['value']);
                 });
             }

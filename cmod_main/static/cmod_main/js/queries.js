@@ -159,7 +159,7 @@ var getGOTerms = function (uniprot, callBackonSuccess) {
 var getInterPro = function (uniprot, callBackonSuccess) {
     var ipDomains = {};
     var ipQuery = [
-        "SELECT distinct ?protein ?interPro_item ?interPro_label ?ipID ?reference_stated_in ?pubDate ?version ?refURL WHERE {" +
+        "SELECT distinct ?protein ?interPro_item ?interPro_label ?ipID ?reference_stated_inLabel ?pubDate ?version ?refURL WHERE {" +
         "?protein wdt:P352",
         "\"" + uniprot + "\";",
         "p:P527 ?interPro." +
@@ -170,6 +170,7 @@ var getInterPro = function (uniprot, callBackonSuccess) {
         "prov:wasDerivedFrom/pr:P854 ?refURL . " + //#reference URL
         "?interPro_item wdt:P2926 ?ipID;" +
         "rdfs:label ?interPro_label. " +
+        "SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\" .}"+
         "filter (lang(?interPro_label) = \"en\") .}"
 
     ].join(" ");
