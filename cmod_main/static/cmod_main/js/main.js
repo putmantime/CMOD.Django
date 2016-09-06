@@ -816,7 +816,7 @@ $(document).ready(function () {
 
         },
         url: "../../static/cmod_main/JBrowse-1.12.1-dev/index.html?data=sparql_data/sparql_data_",
-        coordPrefix: "&tracklist=0&menu=0&loc=",
+        coordPrefix: "&menu=0&loc=",
         cacheDOM: function () {
             this.$jb = $("#jbrowseModule");
             this.$browser = this.$jb.find('#jbrowse');
