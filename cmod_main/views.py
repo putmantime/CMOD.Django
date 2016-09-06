@@ -8,6 +8,7 @@ import pprint
 
 
 def index(request):
+    # launch landing page
     template = loader.get_template("cmod_main/index.html")
     return HttpResponse(template.render())
 
@@ -68,7 +69,8 @@ def wd_go_edit(request):
             try:
                 # find the appropriate item in wd or make a new one
                 wd_item_protein = PBB_Core.WDItemEngine(wd_item_id=statementDict['subject'], domain='proteins',
-                                                        data=[goStatement], use_sparql=True, append_value=[goProp[statementDict['goClass']]])
+                                                        data=[goStatement], use_sparql=True,
+                                                        append_value=[goProp[statementDict['goClass']]])
                 print("found the item")
                 credentials["item_search"] = "success"
                 print("Found item " + wd_item_protein.get_label())
@@ -104,7 +106,8 @@ def wd_credentials(request):
         else:
             user_pass["login"] = "success"
 
-
         return HttpResponse(json.dumps(user_pass), content_type='application/json')
         # return render(request, "cmod_main/main_page.html", )
+
+
 
