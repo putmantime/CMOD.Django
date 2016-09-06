@@ -10,16 +10,16 @@ CMOD Wikidata App built on Django Framework for editing Wikidata with existing G
 
 -Load a gene and browse gene and protein data
 
-  -Identifiers
+  --Identifiers
 
-  -Annotations
+  --Annotations
 
-  -Gene ontology terms
+  --Gene ontology terms
 
-  -InterPro Domains
+  --InterPro Domains
 
-  -EC Number and enzyme data
+  --EC Number and enzyme data
 
 -Add data to Wikidata
 
-  -Add a gene ontology term to a Protein
+  --Add a gene ontology term to a Protein
