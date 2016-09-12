@@ -1,2 +1,4 @@
 cmod/settings_secret.py
-/cmod/settings.py
+cmod/settings.py
+ __pycache__/*
+ cmod/__pycache__/*
