@@ -2,3 +2,4 @@ cmod/settings_secret.py
 cmod/settings.py
  __pycache__/*
  cmod/__pycache__/*
+/idea/*
