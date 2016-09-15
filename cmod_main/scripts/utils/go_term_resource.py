@@ -49,7 +49,7 @@ class UpdatePSQLDatabase(object):
         go_chunks = self.chunks(goresults, 100)
         res = 0
         for chunk in go_chunks:
-
+            res += 1
             data_list = []
             for goterm in chunk:
                 print('INSERT_' + str(res))
@@ -57,11 +57,12 @@ class UpdatePSQLDatabase(object):
                 goClassQid = goterm['goclass']['value'].split("/")[-1]
 
                 column_data = (goterm['goID']['value'], goTermQid, goterm['goTermLabel']['value'],
-                               goClassQid, goterm['goclassLabel']['value'], datetime.now())
+                               goClassQid, goterm['goclassLabel']['value'], str(datetime.now()))
                 data_list.append(column_data)
+
             self.cur.executemany("""INSERT INTO goterms (id, goqid, golabel, coclassqid, goclasslabel, retrieved)
                                        VALUES (%s,%s,%s,%s,%s,%s)
-                                       ON CONFLICT DO NOTHING""", data_list)
+                                       ON CONFLICT (id) DO UPDATE SET retrieved = CURRENT_TIMESTAMP ;""", data_list)
             self.conn.commit()
 
     def querydb(self):
@@ -72,6 +73,9 @@ class UpdatePSQLDatabase(object):
 
 
 
+
+ex = UpdatePSQLDatabase()
+update = ex.get_go_terms()
 
 
 

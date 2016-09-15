@@ -10,5 +10,3 @@ def go_term_update():
     update = ex.get_go_terms()
     return "updated go terms"
 
-
-
