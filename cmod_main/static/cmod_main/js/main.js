@@ -181,7 +181,7 @@ $(document).ready(function () {
                 goFormAll.init(first_protein[2]);
                 var gstart = first_gene[4] - 400;
                 var gend = first_gene[5] - (-400);
-                console.log(gend);
+                //console.log(gend);
                 jbrowse.init(currentTaxa.Taxid, currentTaxa.RefSeq, ":" + gstart + ".." + gend, currentTaxa.Name);
             })
         }
@@ -453,36 +453,28 @@ $(document).ready(function () {
             this.$ul = this.$gd.find('ul');
             this.$geneD = this.$gd.find('#geneData');
             this.$annotations = this.$gd.find('#geneannotationdata');
-
-
+            this.$gene_template = this.$gd.find('#gene_data_template');
             this.template = this.$gd.find('#gene-template').html();
 
         },
         render: function (gene) {
-            //console.log(gene);
             var data = {
-                'gene': gene
+                'gene': gene,
+                'name': gene[0],
+                'entrez': gene[1],
+                'qid': gene[2],
+                'locus_tag': gene[3],
+                'gen_start': gene[4],
+                'gen_end': gene[5],
+                'strand': gene[6]
             };
-            //console.log(data.gene[1]);
-
-            this.$geneD.html(
-                "<div class='main-data'> <h5>Gene Name:    </h5>     " + data.gene[0] + "</div>" +
-                "<div class='main-data'> <h5>Entrez ID:    </h5> <a href='http://www.ncbi.nlm.nih.gov/gene/?term=" +
-                data.gene[1] + "'>" + data.gene[1] + "</a></div>" +
-                "<div class='main-data'> <h5>Wikidata ID:  </h5> <a href='https://www.wikidata.org/wiki/" +
-                data.gene[2] + "'>" + data.gene[2] + "</a></div>"
+            console.log(data);
+            var template = _.template(
+                "<div class='main-data'> <h5>Gene Name: </h5><a href='http://www.ncbi.nlm.nih.gov/gene/?term=<%= entrez %>'><%= name %></a> </div>" +
+                "<div class='main-data'> <h5>Entrez ID: </h5> <a href='http://www.ncbi.nlm.nih.gov/gene/?term=<%= entrez %>'><%= entrez %></a></div>" +
+                "<div class='main-data'> <h5>Wikidata ID: </h5> <a href='https://www.wikidata.org/wiki/<%= qid %>'><%= qid %></a></div>"
             );
-            this.$annotations.html(
-                "<div id='main-annotationBox' class='row main-dataul'>" +
-                "<div class='col-md-3'><a href='http://www.ncbi.nlm.nih.gov/gene/?term=" + data.gene[3] + "'>" +
-                data.gene[3] + "</a></div>" +
-                "<div class='col-md-2'>" + data.gene[4] + "</div>" +
-                "<div class='col-md-2'>" + data.gene[5] + "</div>" +
-                "<div class='col-md-3'>" + data.gene[6] + "</div>" +
-                "<div id='main-ref-button'class=\"col-md-2\">" +
-                "<button type='button' class='main-button-ref btn btn-primary div-ref-but' ></button></div>" +
-                "</div>"
-            );
+            this.$geneD.html(template(data));
             geneRefModal_obj.init(this.$annotations, '-------', '-------');
         }
     };
@@ -504,16 +496,20 @@ $(document).ready(function () {
             //console.log(protein);
 
             var data = {
-                'protein': protein
+                'protein': protein,
+                'name': protein[0],
+                'uniprot': protein[1],
+                'qid': protein[2],
+                'refseq': protein[3]
             };
-
-
-            this.$protD.html(
-                "<div class='main-data'><h5>Protein Name: </h5>" + data.protein[0] + "</div>" +
-                "<div class='main-data'><h5>UniProt ID:   </h5> <a href='http://purl.uniprot.org/uniprot/" + data.protein[1] + "'>" + data.protein[1] + "</a></div>" +
-                "<div class='main-data'><h5>Wikidata ID:  </h5> <a href='https://www.wikidata.org/wiki/" + data.protein[2] + "'>" + data.protein[2] + "</a></div>" +
-                "<div class='main-data'><h5>RefSeq ID:    </h5> <a href='http://www.ncbi.nlm.nih.gov/protein/" + data.protein[3] + "'>" + data.protein[3] + "</a></div>"
+            console.log(protein); //["30S ribosomal protein S12    HP1197", "P0A0X4", "Q21632262", "NP_207988"]
+            var template = _.template(
+                "<div class='main-data'><h5>Protein Name: </h5><a href='http://purl.uniprot.org/uniprot/<%= uniprot %>'><%= name %></a></div>" +
+                "<div class='main-data'><h5>UniProt ID:   </h5> <a href='http://purl.uniprot.org/uniprot/<%= uniprot %>'><%= uniprot %></a></div>" +
+                "<div class='main-data'><h5>Wikidata ID:  </h5> <a href='https://www.wikidata.org/wiki/<%= qid %>'><%= qid %></a></div>" +
+                "<div class='main-data'><h5>RefSeq ID:    </h5> <a href='http://www.ncbi.nlm.nih.gov/protein/<%= refseq %>'><%= refseq %></a></div>"
             );
+            this.$protD.html(template(data));
         }
 
     };
@@ -549,17 +545,17 @@ $(document).ready(function () {
             var cc = this.$cc;
             var enzclass = this.$ecnum;
 
-            console.log(goTerms);
+            //console.log(goTerms);
             var ec_count = 0;
 
             var pmid_ref = function (goclass, results) {
-                console.log(goclass);
+                //console.log(goclass);
                 if (results.hasOwnProperty('pmid')) {
-                    console.log(results['pmid']['value']);
+                    //console.log(results['pmid']['value']);
                     goRefModal_obj.init(goclass, results['reference_stated_inLabel']['value'], results['reference_retrievedLabel']['value'], results['pmid']['value']);
-                //
+                    //
                 } else {
-                    console.log('hello');
+                    //console.log('hello');
                     goRefModal_obj.init(goclass, results['reference_stated_inLabel']['value'], results['reference_retrievedLabel']['value'], 'None');
                 }
             };
@@ -708,9 +704,9 @@ $(document).ready(function () {
             var $modal = this.$modal;
             var $stated = this.$refStated;
             var $retrieved = this.$refRetrieved;
-            console.log(element.find('.div-ref-but'));
+            //console.log(element.find('.div-ref-but'));
             element.find('.div-ref-but').on('click', function () {
-                console.log("clicking ref button");
+                //console.log("clicking ref button");
                 $stated.html(stated_in);
                 $retrieved.html(retrieved);
                 $modal.modal('show');
@@ -744,7 +740,7 @@ $(document).ready(function () {
             var $stated = this.$refStated;
             var $retrieved = this.$refRetrieved;
             var $pmid = this.$pmid;
-            console.log(element.find('.div-ref-but'));
+            //console.log(element.find('.div-ref-but'));
             element.find('.div-ref-but').on('click', function () {
                 console.log("clicking ref button");
                 $stated.html(stated_in);
@@ -785,7 +781,7 @@ $(document).ready(function () {
             var $refURL = this.$refURL;
 
             element.find('.div-ref-but').on('click', function () {
-                console.log("clicking ref button");
+                //console.log("clicking ref button");
                 $stated.html(stated_in);
                 $pubdate.html(pubdate);
                 $refVersion.html(version);

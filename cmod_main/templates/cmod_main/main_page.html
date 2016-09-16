@@ -10,12 +10,15 @@
     <link rel='stylesheet' type='text/css' href="{% static 'cmod_main/css/jquery-ui.theme.css' %}"/>
     <link rel='stylesheet' type='text/css' href="{% static 'cmod_main/css/jquery-ui.structure.css' %}"/>
     <link rel='stylesheet' type='text/css' href="{% static 'cmod_main/css/jquery-ui.css' %}"/>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.3.3/underscore-min.js"></script>
     <script src="{% static 'cmod_main/js/queries.js' %}"></script>
     <script src="{% static 'cmod_main/js/js.cookie.js' %}"></script>
     {#    <script src="{%  static 'cmod_main/js/landingpage.js'%}"></script>#}
+    <script src="{% static 'cmod_main/js/forms.js' %}"></script>
     <script src="{% static 'cmod_main/js/main.js' %}"></script>
     <script type="text/javascript">
         var OrgName = "{{ Name }}";
@@ -120,8 +123,6 @@
         </div>
     </div>
 </div>
-
-
 <!-- Modal -->
 <div class="modal" id="wdLoginModal" tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel" aria-hidden="true">
@@ -307,20 +308,8 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div id="geneDataBox" class="main-data-box">
-                            <div id="geneData"></div>
-                            <div id="geneAnnotationBoxes">
-                                <div class="main-annotaion-box row">
-                                    <div class="main-go-boxheader">
-                                        <div id="#locusTag" class="col-md-3"><h5>Locus Tag</h5></div>
-                                        <div id="#genstart" class="col-md-2"><h5>Start</h5></div>
-                                        <div id="#genend" class="col-md-2"><h5>End</h5></div>
-                                        <div id="#strand" class="col-md-3"><h5>Strand</h5></div>
-                                        <div id="#annotationRefBut" class="col-md-2"><h5>Reference</h5></div>
-                                    </div>
-                                    <div id="geneannotationdata" class="main-go-data"></div>
-                                </div>
+                            <div id="geneData">
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -353,7 +342,7 @@
                         </div>
                     </div>
                 </div>
-                <div style="padding-left:20px; padding-right: 20px; padding-top: 10px; padding-bottom">
+                <div style="padding-left:20px; padding-right: 20px; padding-top: 10px; padding-bottom:10px;">
                     <div>
 
                         <!-- Nav tabs -->
@@ -369,6 +358,8 @@
                                 Domain</a></li>
                             <li role="presentation"><a href="#ez" aria-controls="enzyme" role="tab" data-toggle="tab">Enzimatic
                                 Action</a></li>
+                            <li role="presentation"><a href="#op" aria-controls="operon" role="tab" data-toggle="tab">Operon
+                                </a></li>
                         </ul>
 
                         <!-- Tab panes -->
@@ -444,6 +435,18 @@
                                         <div class="col-md-2"><h5>Substrates</h5></div>
                                         <div class="col-md-2"><h5>Reference</h5></div>
                                         <div id="enzymeprodata" class="main-go-data"></div>
+                                    </div>
+                                </div>
+                            </div>
+                             <div role="tabpanel" class="tab-pane" id="op">
+                                <div id="operonBox">
+                                    <div class="main-go-box row">
+                                        <div class="col-md-2"><h5>Operon Identifier</h5></div>
+                                        <div class="col-md-4"><h5>Genes Involved</h5></div>
+                                        <div class="col-md-2"><h5>Pathway</h5></div>
+                                        <div class="col-md-2"><h5></h5></div>
+                                        <div class="col-md-2"><h5>Reference</h5></div>
+                                        <div id="operondata" class="main-go-data"></div>
                                     </div>
                                 </div>
                             </div>
