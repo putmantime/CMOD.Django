@@ -358,25 +358,27 @@
 
                         <!-- Nav tabs -->
                         <ul class="nav nav-tabs" role="tablist">
-                            <li role="presentation" class="active"><a href="#mf" aria-controls="home" role="tab"
+                            <li role="presentation" class="active"><a href="#mf" aria-controls="molfunc" role="tab"
                                                                       data-toggle="tab">Molecular
                                 Function</a></li>
-                            <li role="presentation"><a href="#bp" aria-controls="profile" role="tab" data-toggle="tab">Biological
+                            <li role="presentation"><a href="#bp" aria-controls="bioproc" role="tab" data-toggle="tab">Biological
                                 Process</a></li>
-                            <li role="presentation"><a href="#cc" aria-controls="messages" role="tab" data-toggle="tab">Cellular
+                            <li role="presentation"><a href="#cc" aria-controls="cellcomp" role="tab" data-toggle="tab">Cellular
                                 Component</a></li>
-                            <li role="presentation"><a href="#ip" aria-controls="settings" role="tab" data-toggle="tab">InterPro
+                            <li role="presentation"><a href="#ip" aria-controls="interpro" role="tab" data-toggle="tab">InterPro
                                 Domain</a></li>
+                            <li role="presentation"><a href="#ez" aria-controls="enzyme" role="tab" data-toggle="tab">Enzimatic
+                                Action</a></li>
                         </ul>
 
                         <!-- Tab panes -->
                         <div class="tab-content">
                             <div role="tabpanel" class="tab-pane active" id="mf">
                                 <div class="main-go-box row">
-                                        <div class="col-md-5"><h5>Molecular Function</h5></div>
-                                        <div class="col-md-3"><h5>Gene Ontology ID</h5></div>
-                                        <div class="col-md-2"><h5>Evidence</h5></div>
-                                        <div class="col-md-2"><h5>Reference</h5></div>
+                                    <div class="col-md-5"><h5>Molecular Function</h5></div>
+                                    <div class="col-md-3"><h5>Gene Ontology ID</h5></div>
+                                    <div class="col-md-2"><h5>Evidence</h5></div>
+                                    <div class="col-md-2"><h5>Reference</h5></div>
                                     <div id="molfuncdata" class="main-go-data"></div>
                                     <div class="main-modal-div">
                                         <!-- Button trigger modal -->
@@ -390,10 +392,10 @@
                             </div>
                             <div role="tabpanel" class="tab-pane" id="bp">
                                 <div class="main-go-box row">
-                                        <div class="col-md-5"><h5>Biological Process</h5></div>
-                                        <div class="col-md-3"><h5>Gene Ontology ID</h5></div>
-                                        <div class="col-md-2"><h5>Evidence</h5></div>
-                                        <div class="col-md-2"><h5>Reference</h5></div>
+                                    <div class="col-md-5"><h5>Biological Process</h5></div>
+                                    <div class="col-md-3"><h5>Gene Ontology ID</h5></div>
+                                    <div class="col-md-2"><h5>Evidence</h5></div>
+                                    <div class="col-md-2"><h5>Reference</h5></div>
                                     <div id="bioprocdata" class="main-go-data"></div>
                                     <div class="main-modal-div">
                                         <!-- Button trigger modal -->
@@ -407,10 +409,10 @@
                             </div>
                             <div role="tabpanel" class="tab-pane" id="cc">
                                 <div class="main-go-box row">
-                                        <div class="col-md-5"><h5>Cellular Component</h5></div>
-                                        <div class="col-md-3"><h5>Gene Ontology ID</h5></div>
-                                        <div class="col-md-2"><h5>Evidence</h5></div>
-                                        <div class="col-md-2"><h5>Reference</h5></div>
+                                    <div class="col-md-5"><h5>Cellular Component</h5></div>
+                                    <div class="col-md-3"><h5>Gene Ontology ID</h5></div>
+                                    <div class="col-md-2"><h5>Evidence</h5></div>
+                                    <div class="col-md-2"><h5>Reference</h5></div>
                                     <div id="celcompdata" class="main-go-data"></div>
                                     <div class="main-modal-div">
                                         <!-- Button trigger modal -->
@@ -425,33 +427,30 @@
                             <div role="tabpanel" class="tab-pane" id="ip">
                                 <div id="interProBoxes">
                                     <div class="main-go-box row">
-                                            <div class="col-md-5"><h5>InterPro Domain</h5></div>
-                                            <div class="col-md-3"><h5>InterPro ID</h5></div>
-                                            <div class="col-md-2"><h5></h5></div>
-                                            <div class="col-md-2"><h5>Reference</h5></div>
+                                        <div class="col-md-5"><h5>InterPro Domain</h5></div>
+                                        <div class="col-md-3"><h5>InterPro ID</h5></div>
+                                        <div class="col-md-2"><h5></h5></div>
+                                        <div class="col-md-2"><h5>Reference</h5></div>
                                         <div id="interprodata" class="main-go-data"></div>
                                     </div>
                                 </div>
                             </div>
+                            <div role="tabpanel" class="tab-pane" id="ez">
+                                <div id="enzymeBoxes">
+                                    <div class="main-go-box row">
+                                        <div class="col-md-2"><h5>EC Number</h5></div>
+                                        <div class="col-md-4"><h5>Reaction</h5></div>
+                                        <div class="col-md-2"><h5>Products</h5></div>
+                                        <div class="col-md-2"><h5>Substrates</h5></div>
+                                        <div class="col-md-2"><h5>Reference</h5></div>
+                                        <div id="enzymeprodata" class="main-go-data"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-
                     </div>
-
-
                 </div>
             </div>
-            {#            <div id="enzymeBoxes">#}
-            {#                <div class="main-go-box row">#}
-            {#                    <div class="main-go-boxheader">#}
-            {#                        <div class="col-md-2"><h5>EC Number</h5></div>#}
-            {#                        <div class="col-md-4"><h5>Reaction</h5></div>#}
-            {#                        <div class="col-md-2"><h5>Products</h5></div>#}
-            {#                        <div class="col-md-2"><h5>Substrates</h5></div>#}
-            {#                        <div class="col-md-2"><h5>Reference</h5></div>#}
-            {#                    </div>#}
-            {#                    <div id="enzymeprodata" class="main-go-data"></div>#}
-            {#                </div>#}
-            {#            </div>#}
         </div>
     </div>
 
@@ -475,7 +474,6 @@
         </div>
 
     </div>
-
 </div>
 
 
