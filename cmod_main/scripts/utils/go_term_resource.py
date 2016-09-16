@@ -1,9 +1,6 @@
 from SPARQLWrapper import SPARQLWrapper, JSON
 import pprint
 import psycopg2
-import json
-import sqlalchemy
-import sys
 from datetime import datetime
 
 
@@ -73,9 +70,6 @@ class UpdatePSQLDatabase(object):
 
 
 
-
-ex = UpdatePSQLDatabase()
-update = ex.get_go_terms()
 
 
 

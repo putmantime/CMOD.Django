@@ -1,7 +1,7 @@
 /**{border: dashed black 1px;}*/
 iframe {
     width: 100%;
-    height: 282px;
+    height: 445px;
 
 }
 
@@ -130,7 +130,7 @@ html, body {
 }
 
 .main-orgRow {
-    height: 350px;
+    height: 500px;
 
 }
 
@@ -146,8 +146,8 @@ html, body {
 
 .main-go-box {
     min-height: 180px;
-    border: solid #cce0ff 2px;
-    border-radius: 10px;
+    /*border: solid #cce0ff 2px;*/
+    /*border-radius: 10px;*/
     margin-top: 5px;
     color: #385d94;
 
@@ -199,7 +199,7 @@ html, body {
 }
 
 #goBoxes {
-    padding: 10px
+    /*padding: 10px*/
 }
 
 #enzymeBoxes {

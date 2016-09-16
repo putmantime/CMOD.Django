@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+
+    {% load static %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" type='text/css' href="{% static 'cmod_main/css/main.css' %}"/>
+    <link rel='stylesheet' type='text/css' href="{% static 'cmod_main/css/jquery-ui.theme.css' %}"/>
+    <link rel='stylesheet' type='text/css' href="{% static 'cmod_main/css/jquery-ui.structure.css' %}"/>
+    <link rel='stylesheet' type='text/css' href="{% static 'cmod_main/css/jquery-ui.css' %}"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="{% static 'cmod_main/js/queries.js' %}"></script>
+    <script src="{% static 'cmod_main/js/js.cookie.js' %}"></script>
+    {#    <script src="{%  static 'cmod_main/js/landingpage.js'%}"></script>#}
+    <script src="{% static 'cmod_main/js/main.js' %}"></script>
+    <script type="text/javascript">
+        var OrgName = "{{ Name }}";
+        var OrgTID = "{{ Taxid }}";
+        var OrgQID = "{{ QID }}";
+        var OrgRefSeq = "{{ RefSeq }}";
+        var loader = "{% static 'cmod_main/img/spin.gif' %}"
+    </script>
+
+
+</head>
+<body>
+{#wd credentials modal#}
+{#dialog#}
+<!--gene reference Modal-->
+<div class="modal" id="wdGeneRefModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <img class="wd-logo" src="{% static 'cmod_main/img/GeneWikidata-logo-en.png' %}">
+                <h4 class="modal-title" id="refModal">Wikidata Statement Reference</h4>
+            </div>
+            <div class="modal-body">
+                <h5>Stated in:</h5>
+
+                <div class='main-data' id="main-ref-statedin">
+                </div>
+                <h5>Retrieved:</h5>
+
+                <div class='main-data' id="main-ref-retrieved">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id='modalRefClose' type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--go reference Modal-->
+<div class="modal" id="wdGoRefModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <img class="wd-logo" src="{% static 'cmod_main/img/GeneWikidata-logo-en.png' %}">
+                <h4 class="modal-title" id="refModal">Wikidata Statement Reference</h4>
+            </div>
+            <div class="modal-body">
+                <h5>Stated in:</h5>
+
+                <div class='main-data' id="main-ref-statedin">
+                </div>
+                <h5>Retrieved:</h5>
+
+                <div class='main-data' id="main-ref-retrieved">
+                </div>
+                <h5>PMID:</h5>
+
+                <div class='main-data' id="main-ref-pmid">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id='modalRefClose' type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--ip reference Modal-->
+<div class="modal" id="wdIPRefModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <img class="wd-logo" src="{% static 'cmod_main/img/GeneWikidata-logo-en.png' %}">
+                <h4 class="modal-title" id="refModal">Wikidata Statement Reference</h4>
+            </div>
+            <div class="modal-body">
+                <h5>Stated in:</h5>
+
+                <div class='main-data' id="main-ref-statedin">
+                </div>
+                <h5>Publication Date:</h5>
+
+                <div class='main-data' id="main-ref-pubDate">
+                </div>
+                <h5>Software Version:</h5>
+
+                <div class='main-data' id="main-ref-version">
+                </div>
+                <h5>Reference URL:</h5>
+
+                <div class='main-data' id="main-ref-url">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id='modalRefClose' type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal" id="wdLoginModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <img class="wd-logo" src="{% static 'cmod_main/img/GeneWikidata-logo-en.png' %}">
+                <h4 class="modal-title" id="myModalLabel">Login to Wikidata</h4>
+            </div>
+            <div class="modal-body">
+                <form id="main-login-form" class="ui-widget ui-front form-inline">
+                    <div class="form-group">
+                        <input type="text" class="form-control"
+                               id="wduserName"
+                               placeholder="Wikidata User Name"
+                               name="wduserNameItem">
+                        <input type="password" class="form-control"
+                               id="wdPassword"
+                               placeholder="Wikidata Password" name="wdPasswordItem">
+                        <button data-dismiss="modal" id="editWDButton"
+                                class="btn btn-primary"
+                                type="submit">
+                            Login to WD
+                        </button>
+
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--?molfunc modal form -->
+<!-- Modal -->
+<div class="modal" id="goModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <img class="wd-logo" src="{% static 'cmod_main/img/GeneWikidata-logo-en.png' %}">
+                <h4 class="modal-title" id="myModalLabel">Add a Gene Ontology Term to this Protein</h4>
+            </div>
+            <div class="modal-body">
+                <form id="main-go-form" class="ui-widget ui-front">
+                    <div class="form-group">
+                        <div id='go-radio' style="text-align: center">
+                            <label id="mfRadio" class="radio-inline"><input type="radio" name="optradio">Molecular Function</label>
+                            <label id="bpRadio" class="radio-inline"><input type="radio" name="optradio">Biological Process</label>
+                            <label id="ccRadio" class="radio-inline"><input type="radio" name="optradio">Cellular Component</label>
+                        </div>
+                        <input id="goTermForm" type="text" class="form-control"
+                               placeholder="Gene Ontology Term"
+                               name="goFormItem">
+                        <input type="text" class="form-control"
+                               id="eviCodeForm"
+                               placeholder="GO Evidence Code"
+                               name="evidenceFormItem">
+                        <input type="text" class="form-control"
+                               id="pmidForm"
+                               placeholder="PMID" name="pmidrefFormItem">
+                        <button data-dismiss="modal" id="editWDButton"
+                                class="btn btn-primary main-go-buttons"
+                                type="button">
+                            Edit Wikidata Item
+                        </button>
+
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12 main-gutter-padding">
+            <div class="main-header">
+                <div id="main-wdlogo-div">
+                    <img style="max-height: 40px"
+                         src="{% static 'cmod_main/img/GeneWikidata-logo-en.png' %}">
+                </div>
+
+                <h1 class="main-title">Centralized Model Organism Database</h1>
+
+                <div class="row">
+                    <div class="col-md-6 main-gutter-padding">
+                        <div id="orgFormModule">
+                            <form class="main-form-div form-inline ui-widget">
+                                {#                                {% csrf_token %}#}
+                                <div class="form-group">
+                                    <label for="orgform"></label>
+                                    <input type="text" class="form-control formborders" id="orgform"
+                                           placeholder="choose a new microbe" name="orgFormItem">
+
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6 main-gutter-padding">
+                        <div id="geneFormModule">
+                            <form class="main-form-div form-inline ui-widget">
+                                {#                                {% csrf_token %}#}
+                                <div class="form-group">
+                                    <label for="geneform"></label>
+                                    <input type="text" class="form-control" id="geneform"
+                                           placeholder="choose a gene" name="geneFormItem">
+
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3 main-gutter-padding">
+            <div id="orgDataModule" class="main-orgRow main-data-borders">
+                <div class="main-boxheader">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h2 class="main-box-title">Organism</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="orgData" class="main-data-box">
+                            <div id="taxid" class="main-data"><h5>NCBI Taxonomy ID: </h5>{{ Taxid }}</div>
+                            <div id="QID" class="main-data"><h5>Wikidata QID: </h5>{{ QID }}</div>
+                            <div id="RefSeq" class="main-data"><h5>NCBI RefSeq ID: </h5>{{ RefSeq }}</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="col-md-9 main-gutter-padding">
+            <div id="jbrowseModule" class="main-orgRow main-data-borders">
+                <div class="main-jb-boxheader">
+                    <div class="row">
+                        <div class="col-md-2">
+
+                        </div>
+                        <div id='main-organism-name' class="col-md-10">
+
+                            <h3><i>{{ Name }}</i></h3>
+
+                        </div>
+                    </div>
+                </div>
+                <div id="jbrowse">
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-6 main-gutter-padding">
+            <div id="geneDataModule" class="main-gene-protein-row main-data-borders">
+                <div class="main-boxheader">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h2 class="main-box-title">Gene</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="geneDataBox" class="main-data-box">
+                            <div id="geneData"></div>
+                            <div id="geneAnnotationBoxes">
+                                <div class="main-annotaion-box row">
+                                    <div class="main-go-boxheader">
+                                        <div id="#locusTag" class="col-md-3"><h5>Locus Tag</h5></div>
+                                        <div id="#genstart" class="col-md-2"><h5>Start</h5></div>
+                                        <div id="#genend" class="col-md-2"><h5>End</h5></div>
+                                        <div id="#strand" class="col-md-3"><h5>Strand</h5></div>
+                                        <div id="#annotationRefBut" class="col-md-2"><h5>Reference</h5></div>
+                                    </div>
+                                    <div id="geneannotationdata" class="main-go-data"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 main-gutter-padding">
+            <div id="proteinDataModule" class="main-data-borders main-gene-protein-row">
+                <div class="main-boxheader">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h2 class="main-box-title">Protein</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="protDataBox" class="main-data-box">
+                            <div id="protData"></div>
+                            <div id="interProBoxes">
+                                <div class="main-go-box row">
+                                    <div class="main-go-boxheader">
+                                        <div class="col-md-5"><h5>InterPro Domain</h5></div>
+                                        <div class="col-md-3"><h5>InterPro ID</h5></div>
+                                        <div class="col-md-2"><h5></h5></div>
+                                        <div class="col-md-2"><h5>Reference</h5></div>
+                                    </div>
+                                    <div id="interprodata" class="main-go-data"></div>
+                                </div>
+                            </div>
+                            <div id="goBoxes">
+                                <div class="main-go-box row">
+                                    <div class="main-go-boxheader">
+                                        <div class="col-md-5"><h5>Molecular Function</h5></div>
+                                        <div class="col-md-3"><h5>Gene Ontology ID</h5></div>
+                                        <div class="col-md-2"><h5>Evidence</h5></div>
+                                        <div class="col-md-2"><h5>Reference</h5></div>
+                                    </div>
+                                    <div id="molfuncdata" class="main-go-data"></div>
+                                    <div class="main-modal-div">
+                                        <!-- Button trigger modal -->
+                                        <button id='mfbutton' type="button" class="main-goButton btn btn-primary"
+                                                data-toggle="modal"
+                                                data-target="#goModal">
+                                            Add a Molecular Function
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="main-go-box row">
+                                    <div class="main-go-boxheader">
+                                        <div class="col-md-5"><h5>Biological Process</h5></div>
+                                        <div class="col-md-3"><h5>Gene Ontology ID</h5></div>
+                                        <div class="col-md-2"><h5>Evidence</h5></div>
+                                        <div class="col-md-2"><h5>Reference</h5></div>
+                                    </div>
+                                    <div id="bioprocdata" class="main-go-data"></div>
+                                    <div class="main-modal-div">
+                                        <!-- Button trigger modal -->
+                                        <button id='bpbutton' type="button" class="main-goButton btn btn-primary"
+                                                data-toggle="modal"
+                                                data-target="#goModal">
+                                            Add a Biological Process
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="main-go-box row">
+                                    <div class="main-go-boxheader main-gutter-padding">
+                                        <div class="col-md-5"><h5>Cellular Component</h5></div>
+                                        <div class="col-md-3"><h5>Gene Ontology ID</h5></div>
+                                        <div class="col-md-2"><h5>Evidence</h5></div>
+                                        <div class="col-md-2"><h5>Reference</h5></div>
+                                    </div>
+                                    <div id="celcompdata" class="main-go-data"></div>
+                                    <div class="main-modal-div">
+                                        <!-- Button trigger modal -->
+                                        <button id='ccbutton' type="button" class="main-goButton btn btn-primary"
+                                                data-toggle="modal"
+                                                data-target="#goModal">
+                                            Add a Cellular Component
+                                        </button>
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+                            <div id="enzymeBoxes">
+                                <div class="main-go-box row">
+                                    <div class="main-go-boxheader">
+                                        <div class="col-md-2"><h5>EC Number</h5></div>
+                                        <div class="col-md-4"><h5>Reaction</h5></div>
+                                        <div class="col-md-2"><h5>Products</h5></div>
+                                        <div class="col-md-2"><h5>Substrates</h5></div>
+                                        <div class="col-md-2"><h5>Reference</h5></div>
+                                    </div>
+                                    <div id="enzymeprodata" class="main-go-data"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="main-gutter-padding">
+            <div class="main-footer">
+                <div style="min-height: 50px" class="main-title">
+                    <div class="col-md-1">
+                        <button id="wd-login-button" type="button" class="btn btn-primary" data-toggle="modal"
+                                data-target="#wdLoginModal">
+                            Login to Wikidata
+                        </button>
+                    </div>
+                    <div class="col-md-1 main-gutter-padding"></div>
+                    <div class="col-md-2 main-gutter-padding">
+                        <div id="userLogin"></div>
+                    </div>
+                    <div class="col-md-8 main-gutter-padding"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+</body>
+
+</html>
+
