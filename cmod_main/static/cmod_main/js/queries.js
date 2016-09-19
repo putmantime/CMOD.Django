@@ -68,12 +68,6 @@ var getGenes = function (taxid, callbackOnSuccess) {
             $.each(geneData, function (key, element) {
                 var gdid = element['gene']['value'].split("/");
                 var gqid = gdid.slice(-1)[0];
-                if (element['strand']['value'] === 'http://www.wikidata.org/entity/Q22809711') {
-                    genes['strand'] = 'Reverse';
-                } else {
-                    genes['strand'] = 'Forward';
-                }
-
                 genes = {
                     'name': element['geneLabel']['value'],
                     'value': element['geneLabel']['value'] + " | " + element['locustag']['value'] + " | " + gqid + " | " + element['entrezid']['value'],
@@ -81,6 +75,7 @@ var getGenes = function (taxid, callbackOnSuccess) {
                     'id': element['entrezid']['value'],
                     'genomicstart': element['genomicstart']['value'],
                     'genomicend': element['genomicend']['value'],
+                    'strand': element['strand']['value'],
                     'gqid': gqid
                 };
 
