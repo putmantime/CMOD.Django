@@ -49,7 +49,7 @@ def wd_go_edit(request):
                 "Biological Process": "P682"
             }
             print(statementDict['PMID'])
-            refs = [PBB_Core.WDItemID(value='Q591041', prop_nr='P248', is_reference=True),  # stated in
+            refs = [
                     PBB_Core.WDItemID(value='Q1860', prop_nr='P407', is_reference=True),  # language
                     PBB_Core.WDString(value=statementDict['PMID'], prop_nr='P698', is_reference=True),  # PMID
                     PBB_Core.WDItemID(value='Q26489220', prop_nr='P143', is_reference=True),  # imorted from CMOD
