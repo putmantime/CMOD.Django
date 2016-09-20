@@ -25,7 +25,7 @@ $(document).ready(function () {
         acsource: function (orginput) {
             getOrgs(function (orgTags) {
                 orginput.autocomplete({
-                    minLength: 3,
+                    minLength: 0,
                     source: orgTags,
                     autoFocus: true,
 

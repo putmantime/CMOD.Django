@@ -5,20 +5,21 @@ import json
 from .scripts.wikidatabots.ProteinBoxBot_Core import PBB_login, PBB_Core
 from time import gmtime, strftime
 import pprint
+from django.views.decorators.csrf import ensure_csrf_cookie
 
-
+@ensure_csrf_cookie
 def index(request):
     # launch landing page
     template = loader.get_template("cmod_main/index.html")
     return HttpResponse(template.render())
 
-
+@ensure_csrf_cookie
 def main_page(request):
     org_data = json.loads(request.session['org'])
     # template = loader.get_template("cmod_main/main_page.html")
     return render(request, "cmod_main/main_page.html", org_data)
 
-
+@ensure_csrf_cookie
 def get_orgs(request):
     if request.method == 'POST':
         data = json.dumps(request.POST)
@@ -28,7 +29,7 @@ def get_orgs(request):
     else:
         return HttpResponse("Hi")
 
-
+@ensure_csrf_cookie
 def wd_go_edit(request):
     if request.method == 'POST':
 
@@ -93,7 +94,7 @@ def wd_go_edit(request):
 
         # return render(request, "cmod_main/main_page.html",  credentials)
 
-
+@ensure_csrf_cookie
 def wd_credentials(request):
     if request.method == 'POST':
         creddata = json.dumps(request.POST)
