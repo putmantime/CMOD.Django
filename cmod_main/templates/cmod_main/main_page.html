@@ -309,35 +309,42 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div id="geneDataBox" class="main-data-box">
-                            <div id="geneData">
+                <div style="padding-left:20px; padding-right: 20px; padding-top: 10px; padding-bottom:10px;">
+                    <ul id='gene-prot-tabs' class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#gene-tab" aria-controls="gene" role="tab"
+                                                                  data-toggle="tab">Gene</a></li>
+                        <li role="presentation"><a href="#prot-tab" aria-controls="protein" role="tab"
+                                                   data-toggle="tab">Protein
+                        </a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="gene-tab">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div id="geneDataBox" class="main-data-box">
+                                        <div style='margin-left: -10px; margin-right: -10px;' id="geneData">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane active" id="prot-tab">
+                            <div id="proteinDataModule">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div id="protDataBox" class="main-data-box">
+                                            <div style='margin-left: -10px; margin-right: -10px;' id="protData"></div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-3 main-gutter-padding">
-            <div id="proteinDataModule" class="main-data-borders main-gene-protein-row">
-                <div class="main-boxheader">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h2 class="main-box-title">Protein</h2>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div id="protDataBox" class="main-data-box">
-                            <div id="protData"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 main-gutter-padding ">
+
+        <div class="col-md-9 main-gutter-padding ">
             <div id='goBoxes' class="main-gene-protein-row main-data-borders ">
                 <div class="main-boxheader">
                     <div class="row">
@@ -354,16 +361,21 @@
                             <li role="presentation" class="active"><a href="#mf" aria-controls="molfunc" role="tab"
                                                                       data-toggle="tab">Molecular
                                 Function</a></li>
-                            <li role="presentation"><a href="#bp" aria-controls="bioproc" role="tab" data-toggle="tab">Biological
+                            <li role="presentation"><a href="#bp" aria-controls="bioproc" role="tab"
+                                                       data-toggle="tab">Biological
                                 Process</a></li>
-                            <li role="presentation"><a href="#cc" aria-controls="cellcomp" role="tab" data-toggle="tab">Cellular
+                            <li role="presentation"><a href="#cc" aria-controls="cellcomp" role="tab"
+                                                       data-toggle="tab">Cellular
                                 Component</a></li>
-                            <li role="presentation"><a href="#ip" aria-controls="interpro" role="tab" data-toggle="tab">InterPro
+                            <li role="presentation"><a href="#ip" aria-controls="interpro" role="tab"
+                                                       data-toggle="tab">InterPro
                                 Domain</a></li>
-                            <li role="presentation"><a href="#ez" aria-controls="enzyme" role="tab" data-toggle="tab">Enzimatic
+                            <li role="presentation"><a href="#ez" aria-controls="enzyme" role="tab"
+                                                       data-toggle="tab">Enzimatic
                                 Action</a></li>
-                            <li role="presentation"><a href="#op" aria-controls="operon" role="tab" data-toggle="tab">Operon
-                                </a></li>
+                            <li role="presentation"><a href="#op" aria-controls="operon" role="tab"
+                                                       data-toggle="tab">Operon
+                            </a></li>
                         </ul>
 
                         <!-- Tab panes -->
@@ -442,7 +454,7 @@
                                     </div>
                                 </div>
                             </div>
-                             <div role="tabpanel" class="tab-pane" id="op">
+                            <div role="tabpanel" class="tab-pane" id="op">
                                 <div id="operonBox">
                                     <div class="main-go-box row">
                                         <div class="col-md-2"><h5>Operon Identifier</h5></div>

@@ -436,9 +436,9 @@ $(document).ready(function () {
                 'organism': taxData,
                 'thing': 'thing'
             };
-            this.$tid.html("<span><h4>NCBI Taxonomy ID:</h4>" + data['organism']['Taxid'] + "</span>");
-            this.$qid.html("<span><h4>Wikidata Item ID</h4>" + data['organism']['QID'] + "</span>");
-            this.$rsid.html("<span><h4>NCBI RefSeq ID</h4>" + data['organism']['RefSeq'] + "</span>");
+            this.$tid.html("<span><h5>NCBI Taxonomy ID:</h5>" + data['organism']['Taxid'] + "</span>");
+            this.$qid.html("<span><h5>Wikidata Item ID</h5>" + data['organism']['QID'] + "</span>");
+            this.$rsid.html("<span><h5>NCBI RefSeq ID</h5>" + data['organism']['RefSeq'] + "</span>");
 
         }
     };
