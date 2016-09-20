@@ -99,6 +99,8 @@ def wd_credentials(request):
         creddata = json.dumps(request.POST)
 
         user_pass = json.loads(creddata)
+        request.session['credentials'] = creddata
+        print(user_pass)
         login = PBB_login.WDLogin(user_pass['userName'], user_pass['password'])
         print(login.login_reply)
         if login.login_reply['login']['result'] == 'Failed':
