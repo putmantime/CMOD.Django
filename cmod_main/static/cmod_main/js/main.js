@@ -133,7 +133,7 @@ $(document).ready(function () {
 
                         //get GO Terms for this gene/protein
                         //goData.init(this.currentProtein[1]);
-                        goData_dev.init(this.currentProtein[1]);
+                        goData.init(this.currentProtein[1]);
                         interProData.init(this.currentProtein[1]);
                         //Render the data into the gene and protein boxes
                         geneData.init(this.currentGene);
@@ -179,7 +179,7 @@ $(document).ready(function () {
                 proteinData.init(first_protein);
                 interProData.init(first_protein[1]);
                 //goData.init(first_protein[1]);
-                goData_dev.init(first_protein[1]);
+                goData.init(first_protein[1]);
                 goFormAll.init(first_protein[2]);
                 var gstart = first_gene[4] - 400;
                 var gend = first_gene[5] - (-400);
@@ -526,133 +526,7 @@ $(document).ready(function () {
         }
 
     };
-
-//////render the gene ontology data in the GO boxes//////
-//    var goData = {
-//        init: function (uniprot) {
-//            this.cacheDOM();
-//            this.goTermData(uniprot);
-//
-//        },
-//        goTermData: function (uniprot) {
-//
-//            getGOTerms(uniprot, function (goTerms) {
-//                //console.log(goTerms);
-//                goData.render(goTerms);
-//            });
-//
-//        },
-//        cacheDOM: function () {
-//            this.$go = $('#goBoxes');
-//            this.$mf = this.$go.find('#molfuncdata');
-//            this.$bp = this.$go.find('#bioprocdata');
-//            this.$cc = this.$go.find('#celcompdata');
-//            this.$ec = $('#enzymeBoxes');
-//            this.$ecnum = this.$ec.find('#enzymeprodata');
-//
-//        },
-//        render: function (goTerms) {
-//            //console.log(goTerms);
-//            var mf = this.$mf;
-//            var bp = this.$bp;
-//            var cc = this.$cc;
-//            var enzclass = this.$ecnum;
-//
-//            //console.log(goTerms);
-//            var ec_count = 0;
-//
-//            var pmid_ref = function (goclass, results) {
-//                //console.log(goclass);
-//                if (results.hasOwnProperty('pmid')) {
-//                    //console.log(results['pmid']['value']);
-//                    goRefModal_obj.init(goclass, results['reference_stated_inLabel']['value'],
-//                        results['reference_retrievedLabel']['value'], results['pmid']['value']);
-//                    //
-//                } else {
-//                    //console.log('hello');
-//                    goRefModal_obj.init(goclass, results['reference_stated_inLabel']['value'],
-//                        results['reference_retrievedLabel']['value'], 'None');
-//                }
-//            };
-//
-//
-//            if (goTerms['molecularFunction'].length > 0) {
-//                $.each(goTerms['molecularFunction'], function (key, element) {
-//                    mf.append(goData.goInput(element['gotermValueLabel']['value'], element['goID']['value'],
-//                        element['determination']['value'], element['determinationLabel']['value']));
-//                    pmid_ref(mf, element);
-//
-//                    if (element.hasOwnProperty("ecnumber")) {
-//                        enzclass.append(goData.ecInput(element['ecnumber']['value']));
-//                    }
-//                });
-//            } else {
-//                //console.log("no go data ");
-//                mf.append(goData.goInput("No Molecular Function Data Available", "----------", "----------", "----------"));
-//                ec_count += 1;
-//            }
-//
-//            if (goTerms['biologicalProcess'].length > 0) {
-//                $.each(goTerms['biologicalProcess'], function (key, element) {
-//                    bp.append(goData.goInput(element['gotermValueLabel']['value'], element['goID']['value'],
-//                        element['determination']['value'], element['determinationLabel']['value']));
-//                    pmid_ref(bp, element);
-//                    if (element.hasOwnProperty("ecnumber")) {
-//                        enzclass.append(goData.ecInput(element['ecnumber']['value']));
-//                    }
-//
-//                });
-//            } else {
-//                //console.log("no go data ");
-//                bp.append(goData.goInput("No Biological Process Data Available", "----------", "----------", "----------"));
-//                ec_count += 1;
-//
-//            }
-//            if (goTerms['cellularComponent'].length > 0) {
-//                $.each(goTerms['cellularComponent'], function (key, element) {
-//                    cc.append(goData.goInput(element['gotermValueLabel']['value'], element['goID']['value'],
-//                        element['determination']['value'], element['determinationLabel']['value']));
-//                    pmid_ref(cc, element);
-//                    if (element.hasOwnProperty("ecnumber")) {
-//                        enzclass.append(goData.ecInput(element['ecnumber']['value']));
-//                    }
-//
-//                });
-//            } else {
-//                //console.log("no go data ");
-//                cc.append(goData.goInput("No Cellular Component Data Available", "----------", "----------", "----------"));
-//                ec_count += 1;
-//            }
-//            if (ec_count === 3) {
-//                enzclass.append(goData.ecInput("No Enzyme Data", "----------", "----------", "----------"));
-//            }
-//
-//        },
-//        goInput: function (golable, goid, evi_url, evi_label) {
-//            return "<div class=\"row main-dataul\"><div class=\"col-md-5\"><h5>" + golable + "</h5></div>" +
-//                "<div class=\"col-md-3\">" +
-//                "<a target=\"_blank\" href=http://amigo.geneontology.org/amigo/term/" + goid + "><h5>" + goid + "</h5></a>" + "</div>" +
-//                "<div class=\"col-md-2\">" +
-//                "<a target=\"_blank\" href=" + evi_url + "><h5>" + evi_label + "</h5></a>" + "</div>" +
-//                "<div id='main-ref-button'class=\"col-md-2\">" +
-//                "<button type='button' class='main-button-ref btn btn-primary div-ref-but' ></button></div>" +
-//                "</div>" +
-//                "</div>";
-//        },
-//        ecInput: function (ec_number) {
-//            return "<div class=\"row main-dataul\"><div class=\"col-md-2\"><h5>" + ec_number + "</h5></div>" +
-//                "<div class=\"col-md-4\"></div>" +
-//                "<div class=\"col-md-2\"></div>" +
-//                "<div class=\"col-md-2\"></div>" +
-//                "<div id='main-ref-button'class=\"col-md-2\">" +
-//                "<button type='button' id='"+  +"' class='main-button-ref btn btn-primary div-ref-but' ></button></div>" +
-//                "</div>" +
-//                "</div>";
-//        }
-//
-//
-//    };
-    var goData_dev = {
+    var goData = {
         init: function (uniprot) {
             this.cacheDOM();
             this.goTermData(uniprot);
@@ -662,7 +536,7 @@ $(document).ready(function () {
 
             getGOTerms(uniprot, function (goTerms) {
                 //console.log(goTerms);
-                goData_dev.render(goTerms);
+                goData.render(goTerms);
             });
 
         },
@@ -671,6 +545,8 @@ $(document).ready(function () {
             this.$mf = this.$go.find('#molfuncdata');
             this.$bp = this.$go.find('#bioprocdata');
             this.$cc = this.$go.find('#celcompdata');
+            this.$tabs = $('#annotations-tabs');
+
         },
         generate_go_template: function (terms, refid) {
             var data = {
@@ -680,11 +556,13 @@ $(document).ready(function () {
                 'evi_label': terms['determinationLabel']['value'],
                 'referenceID': refid
             };
-            var go_template = _.template("<div class=\"row main-dataul\"><div class=\"col-md-5\"><h5><%= label %></h5></div>" +
+            var go_template = _.template(
+                "<div class=\"row main-dataul\">" +
+                "<div class=\"col-md-5\"><h5><%= label %></h5></div>" +
                 "<div class=\"col-md-3\">" +
                 "<a target=\"_blank\" href=http://amigo.geneontology.org/amigo/term/<%= goid %>><h5><%= goid %></h5></a></div>" +
                 "<div class=\"col-md-2\">" +
-                "<a target=\"_blank\" href=<%= evi_label %>><h5><%= evi_label %></h5></a></div>" +
+                "<a target=\"_blank\" href='<%= evi_url %>'><h5><%= evi_label %></h5></a></div>" +
                 "<div id='main-ref-button'class=\"col-md-2\">" +
                 "<button type='button' id=<%= referenceID %> class='main-button-ref btn btn-primary div-ref-but' ></button></div>" +
                 "</div>" +
@@ -712,43 +590,43 @@ $(document).ready(function () {
 
             if (goTerms['molecularFunction'].length > 0) {
                 $.each(goTerms['molecularFunction'], function (key, element) {
-                    var godat = goData_dev.generate_go_template(element, "mf_" + key);
+                    var godat = goData.generate_go_template(element, "mf_" + key);
                     $molf.append(godat);
                     var $refbut = $molf.find('#mf_' + key);
-                    goData_dev.pmidRef($refbut, element);
+                    goData.pmidRef($refbut, element);
                     if (element.hasOwnProperty("ecnumber")) {
                         EnzymeData.init(element);
                     }
                 });
             } else {
-                $molf.append("<span>No Data</span>");
+                $molf.append("<div class='main-data'><h5>No Molecular Function Data Available</h5></div>");
             }
             if (goTerms['biologicalProcess'].length > 0) {
                 $.each(goTerms['biologicalProcess'], function (key, element) {
-                    var godat = goData_dev.generate_go_template(element, 'bp_' + key);
+                    var godat = goData.generate_go_template(element, 'bp_' + key);
                     $biop.append(godat);
                     var $refbut = $biop.find('#bp_' + key);
-                    goData_dev.pmidRef($refbut, element);
+                    goData.pmidRef($refbut, element);
                     if (element.hasOwnProperty("ecnumber")) {
                         EnzymeData.init(element);
                     }
 
                 });
             } else {
-                $biop.append("<span>No Data</span>");
+                $biop.append("<div class='main-data'><h5>No Biological Process Data Available</h5></div>");
             }
             if (goTerms['cellularComponent'].length > 0) {
                 $.each(goTerms['cellularComponent'], function (key, element) {
-                    var godat = goData_dev.generate_go_template(element, 'cc_' + key);
+                    var godat = goData.generate_go_template(element, 'cc_' + key);
                     $celc.append(godat);
                     var $refbut = $celc.find('#cc_' + key);
-                    goData_dev.pmidRef($refbut, element);
+                    goData.pmidRef($refbut, element);
                     if (element.hasOwnProperty("ecnumber")) {
                         EnzymeData.init(element);
                     }
                 });
             } else {
-                $celc.append("<span>No Data</span>");
+                $celc.append("<div class='main-data'><h5>No Cellular Component Data Available</h5></div>");
             }
         }
 

@@ -195,6 +195,7 @@ html, body {
 
 .main-go-data {
     padding: 20px;
+    height: 400px;
     overflow: auto;
 
 }
