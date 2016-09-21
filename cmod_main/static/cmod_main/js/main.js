@@ -903,14 +903,15 @@ $(document).ready(function () {
             this.$loginForm = $('#main-login-form');
             this.$userName = this.$loginForm.find('#wduserName');
             this.$password = this.$loginForm.find('#wdPassword');
-            this.$loginButton = this.$loginForm.find('#editWDButton');
+            this.$editButton = this.$loginForm.find('#editWDButton');
+
             this.$loggedin = $('#userLogin');
 
 
         },
         sendCredentials: function () {
 
-            wdLogin.$loginButton.on("click", function (e) {
+            wdLogin.$editButton.on("click", function (e) {
                 e.preventDefault();
                 var credentials = {
                     "userName": wdLogin.$userName.val(),
@@ -941,6 +942,19 @@ $(document).ready(function () {
                     //console.log(data);
                     if (data['login'] === "success") {
                         $("#userLogin").html("<h5>" + "Logged in as " + data['userName'] + "</h5>");
+
+                        var $loginButton = $("#wd-login-button");
+                        var text = $loginButton.find('span');
+                        text.html('Log out');
+                        $loginButton.off("click").click(function (e) {
+                            e.preventDefault();
+                            text.html('Login to Wikidata');
+                            $('#userLogin').html("");
+
+                        });
+
+
+
                     }
                     else {
 
