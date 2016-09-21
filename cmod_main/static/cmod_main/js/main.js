@@ -849,7 +849,7 @@ $(document).ready(function () {
             this.render(taxid, refseq, coords, name);
 
         },
-        url: "../../static/cmod_main/JBrowse-1.12.1-dev/index.html?data=sparql_data/sparql_data_",
+        url: "/static/cmod_main/JBrowse-1.12.1-dev/index.html?data=sparql_data/sparql_data_",
         coordPrefix: "&tracklist=0&tracks=genes_canvas_mod&menu=0&loc=",
         cacheDOM: function () {
             this.$jb = $("#jbrowseModule");
