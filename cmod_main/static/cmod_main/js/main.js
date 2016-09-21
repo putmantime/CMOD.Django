@@ -354,10 +354,14 @@ $(document).ready(function () {
 
         },
         goClassRadio: function () {
-            this.$radiobutton.click(function () {
-                var radioValue = $("input[name='optradio']:checked").parent().text();
-                if (radioValue) {
-                    goFormAll.goFormData["goClass"] = radioValue;
+            var $radbutton = this.$radiobutton;
+            $radbutton.click(function () {
+
+                var radVal = $("input[name='optradio']:checked").val();
+                console.log(radVal);
+                //var radioValue = $("input[name='optradio']:checked").parent().text();
+                if (radVal) {
+                    goFormAll.goFormData["goClass"] = radVal;
 
                 }
             });

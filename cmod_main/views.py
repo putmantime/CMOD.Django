@@ -45,9 +45,9 @@ def wd_go_edit(request):
             statementDict = json.loads(statementData)
             print(statementDict['subject'])
             goProp = {
-                "Molecular Function": "P680",
-                "Cellular Component": "P681",
-                "Biological Process": "P682"
+                "mf": "P680",
+                "cc": "P681",
+                "bp": "P682"
             }
             print(statementDict['PMID'])
             refs = [

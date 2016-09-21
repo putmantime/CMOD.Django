@@ -175,9 +175,9 @@
                 <form id="main-go-form" class="ui-widget ui-front">
                     <div class="form-group">
                         <div id='go-radio' style="text-align: center">
-                            <label id="mfRadio" class="radio-inline"><input type="radio" name="optradio">Molecular Function</label>
-                            <label id="bpRadio" class="radio-inline"><input type="radio" name="optradio">Biological Process</label>
-                            <label id="ccRadio" class="radio-inline"><input type="radio" name="optradio">Cellular Component</label>
+                            <label id="mfRadio" class="radio-inline"><input value='mf' type="radio" name="optradio">Molecular Function</label>
+                            <label id="bpRadio" class="radio-inline"><input value='bp' type="radio" name="optradio">Biological Process</label>
+                            <label id="ccRadio" class="radio-inline"><input value='cc' type="radio" name="optradio">Cellular Component</label>
                         </div>
                         <input id="goTermForm" type="text" class="form-control"
                                placeholder="Gene Ontology Term"
@@ -199,7 +199,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-
+                <button id='modalRefClose' type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
