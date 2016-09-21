@@ -175,9 +175,12 @@
                 <form id="main-go-form" class="ui-widget ui-front">
                     <div class="form-group">
                         <div id='go-radio' style="text-align: center">
-                            <label id="mfRadio" class="radio-inline"><input value='mf' type="radio" name="optradio">Molecular Function</label>
-                            <label id="bpRadio" class="radio-inline"><input value='bp' type="radio" name="optradio">Biological Process</label>
-                            <label id="ccRadio" class="radio-inline"><input value='cc' type="radio" name="optradio">Cellular Component</label>
+                            <label id="mfRadio" class="radio-inline"><input value='mf' type="radio" name="optradio">Molecular
+                                Function</label>
+                            <label id="bpRadio" class="radio-inline"><input value='bp' type="radio" name="optradio">Biological
+                                Process</label>
+                            <label id="ccRadio" class="radio-inline"><input value='cc' type="radio" name="optradio">Cellular
+                                Component</label>
                         </div>
                         <input id="goTermForm" type="text" class="form-control"
                                placeholder="Gene Ontology Term"
@@ -382,7 +385,8 @@
                                         <!-- Button trigger modal -->
                                         <button id='mfbutton' type="button" class="main-goButton btn btn-primary"
                                                 data-toggle="modal"
-                                                data-target="#goModal">Add a Molecular Function</button>
+                                                data-target="#goModal">Add a Molecular Function
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -397,7 +401,8 @@
                                         <!-- Button trigger modal -->
                                         <button id='bpbutton' type="button" class="main-goButton btn btn-primary"
                                                 data-toggle="modal"
-                                                data-target="#goModal">Add a Biological Process</button>
+                                                data-target="#goModal">Add a Biological Process
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -412,7 +417,8 @@
                                         <!-- Button trigger modal -->
                                         <button id='ccbutton' type="button" class="main-goButton btn btn-primary"
                                                 data-toggle="modal"
-                                                data-target="#goModal">Add a Cellular Component</button>
+                                                data-target="#goModal">Add a Cellular Component
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -458,27 +464,31 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="main-gutter-padding">
-            <div class="main-footer">
-                <div style="min-height: 50px" class="main-title">
-                    <div id="wd-login-button-div" class="col-md-1">
-                        <button id="wd-login-button" type="button" class="btn btn-primary" data-toggle="modal"
-                                data-target="#wdLoginModal">
-                            <span>Login to Wikidata</span>
-                        </button>
-                    </div>
-                    <div class="col-md-1 main-gutter-padding"></div>
-                    <div class="col-md-2 main-gutter-padding">
-                        <div id="userLogin"></div>
-                    </div>
-                    <div class="col-md-8 main-gutter-padding"></div>
+
+    <div class="row main-gutter-padding">
+        <div class="main-footer col-md-12">
+            <div style="border-bottom: solid whitesmoke 3px; min-height: 80px;" class="row main-gutter-padding">
+                <div id="wd-login-button-div" class="col-md-2">
+                    <button id="wd-login-button" type="button" class="btn btn-primary" data-toggle="modal"
+                            data-target="#wdLoginModal">
+                        <span>Login to Wikidata</span>
+                    </button>
                 </div>
+                <div class="col-md-1"></div>
+                <div id="userLogin" class="col-md-4">
+                </div>
+                <div class="col-md-7"></div>
+            </div>
+            <div class="row main-gutter-padding">
+
             </div>
         </div>
-
     </div>
+
 </div>
+
+
+{#<div class="row"#}
 
 
 </body>

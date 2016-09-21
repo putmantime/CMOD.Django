@@ -392,7 +392,8 @@ $(document).ready(function () {
                     //console.log(data);
                     //alert("Successful interaction with the server");
                     if (data['write'] === "success") {
-                        alert("Wikidata item succesfully edited!\nIt may take a few minutes for it to show up here.")
+                        alert("Wikidata item succesfully edited!\nIt may take a few minutes for it to show up here.");
+
                     }
                     else {
                         alert("Could not edit Wikidata at this time");
@@ -483,10 +484,10 @@ $(document).ready(function () {
 
             //console.log(data);
             var template = _.template(
-                "<div class='main-data'> <h5>Gene Name: </h5><a href='http://www.ncbi.nlm.nih.gov/gene/?term=<%= entrez %>'><%= name %></a> </div>" +
-                "<div class='main-data'> <h5>Entrez ID: </h5> <a href='http://www.ncbi.nlm.nih.gov/gene/?term=<%= entrez %>'><%= entrez %></a></div>" +
-                "<div class='main-data'> <h5>Wikidata ID: </h5> <a href='https://www.wikidata.org/wiki/<%= qid %>'><%= qid %></a></div>" +
-                "<div class='main-data'> <h5>NCBI Locus Tag: </h5> <a href='http://www.ncbi.nlm.nih.gov/gene/?term=<%= locus_tag %>'><%= locus_tag %></a></div>" +
+                "<div class='main-data'> <h5>Gene Name: </h5><a target='_blank' href='http://www.ncbi.nlm.nih.gov/gene/?term=<%= entrez %>'><%= name %></a> </div>" +
+                "<div class='main-data'> <h5>Entrez ID: </h5> <a target='_blank' href='http://www.ncbi.nlm.nih.gov/gene/?term=<%= entrez %>'><%= entrez %></a></div>" +
+                "<div class='main-data'> <h5>Wikidata ID: </h5> <a target='_blank' href='https://www.wikidata.org/wiki/<%= qid %>'><%= qid %></a></div>" +
+                "<div class='main-data'> <h5>NCBI Locus Tag: </h5> <a target='_blank' href='http://www.ncbi.nlm.nih.gov/gene/?term=<%= locus_tag %>'><%= locus_tag %></a></div>" +
                 "<div class='main-data'> <h5>Genomic Start: </h5> <%= gen_start %></div>" +
                 "<div class='main-data'> <h5>Genomic End: </h5> <%= gen_end %></div>" +
                 "<div class='main-data'> <h5>Genomic Strand: </h5> <%= strand %></div>"
@@ -521,10 +522,10 @@ $(document).ready(function () {
             };
             console.log(protein); //["30S ribosomal protein S12    HP1197", "P0A0X4", "Q21632262", "NP_207988"]
             var template = _.template(
-                "<div class='main-data'><h5>Protein Name: </h5><a href='http://purl.uniprot.org/uniprot/<%= uniprot %>'><%= name %></a></div>" +
-                "<div class='main-data'><h5>UniProt ID:   </h5> <a href='http://purl.uniprot.org/uniprot/<%= uniprot %>'><%= uniprot %></a></div>" +
-                "<div class='main-data'><h5>Wikidata ID:  </h5> <a href='https://www.wikidata.org/wiki/<%= qid %>'><%= qid %></a></div>" +
-                "<div class='main-data'><h5>RefSeq ID:    </h5> <a href='http://www.ncbi.nlm.nih.gov/protein/<%= refseq %>'><%= refseq %></a></div>"
+                "<div class='main-data'><h5>Protein Name: </h5> <a target='_blank' href='http://purl.uniprot.org/uniprot/<%= uniprot %>'><%= name %></a></div>" +
+                "<div class='main-data'><h5>UniProt ID:   </h5> <a target='_blank' href='http://purl.uniprot.org/uniprot/<%= uniprot %>'><%= uniprot %></a></div>" +
+                "<div class='main-data'><h5>Wikidata ID:  </h5> <a target='_blank' href='https://www.wikidata.org/wiki/<%= qid %>'><%= qid %></a></div>" +
+                "<div class='main-data'><h5>RefSeq ID:    </h5> <a target='_blank' href='http://www.ncbi.nlm.nih.gov/protein/<%= refseq %>'><%= refseq %></a></div>"
             );
             this.$protD.html(template(data));
         }
@@ -903,6 +904,7 @@ $(document).ready(function () {
 
 
         },
+        credentials: {},
         cacheDOM: function () {
             this.$loginForm = $('#main-login-form');
             this.$userName = this.$loginForm.find('#wduserName');
@@ -911,6 +913,7 @@ $(document).ready(function () {
             this.$loginButtonDiv = $('#wd-login-button-div');
             this.$loginButton = this.$loginButtonDiv.find('#wd-login-button');
             this.$loggedin = $('#userLogin');
+            this.$userContrib =  $('#userContributions');
 
 
         },
@@ -918,11 +921,11 @@ $(document).ready(function () {
 
             wdLogin.$editButton.on("click", function (e) {
                 e.preventDefault();
-                var credentials = {
+                wdLogin.credentials = {
                     "userName": wdLogin.$userName.val(),
                     "password": wdLogin.$password.val()
                 };
-                wdLogin.sendToServer(credentials, '/wd_credentials');
+                wdLogin.sendToServer(wdLogin.credentials, '/wd_credentials');
 
                 $('form').each(function () {
                     this.reset()
@@ -946,11 +949,14 @@ $(document).ready(function () {
                     console.log("success");
                     //console.log(data);
                     if (data['login'] === "success") {
-                        wdLogin.$loggedin.html("<h5>" + "Logged in as " + data['userName'] + "</h5>");
+                        console.log(wdLogin.credentials);
+                        wdLogin.$loggedin.html("<span>Logged in as <a target='_blank' id='wd-user-button' class='btn btn-primary' href='https://www.wikidata.org/wiki/Special:Contributions/" + data['userName'] + "' role='button'>" + data['userName'] + "</a>");
                         wdLogin.$loginButtonDiv.html(
                             "<button id='wd-logout-button' type='button' class='btn btn-primary'> " +
                             "<span>Log out</span> </button>");
                         $('#wd-logout-button').off("click").click(function (e) {
+                            wdLogin.credentials = {};
+                            console.log(wdLogin.credentials);
                             wdLogin.$loggedin.html("");
                             wdLogin.$loginButtonDiv.html(
                                 "<button id='wd-login-button' type='button' class='btn btn-primary' " +
