@@ -846,7 +846,7 @@ $(document).ready(function () {
 
         },
         url: "../../static/cmod_main/JBrowse-1.12.1-dev/index.html?data=sparql_data/sparql_data_",
-        coordPrefix: "&menu=0&loc=",
+        coordPrefix: "&tracklist=0&tracks=genes_canvas_mod&menu=0&loc=",
         cacheDOM: function () {
             this.$jb = $("#jbrowseModule");
             this.$browser = this.$jb.find('#jbrowse');
