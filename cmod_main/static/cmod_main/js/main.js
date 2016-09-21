@@ -904,7 +904,8 @@ $(document).ready(function () {
             this.$userName = this.$loginForm.find('#wduserName');
             this.$password = this.$loginForm.find('#wdPassword');
             this.$editButton = this.$loginForm.find('#editWDButton');
-
+            this.$loginButtonDiv = $('#wd-login-button-div');
+            this.$loginButton = this.$loginButtonDiv.find('#wd-login-button');
             this.$loggedin = $('#userLogin');
 
 
@@ -941,18 +942,16 @@ $(document).ready(function () {
                     console.log("success");
                     //console.log(data);
                     if (data['login'] === "success") {
-                        $("#userLogin").html("<h5>" + "Logged in as " + data['userName'] + "</h5>");
-
-                        var $loginButton = $("#wd-login-button");
-                        var text = $loginButton.find('span');
-                        text.html('Log out');
-                        $loginButton.off("click").click(function (e) {
-                            e.preventDefault();
-                            text.html('Login to Wikidata');
-                            $('#userLogin').html("");
-
+                        wdLogin.$loggedin.html("<h5>" + "Logged in as " + data['userName'] + "</h5>");
+                        wdLogin.$loginButtonDiv.html(
+                            "<button id='wd-logout-button' type='button' class='btn btn-primary'> " +
+                            "<span>Log out</span> </button>");
+                        $('#wd-logout-button').off("click").click(function (e) {
+                            wdLogin.$loggedin.html("");
+                            wdLogin.$loginButtonDiv.html(
+                                "<button id='wd-login-button' type='button' class='btn btn-primary' " +
+                                "data-toggle='modal' data-target='#wdLoginModal'> <span>Login to Wikidata</span> </button>");
                         });
-
 
 
                     }
