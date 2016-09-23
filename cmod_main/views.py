@@ -14,30 +14,33 @@ def index(request):
 
 
 def main_page(request):
+    # load main_page with selected organism data
     org_data = json.loads(request.session['org'])
     # template = loader.get_template("cmod_main/main_page.html")
     return render(request, "cmod_main/main_page.html", org_data)
 
 
 def get_orgs(request):
+    # receive organism data from landing page
     if request.method == 'POST':
         data = json.dumps(request.POST)
-        print(request.META)
-        request.session['org'] = data
+        #print(request.META)
+        request.session['org'] = data # name, taxid, refseq genome accession, wikidata qid
         return HttpResponse(request.session['org'], content_type='application/json')
     else:
-        return HttpResponse("Hi")
+        return HttpResponse("organism data received")
 
 
 def wd_go_edit(request):
     if request.method == 'POST':
-
+	# receive edit statment data from wd editing and login form
         # statementData = json.loads(json.dumps(request.POST))
         statementData = json.dumps(request.POST)
         request.session['go'] = statementData
         credentials = json.loads(request.session['credentials'])
+	# attempt to login to wikidata and edit entity with user statement
         try:
-            print(credentials['userName'], credentials['password'])
+            #print(credentials['userName'], credentials['password'])
             login = PBB_login.WDLogin(credentials['userName'], credentials['password'])
             print(login)
             credentials["login"] = "success"
@@ -67,13 +70,14 @@ def wd_go_edit(request):
             print("evidence and goclaims are good")
             print(statementDict['subject'])
             try:
-                # find the appropriate item in wd or make a new one
+                # use PBB_Core Bot code to find the appropriate item in wd and contstruct the statement
                 wd_item_protein = PBB_Core.WDItemEngine(wd_item_id=statementDict['subject'], domain='proteins',
                                                         data=[goStatement], use_sparql=True,
                                                         append_value=[goProp[statementDict['goClass']]])
                 print("found the item")
                 credentials["item_search"] = "success"
                 print("Found item " + wd_item_protein.get_label())
+		# attempt to write to Wikidata
                 wd_item_protein.write(login)
                 credentials["write"] = "success"
                 print("Wrote item " + wd_item_protein.get_label())
@@ -88,13 +92,14 @@ def wd_go_edit(request):
 
         print(type(json.dumps(credentials)), json.dumps(credentials))
         print(type(request.session['go']), request.session['go'])
-
+	# send the outcome to client
         return HttpResponse(json.dumps(credentials), content_type='application/json')
 
         # return render(request, "cmod_main/main_page.html",  credentials)
 
 
 def wd_credentials(request):
+    # initial Wikidata Log in
     if request.method == 'POST':
         creddata = json.dumps(request.POST)
 

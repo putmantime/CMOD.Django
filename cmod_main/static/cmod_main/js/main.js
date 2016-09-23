@@ -1,5 +1,6 @@
 $(document).ready(function () {
 //////////////////////////////////////////Begin Global variables////////////////////////////////////////////////////////
+    //organism data determines current state
     var currentTaxa = {
         "Name": OrgName,
         "Taxid": OrgTID,
@@ -12,34 +13,29 @@ $(document).ready(function () {
 ///////////////////////////////////////////Begin form modules///////////////////////////////////////////////////////////
 //////organism selection form module//////
     var orgForm = {
-
+	// organism form for selecting organism based on label and return core identifiers to populate currentTaxa
         init: function () {
             this.cacheDOM();
             this.acsource(this.$input);
-
         },
         cacheDOM: function () {
+	    // cache the relevant DOM elements once
             this.$of = $("#orgFormModule");
             this.$input = this.$of.find('input');
-
-
         },
         // populate organism form with list of bacteria to choose from
         acsource: function (orginput) {
             getOrgs(function (orgTags) {
                 orginput.autocomplete({
                     minLength: 0,
-                    source: orgTags, //sparql query callback
+                    source: orgTags, //sparql query callback in queries.js
                     autoFocus: true,
-
                     select: function (event, ui) {
-
                         $('form').each(function () {
                             this.reset()
                         });
                         orginput.val("");
-                        $("#geneData, #protData, .main-go-data").html("");
-
+			
                         currentTaxa = {
                             'Name': ui.item.name,
                             'Taxid': ui.item.taxid,
