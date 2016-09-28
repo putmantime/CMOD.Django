@@ -156,7 +156,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-
+                <button id='modalRefClose' type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -175,11 +175,11 @@
                 <form id="main-go-form" class="ui-widget ui-front">
                     <div class="form-group">
                         <div id='go-radio' style="text-align: center">
-                            <label id="mfRadio" class="radio-inline"><input type="radio" name="optradio">Molecular
+                            <label id="mfRadio" class="radio-inline"><input value='mf' type="radio" name="optradio">Molecular
                                 Function</label>
-                            <label id="bpRadio" class="radio-inline"><input type="radio" name="optradio">Biological
+                            <label id="bpRadio" class="radio-inline"><input value='bp' type="radio" name="optradio">Biological
                                 Process</label>
-                            <label id="ccRadio" class="radio-inline"><input type="radio" name="optradio">Cellular
+                            <label id="ccRadio" class="radio-inline"><input value='cc' type="radio" name="optradio">Cellular
                                 Component</label>
                         </div>
                         <input id="goTermForm" type="text" class="form-control"
@@ -202,7 +202,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-
+                <button id='modalRefClose' type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -305,39 +305,46 @@
                 <div class="main-boxheader">
                     <div class="row">
                         <div class="col-md-12">
-                            <h2 class="main-box-title">Gene</h2>
+                            <h2 class="main-box-title">Identifiers</h2>
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div id="geneDataBox" class="main-data-box">
-                            <div id="geneData">
+                <div style="padding-left:20px; padding-right: 20px; padding-top: 10px; padding-bottom:10px;">
+                    <ul id='gene-prot-tabs' class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#gene-tab" aria-controls="gene" role="tab"
+                                                                  data-toggle="tab">Gene</a></li>
+                        <li role="presentation"><a href="#prot-tab" aria-controls="protein" role="tab"
+                                                   data-toggle="tab">Protein
+                        </a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="gene-tab">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div id="geneDataBox" class="main-data-box">
+                                        <div style='margin-left: -10px; margin-right: -10px;' id="geneData">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane active" id="prot-tab">
+                            <div id="proteinDataModule">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div id="protDataBox" class="main-data-box">
+                                            <div style='margin-left: -10px; margin-right: -10px;' id="protData"></div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-3 main-gutter-padding">
-            <div id="proteinDataModule" class="main-data-borders main-gene-protein-row">
-                <div class="main-boxheader">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h2 class="main-box-title">Protein</h2>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div id="protDataBox" class="main-data-box">
-                            <div id="protData"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 main-gutter-padding ">
+
+        <div class="col-md-9 main-gutter-padding ">
             <div id='goBoxes' class="main-gene-protein-row main-data-borders ">
                 <div class="main-boxheader">
                     <div class="row">
@@ -352,18 +359,17 @@
                         <!-- Nav tabs -->
                         <ul id='annotations-tabs' class="nav nav-tabs" role="tablist">
                             <li role="presentation" class="active"><a href="#mf" aria-controls="molfunc" role="tab"
-                                                                      data-toggle="tab">Molecular
-                                Function</a></li>
-                            <li role="presentation"><a href="#bp" aria-controls="bioproc" role="tab" data-toggle="tab">Biological
-                                Process</a></li>
-                            <li role="presentation"><a href="#cc" aria-controls="cellcomp" role="tab" data-toggle="tab">Cellular
-                                Component</a></li>
-                            <li role="presentation"><a href="#ip" aria-controls="interpro" role="tab" data-toggle="tab">InterPro
-                                Domain</a></li>
-                            <li role="presentation"><a href="#ez" aria-controls="enzyme" role="tab" data-toggle="tab">Enzimatic
-                                Action</a></li>
-                            <li role="presentation"><a href="#op" aria-controls="operon" role="tab" data-toggle="tab">Operon
-                                </a></li>
+                                                                      data-toggle="tab">Molecular Function</a></li>
+                            <li role="presentation"><a href="#bp" aria-controls="bioproc" role="tab"
+                                                       data-toggle="tab">Biological Process</a></li>
+                            <li role="presentation"><a href="#cc" aria-controls="cellcomp" role="tab"
+                                                       data-toggle="tab">Cellular Component</a></li>
+                            <li role="presentation"><a href="#ip" aria-controls="interpro" role="tab"
+                                                       data-toggle="tab">InterPro Domain</a></li>
+                            <li role="presentation"><a href="#ez" aria-controls="enzyme" role="tab"
+                                                       data-toggle="tab">Enzimatic Action</a></li>
+                            <li role="presentation"><a href="#op" aria-controls="operon" role="tab"
+                                                       data-toggle="tab">Operon </a></li>
                         </ul>
 
                         <!-- Tab panes -->
@@ -379,8 +385,7 @@
                                         <!-- Button trigger modal -->
                                         <button id='mfbutton' type="button" class="main-goButton btn btn-primary"
                                                 data-toggle="modal"
-                                                data-target="#goModal">
-                                            Add a Molecular Function
+                                                data-target="#goModal">Add a Molecular Function
                                         </button>
                                     </div>
                                 </div>
@@ -396,8 +401,7 @@
                                         <!-- Button trigger modal -->
                                         <button id='bpbutton' type="button" class="main-goButton btn btn-primary"
                                                 data-toggle="modal"
-                                                data-target="#goModal">
-                                            Add a Biological Process
+                                                data-target="#goModal">Add a Biological Process
                                         </button>
                                     </div>
                                 </div>
@@ -413,8 +417,7 @@
                                         <!-- Button trigger modal -->
                                         <button id='ccbutton' type="button" class="main-goButton btn btn-primary"
                                                 data-toggle="modal"
-                                                data-target="#goModal">
-                                            Add a Cellular Component
+                                                data-target="#goModal">Add a Cellular Component
                                         </button>
                                     </div>
                                 </div>
@@ -442,7 +445,7 @@
                                     </div>
                                 </div>
                             </div>
-                             <div role="tabpanel" class="tab-pane" id="op">
+                            <div role="tabpanel" class="tab-pane" id="op">
                                 <div id="operonBox">
                                     <div class="main-go-box row">
                                         <div class="col-md-2"><h5>Operon Identifier</h5></div>
@@ -461,30 +464,33 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="main-gutter-padding">
-            <div class="main-footer">
-                <div style="min-height: 50px" class="main-title">
-                    <div class="col-md-1">
-                        <button id="wd-login-button" type="button" class="btn btn-primary" data-toggle="modal"
-                                data-target="#wdLoginModal">
-                            Login to Wikidata
-                        </button>
-                    </div>
-                    <div class="col-md-1 main-gutter-padding"></div>
-                    <div class="col-md-2 main-gutter-padding">
-                        <div id="userLogin"></div>
-                    </div>
-                    <div class="col-md-8 main-gutter-padding"></div>
+
+    <div class="row main-gutter-padding">
+        <div class="main-footer col-md-12">
+            <div style="border-bottom: solid whitesmoke 3px; min-height: 80px;" class="row main-gutter-padding">
+                <div id="wd-login-button-div" class="col-md-2">
+                    <button id="wd-login-button" type="button" class="btn btn-primary" data-toggle="modal"
+                            data-target="#wdLoginModal">
+                        <span>Login to Wikidata</span>
+                    </button>
                 </div>
+                <div class="col-md-1"></div>
+                <div id="userLogin" class="col-md-4">
+                </div>
+                <div class="col-md-7"></div>
+            </div>
+            <div class="row main-gutter-padding">
+
             </div>
         </div>
-
     </div>
+
 </div>
+
+
+{#<div class="row"#}
 
 
 </body>
 
 </html>
-
