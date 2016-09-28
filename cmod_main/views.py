@@ -5,54 +5,52 @@ import json
 from .scripts.wikidatabots.ProteinBoxBot_Core import PBB_login, PBB_Core
 from time import gmtime, strftime
 import pprint
+from django.views.decorators.csrf import ensure_csrf_cookie
 
-
+@ensure_csrf_cookie
 def index(request):
     # launch landing page
     template = loader.get_template("cmod_main/index.html")
     return HttpResponse(template.render())
 
-
+@ensure_csrf_cookie
 def main_page(request):
-    # load main_page with selected organism data
     org_data = json.loads(request.session['org'])
     # template = loader.get_template("cmod_main/main_page.html")
     return render(request, "cmod_main/main_page.html", org_data)
 
-
+@ensure_csrf_cookie
 def get_orgs(request):
-    # receive organism data from landing page
     if request.method == 'POST':
         data = json.dumps(request.POST)
-        #print(request.META)
-        request.session['org'] = data # name, taxid, refseq genome accession, wikidata qid
+        print(request.META)
+        request.session['org'] = data
         return HttpResponse(request.session['org'], content_type='application/json')
     else:
-        return HttpResponse("organism data received")
+        return HttpResponse("Hi")
 
-
+@ensure_csrf_cookie
 def wd_go_edit(request):
     if request.method == 'POST':
-	# receive edit statment data from wd editing and login form
+
         # statementData = json.loads(json.dumps(request.POST))
         statementData = json.dumps(request.POST)
         request.session['go'] = statementData
         credentials = json.loads(request.session['credentials'])
-	# attempt to login to wikidata and edit entity with user statement
         try:
-            #print(credentials['userName'], credentials['password'])
+            print(credentials['userName'], credentials['password'])
             login = PBB_login.WDLogin(credentials['userName'], credentials['password'])
             print(login)
             credentials["login"] = "success"
             statementDict = json.loads(statementData)
             print(statementDict['subject'])
             goProp = {
-                "Molecular Function": "P680",
-                "Cellular Component": "P681",
-                "Biological Process": "P682"
+                "mf": "P680",
+                "cc": "P681",
+                "bp": "P682"
             }
             print(statementDict['PMID'])
-            refs = [PBB_Core.WDItemID(value='Q591041', prop_nr='P248', is_reference=True),  # stated in
+            refs = [
                     PBB_Core.WDItemID(value='Q1860', prop_nr='P407', is_reference=True),  # language
                     PBB_Core.WDString(value=statementDict['PMID'], prop_nr='P698', is_reference=True),  # PMID
                     PBB_Core.WDItemID(value='Q26489220', prop_nr='P143', is_reference=True),  # imorted from CMOD
@@ -70,14 +68,13 @@ def wd_go_edit(request):
             print("evidence and goclaims are good")
             print(statementDict['subject'])
             try:
-                # use PBB_Core Bot code to find the appropriate item in wd and contstruct the statement
+                # find the appropriate item in wd or make a new one
                 wd_item_protein = PBB_Core.WDItemEngine(wd_item_id=statementDict['subject'], domain='proteins',
                                                         data=[goStatement], use_sparql=True,
                                                         append_value=[goProp[statementDict['goClass']]])
                 print("found the item")
                 credentials["item_search"] = "success"
                 print("Found item " + wd_item_protein.get_label())
-		# attempt to write to Wikidata
                 wd_item_protein.write(login)
                 credentials["write"] = "success"
                 print("Wrote item " + wd_item_protein.get_label())
@@ -92,18 +89,19 @@ def wd_go_edit(request):
 
         print(type(json.dumps(credentials)), json.dumps(credentials))
         print(type(request.session['go']), request.session['go'])
-	# send the outcome to client
+
         return HttpResponse(json.dumps(credentials), content_type='application/json')
 
         # return render(request, "cmod_main/main_page.html",  credentials)
 
-
+@ensure_csrf_cookie
 def wd_credentials(request):
-    # initial Wikidata Log in
     if request.method == 'POST':
         creddata = json.dumps(request.POST)
 
         user_pass = json.loads(creddata)
+        request.session['credentials'] = creddata
+        print(user_pass)
         login = PBB_login.WDLogin(user_pass['userName'], user_pass['password'])
         print(login.login_reply)
         if login.login_reply['login']['result'] == 'Failed':
@@ -113,6 +111,3 @@ def wd_credentials(request):
 
         return HttpResponse(json.dumps(user_pass), content_type='application/json')
         # return render(request, "cmod_main/main_page.html", )
-
-
-

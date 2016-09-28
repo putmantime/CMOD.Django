@@ -1,7 +1,7 @@
 /**{border: dashed black 1px;}*/
 iframe {
     width: 100%;
-    height: 445px;
+    height: 345px;
 
 }
 
@@ -15,7 +15,7 @@ html, body {
 
 }
 
-​,
+,
 #main-wdlogo-div {
     float: right;
     border-radius: 2px;
@@ -130,7 +130,7 @@ html, body {
 }
 
 .main-orgRow {
-    height: 500px;
+    height: 400px;
 
 }
 
@@ -195,7 +195,7 @@ html, body {
 
 .main-go-data {
     padding: 20px;
-    height: 400px;
+    height: 320px;
     overflow: auto;
 
 }
@@ -368,5 +368,3 @@ html, body {
 
 .main-goButton{
 width: 200px;
-
-}
