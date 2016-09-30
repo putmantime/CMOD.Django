@@ -2,6 +2,12 @@
 CMOD Wikidata App built on Django Framework for editing Wikidata with existing GeneWIki bot code
 
 
+
+Video Walkthrough available here:
+ https://drive.google.com/open?id=0Bz6pVfjuj2bhTGlYSm92bGk1QlE
+ 
+
+
 -Choose and load an organism (bacteria for now) from Wikidata
 
 -View Organism data
@@ -23,3 +29,6 @@ CMOD Wikidata App built on Django Framework for editing Wikidata with existing G
 -Add data to Wikidata
 
   --Add a gene ontology term to a Protein
+
+
+
