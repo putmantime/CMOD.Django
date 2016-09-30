@@ -318,7 +318,7 @@ $(document).ready(function () {
                 source: function (request, response) {
                     $.ajax({
                         type: "GET",
-                        url: 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&retmode=json&id=' + request.term,
+                        url: 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&retmode=json&id=' + request.term,
                         datatype: 'json',
                         success: function (data) {
                             var data_array = [];
