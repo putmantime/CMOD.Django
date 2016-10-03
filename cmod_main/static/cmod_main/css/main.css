@@ -366,13 +366,18 @@ html, body {
     background-image: none;
 }
 
-.main-goButton {
-    width: 200px;
-}
+
 
 #evdocbutton {
     float:right;
     display:block;
     margin-right:0;
     clear:left;
+    margin-left:10px;
 }
+
+
+.hov:hover{
+    color: #385d94;
+
+}​

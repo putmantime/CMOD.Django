@@ -263,16 +263,24 @@ $(document).ready(function () {
 
                     //this refers to the current item being iterated over
                     var $indlist = $('<li></li>');
-                    var $inda = $("<div style='border-bottom: solid black 1px; height: 50px; padding: 10px'><a id='" + element.qid + "'>" +
-                        element.alias + "<a id='evdocbutton' target='_blank' href='" + element.docs + "' class='btn btn-default' role='button'>" + '?' + "</a></div>");
+                    var $inda = $("<div style='border-bottom:solid black 1px; height:50px; padding:10px' class='hov' id='" + element.qid + "'style=\"border-bottom: solid black 1px\">" + element.alias + "<a  id='evdocbutton' target='_blank' href='" + element.docs + "' class='btn btn-default' role='button'>" + '?' + "</a></div>");
+
+
+                    //var $inda = $("<div class='form-inline' style='border-bottom: solid black 1px; height: 50px; padding: 10px'><a id='" + element.qid + "'>" +
+                    //    element.alias + "</a> <a id='evdocbutton' target='_blank' href='" + element.docs + "' class='btn btn-default' role='button'>" + '?' + "</a></div>");
 
                     $indlist.html($inda);
                     optlist.append($indlist);
                 });
-                $('#optlist li div a').on('click', function () {
+                var $focused = $('#optlist li div a');
+                $focused.on('hover', function(){
+                    this.addClass()
+                });
+                $focused.on('click', function () {
                     var qidURL = $(this).attr('id');
                     var wdid = qidURL.split("/");
                     goFormAll.goFormData["evidenceCode"] = wdid.slice(-1)[0];
+                    console.log(goFormAll.goFormData);
 
                 });
 
