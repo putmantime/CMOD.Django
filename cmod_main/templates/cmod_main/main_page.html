@@ -179,13 +179,19 @@
                         <input id="goTermForm" type="text" class="form-control"
                                placeholder="Gene Ontology Term"
                                name="goFormItem">
-                        <div class="dropdown" id="'evDropDown">
-                            <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
-                                Determination Method <span class="caret"></span>
-                            </button>
-                            <ul id='optlist' class="but-dropdown dropdown-menu">
-                            </ul>
+
+                        <div class="row">
+                            <div class="dropdown col-md-6" id="'evDropDown">
+                                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                                    Determination Method <span class="caret"></span>
+                                </button>
+                                <ul id='optlist' class="but-dropdown dropdown-menu">
+                                </ul>
+
+                            </div>
+                            <div class="'col-md-6" id="evCodeChoice"></div>
                         </div>
+
                         <input type="text" class="form-control"
                                id="pmidForm"
                                placeholder="PMID" name="pmidrefFormItem">

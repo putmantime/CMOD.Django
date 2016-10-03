@@ -198,6 +198,7 @@ $(document).ready(function () {
             this.pmidForm();
             this.editWD();
             this.evidenceCodes();
+            this.resetForm();
 
 
         },
@@ -209,6 +210,15 @@ $(document).ready(function () {
             this.$radiobutton = this.$goTermForm.find('#go-radio');
             this.$editWDButton = this.$goTermForm.find('#editWDButton');
         },
+        resetForm: function () {
+            $('.modal').on('hidden.bs.modal', function () {
+                $(this).find('form')[0].reset();
+                console.log($(this).find('#evCodeChoice').html(''));
+
+            });
+
+        },
+
         goTermsAC: function () {
             var goClassButton = {
                 mfbutton: ['Q14860489', 'Molecular Function'],
@@ -222,6 +232,8 @@ $(document).ready(function () {
                 console.log(goClassButtonElem);
                 goFormAll.goFormData["goClass"] = goClassButtonElem[0];
                 $('#myGOModalLabel').html("<span>Add a " + goClassButtonElem[1] + " to this protein</span>");
+
+
             });
 
             this.$goForm.autocomplete({
@@ -234,15 +246,15 @@ $(document).ready(function () {
                         type: "GET",
                         url: goFormAll.endpoint +
                         ["SELECT DISTINCT ?goterm ?goID ?goterm_label",
-                        "WHERE {",
-                        "?goterm wdt:P279* wd:" +
-                        goClassButtonElem[0] +
-                        "; rdfs:label ?goterm_label;",
+                            "WHERE {",
+                            "?goterm wdt:P279* wd:" +
+                            goClassButtonElem[0] +
+                            "; rdfs:label ?goterm_label;",
                             "wdt:P686 ?goID.",
-                        "FILTER(lang(?goterm_label) = \"en\")",
-                        "FILTER(CONTAINS(LCASE(?goterm_label), \"" +
-                        request.term +
-                        "\" ))}"].join(" "),
+                            "FILTER(lang(?goterm_label) = \"en\")",
+                            "FILTER(CONTAINS(LCASE(?goterm_label), \"" +
+                            request.term +
+                            "\" ))}"].join(" "),
                         datatype: 'json',
                         success: function (data) {
                             console.log('successful goquery');
@@ -265,6 +277,7 @@ $(document).ready(function () {
                 },
                 select: function (event, ui) {
                     goFormAll.goFormData["goTerm"] = ui.item.qid;
+                    console.log(goFormAll.goFormData);
 
 
                 }
@@ -293,15 +306,17 @@ $(document).ready(function () {
                     $indlist.html($inda);
                     optlist.append($indlist);
                 });
-                var $focused = $('#optlist li div a');
+                var $focused = $('#optlist li div');
                 $focused.on('hover', function () {
-                    this.addClass()
+                    this.addClass();
+                    console.log('evilist');
                 });
-                $focused.on('click', function () {
+                $focused.off("click").click(function (e) {
                     var qidURL = $(this).attr('id');
                     var wdid = qidURL.split("/");
                     goFormAll.goFormData["evidenceCode"] = wdid.slice(-1)[0];
                     console.log(goFormAll.goFormData);
+                    $('#evCodeChoice').html("<span>" + $(this).text().slice(0, -1) + "</span>");
 
                 });
 

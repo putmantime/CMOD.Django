@@ -37,19 +37,19 @@ def wd_go_edit(request):
         statementData = json.dumps(request.POST)
         request.session['go'] = statementData
         credentials = json.loads(request.session['credentials'])
+        print("wd_go_edit " + str(credentials))
         try:
             print(credentials['userName'], credentials['password'])
             login = PBB_login.WDLogin(credentials['userName'], credentials['password'])
             print(login)
             credentials["login"] = "success"
             statementDict = json.loads(statementData)
-            print(statementDict['subject'])
+            print(statementDict)
             goProp = {
-                "mf": "P680",
-                "cc": "P681",
-                "bp": "P682"
+                "Q14860489": "P680",
+                "Q5058355": "P681",
+                "Q2996394": "P682"
             }
-            print(statementDict['PMID'])
             refs = [
                     PBB_Core.WDItemID(value='Q1860', prop_nr='P407', is_reference=True),  # language
                     PBB_Core.WDString(value=statementDict['PMID'], prop_nr='P698', is_reference=True),  # PMID
@@ -65,8 +65,8 @@ def wd_go_edit(request):
             goStatement = PBB_Core.WDItemID(value=statementDict['goTerm'], prop_nr=goProp[statementDict['goClass']],
                                             references=[refs], qualifiers=[evidence])
 
-            print("evidence and goclaims are good")
-            print(statementDict['subject'])
+
+
             try:
                 # find the appropriate item in wd or make a new one
                 wd_item_protein = PBB_Core.WDItemEngine(wd_item_id=statementDict['subject'], domain='proteins',
@@ -82,13 +82,12 @@ def wd_go_edit(request):
                 pprint.pprint(e)
 
         except Exception as e:
+            print(e)
             print("Wikidata edit failed")
             credentials["login"] = "error"
             credentials["item_search"] = "error"
             credentials["write"] = "error"
 
-        print(type(json.dumps(credentials)), json.dumps(credentials))
-        print(type(request.session['go']), request.session['go'])
 
         return HttpResponse(json.dumps(credentials), content_type='application/json')
 
@@ -101,9 +100,9 @@ def wd_credentials(request):
 
         user_pass = json.loads(creddata)
         request.session['credentials'] = creddata
-        print(user_pass)
+        print("user_pass dj " + str(user_pass))
         login = PBB_login.WDLogin(user_pass['userName'], user_pass['password'])
-        print(login.login_reply)
+        print("user_pass response wd " + str(login.login_reply))
         if login.login_reply['login']['result'] == 'Failed':
             user_pass["login"] = "error"
         else:
