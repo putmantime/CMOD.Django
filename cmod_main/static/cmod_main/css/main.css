@@ -376,8 +376,17 @@ html, body {
     margin-left:10px;
 }
 
+#evCodeChoice{
+    font-family: "Roboto", "Lucida Grande", Verdana, Arial, sans-serif;
+    padding:5px
+}
 
 .hov:hover{
     color: #385d94;
 
 }​,
+
+.dropdown-menu {
+    max-height: 200px;
+    overflow: auto;
+ }
