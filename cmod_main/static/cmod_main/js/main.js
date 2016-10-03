@@ -196,7 +196,6 @@ $(document).ready(function () {
             this.cacheDOM();
             this.goTermsAC();
             this.pmidForm();
-            this.goClassRadio();
             this.editWD();
             this.evidenceCodes();
 
@@ -211,6 +210,20 @@ $(document).ready(function () {
             this.$editWDButton = this.$goTermForm.find('#editWDButton');
         },
         goTermsAC: function () {
+            var goClassButton = {
+                mfbutton: ['Q14860489', 'Molecular Function'],
+                bpbutton: ['Q2996394', 'Biological Process'],
+                ccbutton: ['Q5058355', 'Cellular Component']
+
+            };
+            var goClassButtonElem;
+            $('.main-goButton').on('click', function () {
+                goClassButtonElem = goClassButton[$(this).attr('id')];
+                console.log(goClassButtonElem);
+                goFormAll.goFormData["goClass"] = goClassButtonElem[0];
+                $('#myGOModalLabel').html("<span>Add a " + goClassButtonElem[1] + " to this protein</span>");
+            });
+
             this.$goForm.autocomplete({
                 delay: 900,
                 autoFocus: true,
@@ -219,19 +232,28 @@ $(document).ready(function () {
                 source: function (request, response) {
                     $.ajax({
                         type: "GET",
-                        url: goFormAll.endpoint + ["SELECT DISTINCT ?goTerm ?goTermLabel ?goID WHERE { ?goTerm wdt:P686 ?goID.",
-                            "SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". ?goTerm rdfs:label ?goTermLabel.}",
-                            "FILTER(CONTAINS(LCASE(?goTermLabel), \"" + request.term + "\"))}"].join(" "),
+                        url: goFormAll.endpoint +
+                        ["SELECT DISTINCT ?goterm ?goID ?goterm_label",
+                        "WHERE {",
+                        "?goterm wdt:P279* wd:" +
+                        goClassButtonElem[0] +
+                        "; rdfs:label ?goterm_label;",
+                            "wdt:P686 ?goID.",
+                        "FILTER(lang(?goterm_label) = \"en\")",
+                        "FILTER(CONTAINS(LCASE(?goterm_label), \"" +
+                        request.term +
+                        "\" ))}"].join(" "),
                         datatype: 'json',
                         success: function (data) {
+                            console.log('successful goquery');
                             var data_array = [];
                             var data_hash = {};
                             $.each(data['results']['bindings'], function (key, element) {
-                                var wdid = element['goTerm']['value'].split("/");
+                                var wdid = element['goterm']['value'].split("/");
                                 var orgqid = wdid.slice(-1)[0];
                                 data_hash = {
-                                    'label': element['goTermLabel']['value'],
-                                    'value': orgqid,
+                                    'label': element['goterm_label']['value'],
+                                    'value': element['goterm_label']['value'],
                                     'id': element['goID']['value'],
                                     'qid': orgqid
                                 };
@@ -250,10 +272,13 @@ $(document).ready(function () {
                 .autocomplete("instance")._renderItem = function (ul, item) {
                 return $("<li>")
                     .append("<div class='main-data' style=\"border-bottom: solid black 1px\"><strong><u>" + item.label +
-                    "</u></strong><br>Gene Ontology ID:" + item.id + "<br>Wikidata: " + item.qid + "</div>")
+                    "</u></strong><br>Gene Ontology ID: " + item.id + "<br>Wikidata: " + item.qid + "</div>")
                     .appendTo(ul);
             };
+
+
         },
+
         evidenceCodes: function () {
 
             getEvidenceCodes(function (evCodes) {
@@ -265,15 +290,11 @@ $(document).ready(function () {
                     var $indlist = $('<li></li>');
                     var $inda = $("<div style='border-bottom:solid black 1px; height:50px; padding:10px' class='hov' id='" + element.qid + "'style=\"border-bottom: solid black 1px\">" + element.alias + "<a  id='evdocbutton' target='_blank' href='" + element.docs + "' class='btn btn-default' role='button'>" + '?' + "</a></div>");
 
-
-                    //var $inda = $("<div class='form-inline' style='border-bottom: solid black 1px; height: 50px; padding: 10px'><a id='" + element.qid + "'>" +
-                    //    element.alias + "</a> <a id='evdocbutton' target='_blank' href='" + element.docs + "' class='btn btn-default' role='button'>" + '?' + "</a></div>");
-
                     $indlist.html($inda);
                     optlist.append($indlist);
                 });
                 var $focused = $('#optlist li div a');
-                $focused.on('hover', function(){
+                $focused.on('hover', function () {
                     this.addClass()
                 });
                 $focused.on('click', function () {
@@ -287,14 +308,6 @@ $(document).ready(function () {
 
             });
         },
-        //<a href="#" class="btn btn-info" role="button">Link Button</a>
-
-
-
-
-
-
-
         pmidForm: function () {
             //form for looking a publication to provide as a reference using eutils
             this.$pmidForm.autocomplete({
@@ -339,20 +352,6 @@ $(document).ready(function () {
                     "</u></strong><br>Publication:" + item.journal + "</div>")
                     .appendTo(ul);
             };
-
-        },
-        goClassRadio: function () {
-            var $radbutton = this.$radiobutton;
-            $radbutton.click(function () {
-
-                var radVal = $("input[name='optradio']:checked").val();
-                console.log(radVal);
-                //var radioValue = $("input[name='optradio']:checked").parent().text();
-                if (radVal) {
-                    goFormAll.goFormData["goClass"] = radVal;
-
-                }
-            });
 
         },
         editWD: function () {
