@@ -192,6 +192,35 @@ var getInterPro = function (uniprot, callBackonSuccess) {
 
 };
 
+var getEvidenceCodes = function (callBackonSuccess) {
+    var codeslist = [];
+    var ev_query = endpoint + [
+            "select distinct ?evidence_code ?evidence_codeLabel ?alias where {" +
+            "?evidence_code wdt:P31 wd:Q23173209. " +
+            "?evidence_code skos:altLabel ?alias." +
+            "filter (lang(?alias) = \"en\") " +
+            "SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\" .}",
+            "}"
+        ].join(" ");
 
+    $.ajax({
+        type: "GET",
+        url: ev_query,
+        dataType: 'json',
+        success: function (data) {
+            //console.log(data);
+            $.each(data['results']['bindings'], function (key, element) {
+                var evCodes = {
+                'code': element['evidence_codeLabel']['value'],
+                'qid': element['evidence_code']['value'],
+                'alias': element['alias']['value']
+            };
+            codeslist.push(evCodes);
+            });
+            callBackonSuccess(codeslist);
+        }
+    });
+
+};
 
 

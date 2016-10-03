@@ -17,7 +17,9 @@
     <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.3.3/underscore-min.js"></script>
     <script src="{% static 'cmod_main/js/queries.js' %}"></script>
     <script src="{% static 'cmod_main/js/js.cookie.js' %}"></script>
-    {#    <script src="{%  static 'cmod_main/js/landingpage.js'%}"></script>#}
+    {#
+    <script src="{%  static 'cmod_main/js/landingpage.js'%}"></script>
+    #}
     <script src="{% static 'cmod_main/js/forms.js' %}"></script>
     <script src="{% static 'cmod_main/js/main.js' %}"></script>
     <script type="text/javascript">
@@ -185,10 +187,13 @@
                         <input id="goTermForm" type="text" class="form-control"
                                placeholder="Gene Ontology Term"
                                name="goFormItem">
-                        <input type="text" class="form-control"
-                               id="eviCodeForm"
-                               placeholder="GO Evidence Code"
-                               name="evidenceFormItem">
+                        <div class="dropdown" id="'evDropDown">
+                            <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                                Determination Method <span class="caret"></span>
+                            </button>
+                            <ul id='optlist' class="but-dropdown dropdown-menu">
+                            </ul>
+                        </div>
                         <input type="text" class="form-control"
                                id="pmidForm"
                                placeholder="PMID" name="pmidrefFormItem">
@@ -222,7 +227,7 @@
                     <div class="col-md-6 main-gutter-padding">
                         <div id="orgFormModule">
                             <form class="main-form-div form-inline ui-widget">
-                                {#                                {% csrf_token %}#}
+                                {# {% csrf_token %}#}
                                 <div class="form-group">
                                     <label for="orgform"></label>
                                     <input type="text" class="form-control formborders" id="orgform"
@@ -236,7 +241,7 @@
                     <div class="col-md-6 main-gutter-padding">
                         <div id="geneFormModule">
                             <form class="main-form-div form-inline ui-widget">
-                                {#                                {% csrf_token %}#}
+                                {# {% csrf_token %}#}
                                 <div class="form-group">
                                     <label for="geneform"></label>
                                     <input type="text" class="form-control" id="geneform"
@@ -365,9 +370,11 @@
                             <li role="presentation"><a href="#ip" aria-controls="interpro" role="tab"
                                                        data-toggle="tab">InterPro Domain</a></li>
                             <li role="presentation"><a href="#ez" aria-controls="enzyme" role="tab"
-                                                       data-toggle="tab">Enzimatic Action</a></li>
+                                                       data-toggle="tab">Enzymatic Action</a></li>
                             <li role="presentation"><a href="#op" aria-controls="operon" role="tab"
                                                        data-toggle="tab">Operon </a></li>
+                            <li role="presentation"><a href="#cm" aria-controls="chemical-mutants" role="tab"
+                                                       data-toggle="tab">Chemical Mutants </a></li>
                         </ul>
 
                         <!-- Tab panes -->
@@ -455,6 +462,18 @@
                                     </div>
                                 </div>
                             </div>
+                            <div role="tabpanel" class="tab-pane" id="cm">
+                                <div id="chemMutBox">
+                                    <div class="main-go-box row">
+                                        <div class="col-md-2"><h5>Nucleotide Change</h5></div>
+                                        <div class="col-md-2"><h5>Amino Acid Change</h5></div>
+                                        <div class="col-md-4"><h5>Genome Coordinate</h5></div>
+                                        <div class="col-md-4"><h5></h5></div>
+                                        <div class="col-md-2"><h5>Reference</h5></div>
+                                        <div id="chemMutData" class="main-go-data"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -484,9 +503,6 @@
     </div>
 
 </div>
-
-
-{#<div class="row"#}
 
 
 </body>

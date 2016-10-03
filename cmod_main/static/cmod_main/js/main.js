@@ -195,10 +195,10 @@ $(document).ready(function () {
             this.goFormData["subject"] = subjectQID;
             this.cacheDOM();
             this.goTermsAC();
-            this.evidenceCodesAC();
             this.pmidForm();
             this.goClassRadio();
             this.editWD();
+            this.evidenceCodes();
 
 
         },
@@ -254,55 +254,28 @@ $(document).ready(function () {
                     .appendTo(ul);
             };
         },
-        evidenceCodesAC: function () {
-            this.$goEviForm.autocomplete({
-                delay: 900,
-                autoFocus: true,
-                minLength: 3,
-                appendTo: null,
-                source: function (request, response) {
-                    $.ajax({
-                        type: "GET",
-                        url: goFormAll.endpoint + [
-                            "select distinct ?evidence_code ?evidence_codeLabel ?alias where {" +
-                            "?evidence_code wdt:P31 wd:Q23173209. " +
-                            "?evidence_code skos:altLabel ?alias." +
-                            "filter (lang(?alias) = \"en\") " +
-                            "SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\" .}",
-                            "FILTER(CONTAINS(LCASE(?alias), \"" + request.term + "\"))}"
-                        ].join(" "),
+        evidenceCodes: function () {
+
+            getEvidenceCodes(function (evCodes) {
+                console.log(evCodes);
+                var optlist = $('#optlist');
+                $.each(evCodes, function (key, element) {
+
+                    //this refers to the current item being iterated over
+                    var $indlist = $('<li></li>');
+                    var $inda = $('<a id=' + element.qid + '>' + element.alias + '</a>');
+                    $indlist.html($inda);
+                    optlist.append($indlist);
+                });
+                $('#optlist li a').on('click', function () {
+                    var qidURL = $(this).attr('id');
+                    var wdid = qidURL.split("/");
+                    goFormAll.goFormData["evidenceCode"] = wdid.slice(-1)[0];
+
+                });
 
 
-                        datatype: 'json',
-                        success: function (data) {
-                            var data_array = [];
-                            var data_hash = {};
-                            $.each(data['results']['bindings'], function (key, element) {
-                                var wdid = element['evidence_code']['value'].split("/");
-                                var evqid = wdid.slice(-1)[0];
-                                data_hash = {
-                                    'label': element['alias']['value'],
-                                    'value': evqid,
-                                    'id': element['evidence_codeLabel']['value'],
-                                    'qid': evqid
-
-                                };
-                                data_array.push(data_hash);
-                            });
-                            response(data_array);
-                        }
-                    });
-                },
-                select: function (event, ui) {
-                    goFormAll.goFormData["evidenceCode"] = ui.item.qid;
-                }
-            })
-                .autocomplete("instance")._renderItem = function (ul, item) {
-                return $("<li>")
-                    .append("<div class='main-data' style=\"border-bottom: solid black 1px\"><strong><u>" + item.label +
-                    "</u></strong><br>Evidence Code: " + item.id + "<br>Wikidata: " + item.qid + "</div>")
-                    .appendTo(ul);
-            };
+            });
         },
         pmidForm: function () {
             //form for looking a publication to provide as a reference using eutils
@@ -338,6 +311,7 @@ $(document).ready(function () {
                 },
                 select: function (event, ui) {
                     goFormAll.goFormData["PMID"] = ui.item.id;
+                    console.log(goFormAll.goFormData);
                 }
             })
                 .autocomplete("instance")._renderItem = function (ul, item) {
@@ -908,7 +882,7 @@ $(document).ready(function () {
             this.$loginButtonDiv = $('#wd-login-button-div');
             this.$loginButton = this.$loginButtonDiv.find('#wd-login-button');
             this.$loggedin = $('#userLogin');
-            this.$userContrib =  $('#userContributions');
+            this.$userContrib = $('#userContributions');
 
 
         },
