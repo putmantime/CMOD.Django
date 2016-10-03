@@ -369,3 +369,10 @@ html, body {
 .main-goButton {
     width: 200px;
 }
+
+#evdocbutton {
+    float:right;
+    display:block;
+    margin-right:0;
+    clear:left;
+}

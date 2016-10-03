@@ -195,9 +195,10 @@ var getInterPro = function (uniprot, callBackonSuccess) {
 var getEvidenceCodes = function (callBackonSuccess) {
     var codeslist = [];
     var ev_query = endpoint + [
-            "select distinct ?evidence_code ?evidence_codeLabel ?alias where {" +
+            "select distinct ?evidence_code ?evidence_codeLabel ?alias ?eviURL where {" +
             "?evidence_code wdt:P31 wd:Q23173209. " +
             "?evidence_code skos:altLabel ?alias." +
+            "?evidence_code wdt:P856 ?eviURL." +
             "filter (lang(?alias) = \"en\") " +
             "SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\" .}",
             "}"
@@ -213,7 +214,8 @@ var getEvidenceCodes = function (callBackonSuccess) {
                 var evCodes = {
                 'code': element['evidence_codeLabel']['value'],
                 'qid': element['evidence_code']['value'],
-                'alias': element['alias']['value']
+                'alias': element['alias']['value'],
+                'docs' : element['eviURL']['value']
             };
             codeslist.push(evCodes);
             });

@@ -263,11 +263,13 @@ $(document).ready(function () {
 
                     //this refers to the current item being iterated over
                     var $indlist = $('<li></li>');
-                    var $inda = $('<a id=' + element.qid + '>' + element.alias + '</a>');
+                    var $inda = $("<div style='border-bottom: solid black 1px; height: 50px; padding: 10px'><a id='" + element.qid + "'>" +
+                        element.alias + "<a id='evdocbutton' target='_blank' href='" + element.docs + "' class='btn btn-default' role='button'>" + '?' + "</a></div>");
+
                     $indlist.html($inda);
                     optlist.append($indlist);
                 });
-                $('#optlist li a').on('click', function () {
+                $('#optlist li div a').on('click', function () {
                     var qidURL = $(this).attr('id');
                     var wdid = qidURL.split("/");
                     goFormAll.goFormData["evidenceCode"] = wdid.slice(-1)[0];
@@ -277,6 +279,14 @@ $(document).ready(function () {
 
             });
         },
+        //<a href="#" class="btn btn-info" role="button">Link Button</a>
+
+
+
+
+
+
+
         pmidForm: function () {
             //form for looking a publication to provide as a reference using eutils
             this.$pmidForm.autocomplete({
