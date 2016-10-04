@@ -152,7 +152,23 @@ html, body {
     color: #385d94;
 
 }
+.main-operon-box {
+    min-height: 30px;
+    /*border: solid #cce0ff 2px;*/
+    /*border-radius: 10px;*/
+    margin-top: 5px;
+    color: #385d94;
 
+}
+
+.main-operon-genes-box {
+    min-height: 30px;
+    /*border: solid #cce0ff 2px;*/
+    /*border-radius: 10px;*/
+    margin-top: 5px;
+    color: #385d94;
+
+}
 .main-annotaion-box {
     min-height: 40px;
     border: solid #cce0ff 2px;
@@ -196,6 +212,19 @@ html, body {
 .main-go-data {
     padding: 20px;
     height: 320px;
+    overflow: auto;
+
+}
+
+.main-operon-data {
+    padding: 20px;
+    height: 50px;
+
+
+}
+.main-operon-genes-data {
+    padding: 20px;
+    height: 220px;
     overflow: auto;
 
 }
@@ -389,4 +418,10 @@ html, body {
 .dropdown-menu {
     max-height: 200px;
     overflow: auto;
+ }
+
+
+ .dat-space-bottom{
+     margin-bottom: 5px;
+     margin-top: 5px
  }

@@ -166,7 +166,7 @@ var getInterPro = function (uniprot, callBackonSuccess) {
         "prov:wasDerivedFrom/pr:P854 ?refURL . " + //#reference URL
         "?interPro_item wdt:P2926 ?ipID;" +
         "rdfs:label ?interPro_label. " +
-        "SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\" .}"+
+        "SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\" .}" +
         "filter (lang(?interPro_label) = \"en\") .}"
 
     ].join(" ");
@@ -212,12 +212,12 @@ var getEvidenceCodes = function (callBackonSuccess) {
             //console.log(data);
             $.each(data['results']['bindings'], function (key, element) {
                 var evCodes = {
-                'code': element['evidence_codeLabel']['value'],
-                'qid': element['evidence_code']['value'],
-                'alias': element['alias']['value'],
-                'docs' : element['eviURL']['value']
-            };
-            codeslist.push(evCodes);
+                    'code': element['evidence_codeLabel']['value'],
+                    'qid': element['evidence_code']['value'],
+                    'alias': element['alias']['value'],
+                    'docs': element['eviURL']['value']
+                };
+                codeslist.push(evCodes);
             });
             callBackonSuccess(codeslist);
         }
@@ -226,3 +226,74 @@ var getEvidenceCodes = function (callBackonSuccess) {
 };
 
 
+var getOperonData = function (entrez, callBackonSuccess) {
+    var operonGenes = {};
+    var opQuery = [
+        "SELECT ?gene ?locusTag ?entrez ?operon ?operonLabel ?genStart",
+        "?genEnd ?strand ?strandLabel ?op_genes ?op_genesLabel",
+        "WHERE {",
+        "?gene wdt:P351 '" + entrez + "';",
+        "wdt:P361 ?operon.",
+        "?operon wdt:P527 ?op_genes.",
+        "?op_genes wdt:P2393 ?locusTag;",
+        "wdt:P351 ?entrez;",
+        "wdt:P644 ?genStart;",
+        "wdt:P645 ?genEnd;",
+        "wdt:P2548 ?strand.",
+        "SERVICE wikibase:label {",
+        "bd:serviceParam wikibase:language \"en\" .",
+        "}}"
+    ].join(" ");
+    //console.log(endpoint + opQuery);
+
+    $.ajax({
+        type: "GET",
+        url: endpoint + opQuery,
+        dataType: 'json',
+        success: function (data) {
+            //console.log(data);
+            var opD = [];
+            $.each(data['results']['bindings'], function (key, element) {
+                opD.push(element);
+
+            });
+            operonGenes['Operon'] = opD;
+
+            //console.log(bp);
+            callBackonSuccess(operonGenes);
+        }
+    });
+
+};
+
+var getOperon = function (entrez, callBackonSuccess) {
+    var operon = {};
+    var operonQuery = [
+        "SELECT ?operon ?operonLabel",
+        "WHERE {",
+        "?gene wdt:P351 '" + entrez + "';",
+        "wdt:P361 ?operon.",
+        "SERVICE wikibase:label {",
+        "bd:serviceParam wikibase:language \"en\" .",
+        "}}"
+    ].join(" ");
+    //console.log(endpoint + opQuery);
+
+    $.ajax({
+        type: "GET",
+        url: endpoint + operonQuery,
+        dataType: 'json',
+        success: function (data) {
+            //console.log(data);
+            var opD = [];
+            $.each(data['results']['bindings'], function (key, element) {
+                opD.push(element);
+            });
+            operon['Operon'] = opD;
+
+            //console.log(bp);
+            callBackonSuccess(operon);
+        }
+    });
+
+};

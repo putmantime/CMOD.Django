@@ -357,7 +357,8 @@
 
                         <!-- Nav tabs -->
                         <ul id='annotations-tabs' class="nav nav-tabs" role="tablist">
-                            <li role="presentation" class="active"><a id='mfTab' href="#mf" aria-controls="molfunc" role="tab"
+                            <li role="presentation" class="active"><a id='mfTab' href="#mf" aria-controls="molfunc"
+                                                                      role="tab"
                                                                       data-toggle="tab">Molecular Function</a></li>
                             <li role="presentation"><a id='bpTab' href="#bp" aria-controls="bioproc" role="tab"
                                                        data-toggle="tab">Biological Process</a></li>
@@ -448,14 +449,27 @@
                             </div>
                             <div role="tabpanel" class="tab-pane" id="op">
                                 <div id="operonBox">
-                                    <div class="main-go-box row">
+                                    <div class="main-operon-box row">
                                         <div class="col-md-2"><h5>Operon Identifier</h5></div>
-                                        <div class="col-md-4"><h5>Genes Involved</h5></div>
-                                        <div class="col-md-2"><h5>Pathway</h5></div>
+                                        <div class="col-md-4"><h5>Wikidata Identifier</h5></div>
+                                        <div class="col-md-2"><h5></h5></div>
                                         <div class="col-md-2"><h5></h5></div>
                                         <div class="col-md-2"><h5>Reference</h5></div>
-                                        <div id="operondata" class="main-go-data"></div>
+
                                     </div>
+                                    <div id="operondata" class="main-operon-data"></div>
+                                    <div class="main-operon-genes-box row">
+                                        <div class="col-md-4"><h5>Gene Name</h5></div>
+                                        <div class="col-md-1"><h5>Entrez ID</h5></div>
+                                        <div class="col-md-1"><h5>Locus Tag</h5></div>
+                                        <div class="col-md-1"><h5>Wikidata</h5></div>
+                                        <div class="col-md-1"><h5>Genomic Start</h5></div>
+                                        <div class="col-md-1"><h5>Genomic End</h5></div>
+                                        <div class="col-md-2"><h5>Strand</h5></div>
+                                        <div class="col-md-1"><h5>Reference</h5></div>
+
+                                    </div>
+                                    <div id="operonGenesdata" class="main-operon-genes-data"></div>
                                 </div>
                             </div>
                             <div role="tabpanel" class="tab-pane" id="cm">

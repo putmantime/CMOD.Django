@@ -31,6 +31,7 @@ $(document).ready(function () {
                     source: orgTags, //sparql query callback in queries.js
                     autoFocus: true,
                     select: function (event, ui) {
+                        $("#geneData, #protData, .main-go-data .main-operon-genes-data .main-operon-data ").html("");
                         $('form').each(function () {
                             this.reset()
                         });
@@ -45,7 +46,6 @@ $(document).ready(function () {
 
                         //initiate gene form with organism data
                         geneForm.init(currentTaxa.Taxid);
-
                         //render organism data
                         orgData.init(currentTaxa);
                         //launch jbrowse
@@ -105,7 +105,7 @@ $(document).ready(function () {
                         $('form').each(function () {
                             this.reset()
                         });
-                        $("#geneData, #protData, .main-go-data").html("");
+                        $("#geneData, #protData, .main-go-data .main-operon-genes-data .main-operon-data ").html("");
                         geneinput.val("");
 
                         this.currentGene = [
@@ -118,7 +118,6 @@ $(document).ready(function () {
                             ui.item.strand,
                             currentTaxa[3]
                         ];
-                        console.log(ui.item.strand);
                         this.currentProtein = [
                             ui.item.proteinLabel,
                             ui.item.uniprot,
@@ -130,6 +129,7 @@ $(document).ready(function () {
                         //get GO Terms for this gene/protein
                         //goData.init(this.currentProtein[1]);
                         goData.init(this.currentProtein[1]);
+                        operonData.init(this.currentGene[1]);
                         interProData.init(this.currentProtein[1]);
                         //Render the data into the gene and protein boxes
                         geneData.init(this.currentGene);
@@ -171,7 +171,7 @@ $(document).ready(function () {
                 ];
                 //initialize all modules on organism load
                 geneData.init(first_gene);
-
+                operonData.init(first_gene[1]);
                 proteinData.init(first_protein);
                 interProData.init(first_protein[1]);
                 //goData.init(first_protein[1]);
@@ -213,7 +213,6 @@ $(document).ready(function () {
         resetForm: function () {
             $('.modal').on('hidden.bs.modal', function () {
                 $(this).find('form')[0].reset();
-                console.log($(this).find('#evCodeChoice').html(''));
 
             });
 
@@ -229,7 +228,6 @@ $(document).ready(function () {
             var goClassButtonElem;
             $('.main-goButton').on('click', function () {
                 goClassButtonElem = goClassButton[$(this).attr('id')];
-                console.log(goClassButtonElem);
                 goFormAll.goFormData["goClass"] = goClassButtonElem[0];
                 $('#myGOModalLabel').html("<span>Add a " + goClassButtonElem[1] + " to this protein</span>");
 
@@ -257,7 +255,6 @@ $(document).ready(function () {
                             "\" ))}"].join(" "),
                         datatype: 'json',
                         success: function (data) {
-                            console.log('successful goquery');
                             var data_array = [];
                             var data_hash = {};
                             $.each(data['results']['bindings'], function (key, element) {
@@ -277,7 +274,7 @@ $(document).ready(function () {
                 },
                 select: function (event, ui) {
                     goFormAll.goFormData["goTerm"] = ui.item.qid;
-                    console.log(goFormAll.goFormData);
+                    //console.log(goFormAll.goFormData);
 
 
                 }
@@ -295,7 +292,6 @@ $(document).ready(function () {
         evidenceCodes: function () {
 
             getEvidenceCodes(function (evCodes) {
-                console.log(evCodes);
                 var optlist = $('#optlist');
                 $.each(evCodes, function (key, element) {
 
@@ -309,13 +305,12 @@ $(document).ready(function () {
                 var $focused = $('#optlist li div');
                 $focused.on('hover', function () {
                     this.addClass();
-                    console.log('evilist');
                 });
                 $focused.off("click").click(function (e) {
                     var qidURL = $(this).attr('id');
                     var wdid = qidURL.split("/");
                     goFormAll.goFormData["evidenceCode"] = wdid.slice(-1)[0];
-                    console.log(goFormAll.goFormData);
+                    //console.log(goFormAll.goFormData);
                     $('#evCodeChoice').html("<span>" + $(this).text().slice(0, -1) + "</span>");
 
                 });
@@ -357,7 +352,7 @@ $(document).ready(function () {
                 },
                 select: function (event, ui) {
                     goFormAll.goFormData["PMID"] = ui.item.id;
-                    console.log(goFormAll.goFormData);
+                    //console.log(goFormAll.goFormData);
                 }
             })
                 .autocomplete("instance")._renderItem = function (ul, item) {
@@ -422,6 +417,7 @@ $(document).ready(function () {
     var orgData = {
         init: function (taxData) {
             this.cacheDOM();
+            this.$orgD.html('');
             this.render(taxData);
 
         },
@@ -452,6 +448,7 @@ $(document).ready(function () {
     var geneData = {
         init: function (gene) {
             this.cacheDOM();
+            this.$geneD.html('');
             this.render(gene);
 
 
@@ -475,7 +472,6 @@ $(document).ready(function () {
                 'gen_start': gene[4],
                 'gen_end': gene[5]
             };
-            console.log(gene[6]);
             if (gene[6] === 'http://www.wikidata.org/entity/Q22809711') {
                 data['strand'] = 'Reverse';
             }
@@ -501,6 +497,7 @@ $(document).ready(function () {
     var proteinData = {
         init: function (protein) {
             this.cacheDOM();
+            this.$protD.html('');
             this.render(protein);
 
         },
@@ -521,7 +518,7 @@ $(document).ready(function () {
                 'qid': protein[2],
                 'refseq': protein[3]
             };
-            console.log(protein); //["30S ribosomal protein S12    HP1197", "P0A0X4", "Q21632262", "NP_207988"]
+            //console.log(protein); //["30S ribosomal protein S12    HP1197", "P0A0X4", "Q21632262", "NP_207988"]
             var template = _.template(
                 "<div class='main-data'><h5>Protein Name: </h5> <a target='_blank' href='http://purl.uniprot.org/uniprot/<%= uniprot %>'><%= name %></a></div>" +
                 "<div class='main-data'><h5>UniProt ID:   </h5> <a target='_blank' href='http://purl.uniprot.org/uniprot/<%= uniprot %>'><%= uniprot %></a></div>" +
@@ -551,10 +548,9 @@ $(document).ready(function () {
             this.$mf = this.$go.find('#molfuncdata');
             this.$bp = this.$go.find('#bioprocdata');
             this.$cc = this.$go.find('#celcompdata');
-            this.$tabs = $('#annotations-tabs');
-            this.$molTab = this.$tabs.find('#mfTab');
-            this.$biopTab = this.$tabs.find('#bpTab');
-            this.$celcTab = this.$tabs.find('#ccTab');
+            this.$molTab = $('#mfTab');
+            this.$biopTab = $('#bpTab');
+            this.$celcTab = $('#ccTab');
         },
         generate_go_template: function (terms, refid) {
             var data = {
@@ -591,10 +587,12 @@ $(document).ready(function () {
             }
         },
         render: function (goTerms) {
-            console.log(goTerms);
             var $molf = this.$mf;
+                $molf.html('');
             var $biop = this.$bp;
+                $biop.html('');
             var $celc = this.$cc;
+                $celc.html('');
             var ecNumbers = [];
 
             var nodata = {
@@ -604,7 +602,9 @@ $(document).ready(function () {
                 'determinationLabel':{'value': '---'},
                 'referenceID':{'value': ''}
             };
-
+            this.$molTab.text('Molecular Function (' + goTerms['molecularFunction'].length + ')');
+            this.$biopTab.text('Biological Process (' + goTerms['biologicalProcess'].length + ')');
+            this.$celcTab.text('Cellular Component (' + goTerms['cellularComponent'].length + ')');
 
             if (goTerms['molecularFunction'].length > 0) {
                 $.each(goTerms['molecularFunction'], function (key, element) {
@@ -616,10 +616,9 @@ $(document).ready(function () {
                         ecNumbers.push(element['ecnumber']['value']);
                     }
                 });
-                this.$molTab.text('Molecular Function (' + goTerms['molecularFunction'].length + ')');
+
             } else {
-                $molf.append(goData.generate_go_template(nodata, 'mf_', ''));
-                this.$molTab.text('Molecular Function (0)');
+                $molf.html(goData.generate_go_template(nodata, 'mf_' + ' '));
             }
             if (goTerms['biologicalProcess'].length > 0) {
                 $.each(goTerms['biologicalProcess'], function (key, element) {
@@ -629,14 +628,12 @@ $(document).ready(function () {
                     goData.pmidRef($refbut, element);
                     if (element.hasOwnProperty("ecnumber")) {
                         ecNumbers.push(element['ecnumber']['value']);
-
                     }
 
                 });
-                this.$biopTab.text('Biological Process (' + goTerms['biologicalProcess'].length + ')');
             } else {
-                $biop.append(goData.generate_go_template(nodata, 'bp_', ''));
-                this.$biopTab.text('Biological Process (0)');
+                $biop.html(goData.generate_go_template(nodata, 'bp_' + ' '));
+
             }
             if (goTerms['cellularComponent'].length > 0) {
                 $.each(goTerms['cellularComponent'], function (key, element) {
@@ -648,10 +645,9 @@ $(document).ready(function () {
                         ecNumbers.push(element['ecnumber']['value']);
                     }
                 });
-                this.$celcTab.text('Cellular Component (' + goTerms['cellularComponent'].length + ')');
+
             } else {
-                $celc.append(goData.generate_go_template(nodata, 'bp_', ''));
-                this.$celcTab.text('Cellular Component (0)');
+                $celc.html(goData.generate_go_template(nodata, 'cc_' + ' '));
             }
 
             var uniqueECs = _.uniq(ecNumbers, false);
@@ -663,19 +659,21 @@ $(document).ready(function () {
     var EnzymeData = {
         init: function (enzData) {
             this.cacheDOM();
+            this.$ecnum.html('');
             this.render(enzData);
         },
         cacheDOM: function () {
             this.$ec = $('#enzymeBoxes');
             this.$ecnum = this.$ec.find('#enzymeprodata');
-            this.$tabs = $('#annotations-tabs');
-            this.$ezTab = this.$tabs.find('#ezTab');
+            this.$ezTab = $('#ezTab');
         },
         generate_ec_template: function (ecnumb) {
             var data = {
                 'ecnumber': ecnumb
             };
-            var ec_template = _.template("<div class='row main-dataul'><div class='col-md-2'><h5><%= ecnumber %></h5></div>" +
+            var ec_template = _.template(
+                "<div class='row main-dataul'>" +
+                "<div class='col-md-2'><h5><%= ecnumber %></h5></div>" +
                 "<div class='col-md-4'></div>" +
                 "<div class='col-md-2'></div>" +
                 "<div class='col-md-2'></div>" +
@@ -686,7 +684,6 @@ $(document).ready(function () {
 
         },
         render: function (enzData) {
-            console.log(enzData);
             var $enz = this.$ecnum;
             var allEC = [];
 
@@ -707,9 +704,10 @@ $(document).ready(function () {
 
     var interProData = {
         init: function (uniprot) {
-            //console.log("interpro init" + uniprot);
             this.cacheDOM();
+            this.$ipData.html('');
             this.interProtData(uniprot);
+
 
         },
         interProtData: function (uniprot) {
@@ -721,27 +719,23 @@ $(document).ready(function () {
         cacheDOM: function () {
             this.$ip = $('#interProBoxes');
             this.$ipData = this.$ip.find('#interprodata');
-            this.$tabs = $('#annotations-tabs');
-            this.$ipTab = this.$tabs.find('#ipTab');
+            this.$ipTab = $('#ipTab');
 
         },
         render: function (ipDomains) {
-
+            this.$ipTab.text('InterPro Domains (' + ipDomains['InterPro'].length + ')');
             var ipD = this.$ipData;
             if (ipDomains['InterPro'].length > 0) {
                 $.each(ipDomains['InterPro'], function (key, element) {
-                    //console.log(element);
-                    //console.log(element['interPro_label']['value']);
-
                     ipD.append(interProData.ipInput(element['interPro_label']['value'], element['ipID']['value']));
                     interProRefModal_obj.init(ipD, element['reference_stated_inLabel']['value'], element['pubDate']['value'],
                         element['version']['value'], element['refURL']['value']);
                 });
             }
             else {
-                ipD.append(interProData.ipInput("No InterPro Domain Data Available", '---------'));
+                ipD.html(interProData.ipInput("No InterPro Domain Data Available", '---------'));
             }
-            this.$ipTab.text('InterPro Domains (' + ipDomains['InterPro'].length + ')');
+
         },
         ipInput: function (iplable, ipid) {
             return "<div class=\"row main-dataul\"><div class=\"col-md-5\"><h5>" +
@@ -753,6 +747,112 @@ $(document).ready(function () {
         }
     };
 
+
+    var operonData = {
+        init: function(entrez){
+            this.cacheDOM();
+            this.$opData.html('');
+            this.$opGenes.html('');
+            this.$opTab.text("Operon (0)" );
+            this.operonData(entrez);
+            this.operonIdentifier(entrez);
+        },
+        operonIdentifier: function (entrez){
+            getOperon(entrez, function (operon){
+                if(operon['Operon'].length > 0){
+                    operonData.renderOP(operon);
+                }
+
+            });
+        },
+        operonData: function (entrez){
+            getOperonData(entrez, function (operonGenes) {
+                if (operonGenes['Operon'].length > 0){
+                    operonData.renderOPGenes(operonGenes);
+                }
+
+            });
+        },
+        cacheDOM: function () {
+            this.$opTab = $('#opTab');
+            this.$opBox = $('#operonBox');
+            this.$opData = this.$opBox.find('#operondata');
+            this.$opGenes = this.$opBox.find('#operonGenesdata');
+        },
+        generate_operon_template: function (operon_identifier) {
+            var data = {
+                'operon_label': operon_identifier['Operon'][0]['operonLabel']['value'],
+                'operon_qid': operon_identifier['Operon'][0]['operon']['value'],
+            };
+
+            var op_template = _.template(
+                "<div style='margin-bottom: 10px' class='row main-data'>" +
+                "<div class='col-md-2'><%= operon_label %></div> " +
+                "<div class='col-md-4'><%= operon_qid %></div> " +
+                "<div class='col-md-2'></div>  " +
+                "<div class='col-md-2'></div>  " +
+                "<div class='col-md-2'></div>" +
+                "</div>"
+
+            );
+            return (op_template(data));
+        },
+        generate_opGenes_template: function (operon_genes) {
+            var wdid = operon_genes['gene']['value'].split("/");
+            var geneQID = wdid.slice(-1)[0];
+
+
+            var strandQID = operon_genes['strand']['value'];
+            var data = {
+                'gene': operon_genes['op_genes']['value'],
+                'geneQID': geneQID,
+                'gene_label': operon_genes['op_genesLabel']['value'],
+                'genStart': operon_genes['genStart']['value'],
+                'genEnd': operon_genes['genEnd']['value'],
+                'entrez': operon_genes['entrez']['value'],
+                'locus_tag': operon_genes['locusTag']['value'],
+                'strandQID': strandQID
+            };
+
+            if (strandQID === 'http://www.wikidata.org/entity/Q22809711') {
+                data['strand'] = 'Reverse';
+            }
+            else {
+                data['strand'] = 'Forward';
+            }
+
+            var op_gene_template = _.template(
+                "<div class='row main-data'>" +
+                "<div class='col-md-4 dat-space-bottom'><%= gene_label %></div>" +
+                "<div class='col-md-1 dat-space-bottom'><%= entrez %></div>" +
+                "<div class='col-md-1 dat-space-bottom'><%= locus_tag %></div>" +
+                "<div class='col-md-1 dat-space-bottom'><%= geneQID %></div>" +
+                "<div class='col-md-1 dat-space-bottom'><%= genStart %></div>" +
+                "<div class='col-md-1 dat-space-bottom'><%= genEnd %></div>" +
+                "<div class='col-md-2 dat-space-bottom'><%= strand %></div>" +
+                "<div class='col-md-1 dat-space-bottom'></div>" +
+                "</div>"
+
+            );
+            return (op_gene_template(data));
+        },
+
+        renderOP: function (operon) {
+            this.$opTab.text("Operon (1)" );
+            this.$opData.html(this.generate_operon_template(operon));
+        },
+
+        renderOPGenes: function (operonGenes) {
+            console.log(operonGenes);
+            $.each(operonGenes['Operon'], function(key, element){
+                console.log(element);
+                operonData.$opGenes.append(operonData.generate_opGenes_template(element));
+            });
+
+        }
+
+
+    };
 
 ///////////////////////////////////////End data rendering modules///////////////////////////////////////////////////////
 // /////////////////////////////////////Begin reference modules///////////////////////////////////////////////////////
@@ -815,7 +915,7 @@ $(document).ready(function () {
 
             //console.log(element.find('.div-ref-but'));
             element.on('click', function () {
-                console.log("clicking ref button");
+                //console.log("clicking ref button");
                 $stated.html(stated_in);
                 $retrieved.html(retrieved);
                 $pmid.html(pmid);
