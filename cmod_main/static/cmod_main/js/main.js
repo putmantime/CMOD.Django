@@ -31,7 +31,6 @@ $(document).ready(function () {
                     source: orgTags, //sparql query callback in queries.js
                     autoFocus: true,
                     select: function (event, ui) {
-                        $("#geneData, #protData, .main-go-data .main-operon-genes-data .main-operon-data ").html("");
                         $('form').each(function () {
                             this.reset()
                         });
@@ -417,7 +416,7 @@ $(document).ready(function () {
     var orgData = {
         init: function (taxData) {
             this.cacheDOM();
-            this.$orgD.html('');
+
             this.render(taxData);
 
         },
