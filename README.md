@@ -2,6 +2,8 @@
 CMOD Wikidata App built on Django Framework for editing Wikidata with existing GeneWIki bot code
 
 
+available to demo at http://52.44.239.15/cmod_main/
+
 
 Video Walkthrough available here:
  https://drive.google.com/open?id=0Bz6pVfjuj2bhTGlYSm92bGk1QlE
