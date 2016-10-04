@@ -564,6 +564,7 @@ $(document).ready(function () {
                 'evi_label': terms['determinationLabel']['value'],
                 'referenceID': refid
             };
+
             var go_template = _.template(
                 "<div class=\"row main-dataul\">" +
                 "<div class=\"col-md-5\"><h5><%= label %></h5></div>" +
@@ -595,6 +596,16 @@ $(document).ready(function () {
             var $biop = this.$bp;
             var $celc = this.$cc;
             var ecNumbers = [];
+
+            var nodata = {
+                'gotermValueLabel':{'value': 'No Data Available'},
+                'goID':{'value': '--------'},
+                'determination':{'value': ''},
+                'determinationLabel':{'value': '---'},
+                'referenceID':{'value': ''}
+            };
+
+
             if (goTerms['molecularFunction'].length > 0) {
                 $.each(goTerms['molecularFunction'], function (key, element) {
                     var godat = goData.generate_go_template(element, "mf_" + key);
@@ -607,7 +618,7 @@ $(document).ready(function () {
                 });
                 this.$molTab.text('Molecular Function (' + goTerms['molecularFunction'].length + ')');
             } else {
-                $molf.append("<div class='main-data'><h5>No Molecular Function Data Available</h5></div>");
+                $molf.append(goData.generate_go_template(nodata, 'mf_', ''));
                 this.$molTab.text('Molecular Function (0)');
             }
             if (goTerms['biologicalProcess'].length > 0) {
@@ -624,7 +635,7 @@ $(document).ready(function () {
                 });
                 this.$biopTab.text('Biological Process (' + goTerms['biologicalProcess'].length + ')');
             } else {
-                $biop.append("<div class='main-data'><h5>No Biological Process Data Available</h5></div>");
+                $biop.append(goData.generate_go_template(nodata, 'bp_', ''));
                 this.$biopTab.text('Biological Process (0)');
             }
             if (goTerms['cellularComponent'].length > 0) {
@@ -639,7 +650,7 @@ $(document).ready(function () {
                 });
                 this.$celcTab.text('Cellular Component (' + goTerms['cellularComponent'].length + ')');
             } else {
-                $celc.append("<div class='main-data'><h5>No Cellular Component Data Available</h5></div>");
+                $celc.append(goData.generate_go_template(nodata, 'bp_', ''));
                 this.$celcTab.text('Cellular Component (0)');
             }
 
@@ -710,14 +721,14 @@ $(document).ready(function () {
         cacheDOM: function () {
             this.$ip = $('#interProBoxes');
             this.$ipData = this.$ip.find('#interprodata');
+            this.$tabs = $('#annotations-tabs');
+            this.$ipTab = this.$tabs.find('#ipTab');
 
         },
         render: function (ipDomains) {
+
             var ipD = this.$ipData;
             if (ipDomains['InterPro'].length > 0) {
-                //console.log(ipDomains['InterPro']);
-                //console.log("its alive");
-
                 $.each(ipDomains['InterPro'], function (key, element) {
                     //console.log(element);
                     //console.log(element['interPro_label']['value']);
@@ -730,6 +741,7 @@ $(document).ready(function () {
             else {
                 ipD.append(interProData.ipInput("No InterPro Domain Data Available", '---------'));
             }
+            this.$ipTab.text('InterPro Domains (' + ipDomains['InterPro'].length + ')');
         },
         ipInput: function (iplable, ipid) {
             return "<div class=\"row main-dataul\"><div class=\"col-md-5\"><h5>" +
