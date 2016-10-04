@@ -552,7 +552,9 @@ $(document).ready(function () {
             this.$bp = this.$go.find('#bioprocdata');
             this.$cc = this.$go.find('#celcompdata');
             this.$tabs = $('#annotations-tabs');
-
+            this.$molTab = this.$tabs.find('#mfTab');
+            this.$biopTab = this.$tabs.find('#bpTab');
+            this.$celcTab = this.$tabs.find('#ccTab');
         },
         generate_go_template: function (terms, refid) {
             var data = {
@@ -592,8 +594,7 @@ $(document).ready(function () {
             var $molf = this.$mf;
             var $biop = this.$bp;
             var $celc = this.$cc;
-            var $enzclass = this.$ecnum;
-
+            var ecNumbers = [];
             if (goTerms['molecularFunction'].length > 0) {
                 $.each(goTerms['molecularFunction'], function (key, element) {
                     var godat = goData.generate_go_template(element, "mf_" + key);
@@ -601,11 +602,13 @@ $(document).ready(function () {
                     var $refbut = $molf.find('#mf_' + key);
                     goData.pmidRef($refbut, element);
                     if (element.hasOwnProperty("ecnumber")) {
-                        EnzymeData.init(element);
+                        ecNumbers.push(element['ecnumber']['value']);
                     }
                 });
+                this.$molTab.text('Molecular Function (' + goTerms['molecularFunction'].length + ')');
             } else {
                 $molf.append("<div class='main-data'><h5>No Molecular Function Data Available</h5></div>");
+                this.$molTab.text('Molecular Function (0)');
             }
             if (goTerms['biologicalProcess'].length > 0) {
                 $.each(goTerms['biologicalProcess'], function (key, element) {
@@ -614,12 +617,15 @@ $(document).ready(function () {
                     var $refbut = $biop.find('#bp_' + key);
                     goData.pmidRef($refbut, element);
                     if (element.hasOwnProperty("ecnumber")) {
-                        EnzymeData.init(element);
+                        ecNumbers.push(element['ecnumber']['value']);
+
                     }
 
                 });
+                this.$biopTab.text('Biological Process (' + goTerms['biologicalProcess'].length + ')');
             } else {
                 $biop.append("<div class='main-data'><h5>No Biological Process Data Available</h5></div>");
+                this.$biopTab.text('Biological Process (0)');
             }
             if (goTerms['cellularComponent'].length > 0) {
                 $.each(goTerms['cellularComponent'], function (key, element) {
@@ -628,29 +634,35 @@ $(document).ready(function () {
                     var $refbut = $celc.find('#cc_' + key);
                     goData.pmidRef($refbut, element);
                     if (element.hasOwnProperty("ecnumber")) {
-                        EnzymeData.init(element);
+                        ecNumbers.push(element['ecnumber']['value']);
                     }
                 });
+                this.$celcTab.text('Cellular Component (' + goTerms['cellularComponent'].length + ')');
             } else {
                 $celc.append("<div class='main-data'><h5>No Cellular Component Data Available</h5></div>");
+                this.$celcTab.text('Cellular Component (0)');
             }
+
+            var uniqueECs = _.uniq(ecNumbers, false);
+            EnzymeData.init(uniqueECs);
         }
 
     };
 
     var EnzymeData = {
-        init: function (gotermData) {
+        init: function (enzData) {
             this.cacheDOM();
-            this.render(gotermData);
+            this.render(enzData);
         },
         cacheDOM: function () {
             this.$ec = $('#enzymeBoxes');
             this.$ecnum = this.$ec.find('#enzymeprodata');
+            this.$tabs = $('#annotations-tabs');
+            this.$ezTab = this.$tabs.find('#ezTab');
         },
-        generate_ec_template: function (terms) {
+        generate_ec_template: function (ecnumb) {
             var data = {
-                'ecnumber': terms['ecnumber']['value']
-
+                'ecnumber': ecnumb
             };
             var ec_template = _.template("<div class='row main-dataul'><div class='col-md-2'><h5><%= ecnumber %></h5></div>" +
                 "<div class='col-md-4'></div>" +
@@ -662,13 +674,23 @@ $(document).ready(function () {
             return (ec_template(data))
 
         },
-        render: function (gotermData) {
-            console.log(gotermData);
+        render: function (enzData) {
+            console.log(enzData);
             var $enz = this.$ecnum;
+            var allEC = [];
 
-            var ectemplate = this.generate_ec_template(gotermData);
-            $enz.html(ectemplate);
+            if (enzData.length === 0) {
+              allEC.push(EnzymeData.generate_ec_template('No Enzyme Data Available'));
+            }
+            else {
+                $.each(enzData, function (index, ec) {
+                    allEC.push(EnzymeData.generate_ec_template(ec));
+                });
 
+
+            }
+            $enz.html(allEC.join(" "));
+            this.$ezTab.text('Enzymatic Action (' + enzData.length + ')');
         }
     };
 
