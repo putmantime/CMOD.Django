@@ -1,1 +1,1 @@
-[{"seqChunkSize":20000,"end":3773236,"description":"Desulfovibrio vulgaris str. Hildenborough chromosome, complete genome","name":"NC_002937.3","start":0}]
+[{"description":"Desulfovibrio vulgaris str. Hildenborough chromosome, complete genome","start":0,"seqChunkSize":20000,"name":"NC_002937.3","end":3570858},{"end":202301,"name":"NC_005863.1","seqChunkSize":20000,"start":0,"description":"Desulfovibrio vulgaris str. Hildenborough plasmid pDV, complete sequence"}]

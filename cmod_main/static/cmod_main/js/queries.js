@@ -38,7 +38,8 @@ var getGenes = function (taxid, callbackOnSuccess) {
     var genes = {};
     var geneTags = [];
     var queryGenes = ["SELECT  ?gene ?specieswd ?specieswdLabel ?taxid ?genomeaccession ?geneLabel ",
-        "?locustag ?entrezid ?genomicstart ?genomicend ?strand ?protein ?proteinLabel ?uniprot ?refseqProtein ",
+        "?locustag ?entrezid ?genomicstart ?genomicend ?strand ?protein ?proteinLabel ?uniprot ?refseqProtein " +
+        "?refSeqChromosome",
         "WHERE {",
         "?specieswd wdt:P685",
         "\"" + taxid + "\".",
@@ -49,25 +50,33 @@ var getGenes = function (taxid, callbackOnSuccess) {
         "wdt:P644 ?genomicstart;",
         "wdt:P645 ?genomicend;",
         "wdt:P2393 ?locustag;",
-        "wdt:P2548 ?strand.",
+        "wdt:P2548 ?strand;",
+        "p:P644 ?chr.",
 
         "OPTIONAL{?gene wdt:P688 ?protein.",
+        "?chr pq:P2249 ?refSeqChromosome.",
         "?protein wdt:P352 ?uniprot;",
         "wdt:P637 ?refseqProtein.}",
         "SERVICE wikibase:label {",
         "bd:serviceParam wikibase:language \"en\" .",
         "}}"
     ].join(" ");
-    //console.log(queryGenes);
+    console.log(queryGenes);
     $.ajax({
         type: "GET",
         url: endpoint + queryGenes,
         dataType: 'json',
         success: function (data) {
             var geneData = data['results']['bindings'];
+            var gene_count = 0;
+            var chr_count = 0;
             $.each(geneData, function (key, element) {
+                gene_count += 1;
                 var gdid = element['gene']['value'].split("/");
                 var gqid = gdid.slice(-1)[0];
+
+
+
                 genes = {
                     'name': element['geneLabel']['value'],
                     'value': element['geneLabel']['value'] + " | " + element['locustag']['value'] + " | " + gqid + " | " + element['entrezid']['value'],
@@ -79,6 +88,12 @@ var getGenes = function (taxid, callbackOnSuccess) {
                     'gqid': gqid
                 };
 
+                if (element.hasOwnProperty('refSeqChromosome')){
+                    genes['chromosome'] = element['refSeqChromosome']['value']
+                } else{
+                    genes['chromosome'] = 'None'
+                }
+
                 if (element.hasOwnProperty('protein')) {
                     var pdid = element['protein']['value'].split("/");
                     var pqid = pdid.slice(-1)[0];
@@ -87,10 +102,12 @@ var getGenes = function (taxid, callbackOnSuccess) {
                     genes['refseqProtein'] = element['refseqProtein']['value'];
                     genes['protein'] = pqid;
                 }
-
                 geneTags.push(genes);
 
             });
+
+            console.log(gene_count);
+            console.log(chr_count);
             callbackOnSuccess(geneTags);
         }
     });

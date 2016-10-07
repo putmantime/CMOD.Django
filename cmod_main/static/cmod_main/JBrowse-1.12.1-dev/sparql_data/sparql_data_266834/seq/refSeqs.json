@@ -1,1 +1,1 @@
-[{"name":"NC_003047.1","start":0,"description":"Sinorhizobium meliloti 1021 chromosome, complete genome","seqChunkSize":20000,"end":6691826}]
+[{"seqChunkSize":20000,"start":0,"name":"NC_003047.1","end":3654135,"description":"Sinorhizobium meliloti 1021 chromosome, complete genome"},{"end":1354226,"description":"Sinorhizobium meliloti 1021 plasmid pSymA, complete sequence","name":"NC_003037.1","start":0,"seqChunkSize":20000},{"start":0,"name":"NC_003078.1","description":"Sinorhizobium meliloti 1021 plasmid pSymB, complete sequence","end":1683333,"seqChunkSize":20000}]

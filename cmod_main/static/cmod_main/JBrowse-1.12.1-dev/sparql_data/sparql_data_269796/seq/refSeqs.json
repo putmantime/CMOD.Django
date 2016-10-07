@@ -1,1 +1,1 @@
-[{"description":"Rhodospirillum rubrum ATCC 11170 chromosome, complete genome","end":4406629,"seqChunkSize":20000,"start":0,"name":"NC_007643.1"}]
+[{"end":4352825,"start":0,"name":"NC_007643.1","description":"Rhodospirillum rubrum ATCC 11170 chromosome, complete genome","seqChunkSize":20000},{"description":"Rhodospirillum rubrum ATCC 11170 plasmid unnamed, complete sequence","seqChunkSize":20000,"end":53732,"name":"NC_007641.1","start":0}]

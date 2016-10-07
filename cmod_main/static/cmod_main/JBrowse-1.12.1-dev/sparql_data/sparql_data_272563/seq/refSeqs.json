@@ -1,1 +1,1 @@
-[{"seqChunkSize":20000,"name":"NC_009089.1","start":0,"description":"Peptoclostridium difficile 630, complete genome","end":4298203}]
+[{"description":"Peptoclostridium difficile 630, complete genome","start":0,"name":"NC_009089.1","end":4290252,"seqChunkSize":20000},{"end":7881,"description":"Peptoclostridium difficile 630 plasmid pCD630, complete sequence","name":"NC_008226.1","start":0,"seqChunkSize":20000}]

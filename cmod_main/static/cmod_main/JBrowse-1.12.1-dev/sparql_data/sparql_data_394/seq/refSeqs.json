@@ -1,1 +1,1 @@
-[{"seqChunkSize":20000,"end":6892038,"start":0,"name":"NC_012587.1","description":"Sinorhizobium fredii NGR234 chromosome, complete genome"}]
+[{"end":3925702,"seqChunkSize":20000,"description":"Sinorhizobium fredii NGR234 chromosome, complete genome","name":"NC_012587.1","start":0},{"description":"Sinorhizobium fredii NGR234 plasmid pNGR234a, complete sequence","name":"NC_000914.2","end":536165,"seqChunkSize":20000,"start":0},{"start":0,"description":"Sinorhizobium fredii NGR234 plasmid pNGR234b, complete sequence","name":"NC_012586.1","seqChunkSize":20000,"end":2430033}]

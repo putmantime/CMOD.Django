@@ -135,3 +135,4 @@ def wd_credentials(request):
 
         return HttpResponse(json.dumps(user_pass), content_type='application/json')
         # return render(request, "cmod_main/main_page.html", )
+

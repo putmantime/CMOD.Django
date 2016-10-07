@@ -5,51 +5,33 @@ import subprocess
 import os, os.path
 import glob
 import shutil
+import tempfile
 from SPARQLWrapper import SPARQLWrapper, JSON
-
-ref_taxids = ["251221", "115713", "471472", "272561", "300852", "36809", "224324", "309807", "243274", "197221",
-              "227377", "208964", "242231", "257313", "386585", "585056", "585057", "685038", "1133852", "511145",
-              "1125630", "393305", "223926", "269796", "176280", "210007", "208435", "160490", "272623", "226900",
-              "224308", "441771", "413999", "272621", "233413", "83332", "525284", "243160", "189518", "85962",
-              "272624", "122586", "568707", "300267", "214092", "312309", "295405", "93061", "568814", "171101",
-              "226185", "333849", "272562", "321967", "169963", "196627", "272631", "272560", "1208660", "107806",
-              "243275", "177416", "205918", "266834", "1028307", "198214", "380703", "71421", "272947", "324602",
-              "243230", "198094", "260799", "281309", "272563", "220668", "246196", "100226", "272632", "272634",
-              "365659", "99287", "220341", "243231", "224326", "160488", "190485", "871585", "716541", "272943",
-              "362948", "702459", "190650", "265311", "264732", "211586", "190304", "749927", "206672", "194439",
-              "402612", "394", "192222", "167539", "243090", "366394", "243277", "882", "223283"]
 
 
 class PrepareRefSeqs(object):
     def __init__(self):
         self.tid_query = "SELECT ?taxid WHERE { ?species wdt:P171* wd:Q10876; wdt:P685 ?taxid; wdt:P2249 ?RefSeq. }"
         self.tids = self.query_results()
-        print(self.tids)
+        species_count = 0
         for tid in self.tids:
+            species_count += 1
+            print(species_count, tid)
             self.generate_tracks_conf(tid)
             genome = self.get_ref_ftp_path(tid)
-            with gzip.open(genome, 'rb') as f:
-                file_content = f.read().decode().split('\n')
-                seq = "".join(file_content[1:])
-                seqlen = len(seq)
-                f_genome = [file_content[0], seq]
-                # display the genome data at the terminal
-                full_genome = "\n".join(f_genome)
-                refseq = file_content[0].lstrip(">").split()[0]
-                jbrowse = [{"length": seqlen, "name": refseq, "seqChunkSize": 20000, "end": seqlen, "start": 0}]
-                f.close()
-            current_fasta = './reference_genomes/{}_reference.fasta'.format(tid)
-            refseq_fasta = open(current_fasta, 'w')
-            for line in f_genome:
-                print(line, file=refseq_fasta)
-            refseq_fasta.close()
-            # run the jbrowse prepare-refseqs.pl perl script
-            prep_rs = '../../static/cmod_main/JBrowse-1.12.1-dev/bin/prepare-refseqs.pl'
-            subprocess.call([prep_rs, "--fasta", current_fasta,
-                             "--out",
-                             '../../static/cmod_main/JBrowse-1.12.1-dev/sparql_data/sparql_data_{}/'.format(tid)])
 
-            print((full_genome[:200] + '...', jbrowse))
+            with gzip.open(genome, 'rb') as f:
+                chroms = {}
+                current_fasta = f.read()
+
+                with tempfile.NamedTemporaryFile() as temp:
+                    temp.write(current_fasta)
+                    temp.flush()
+
+                    prep_rs = '/Users/timputman/django-projects/cmod_dev/CMOD.Django/cmod_main/static/cmod_main/JBrowse-1.12.1-dev/bin/prepare-refseqs.pl'
+                    sub_args = [prep_rs, "--fasta", temp.name, "--out",
+                                '/Users/timputman/django-projects/cmod_dev/CMOD.Django/cmod_main/static/cmod_main/JBrowse-1.12.1-dev/sparql_data/sparql_data_{}/'.format(tid)]
+                    subprocess.call(sub_args)
 
     def execute_query(self):
         endpoint = SPARQLWrapper(endpoint="https://query.wikidata.org/sparql")
@@ -84,9 +66,12 @@ class PrepareRefSeqs(object):
         jbrowse_conf_prefix = [x.lstrip() for x in jbrowse_conf_prefix]
         # sparql query is in one long line...jbrowse was only taking first line of query when it was multiline (this held me up for a while)
         query1 = ["queryTemplate = PREFIX wdt: <http://www.wikidata.org/prop/direct/> PREFIX wd: <http://www.wikidata.org/entity/>",
-                  "SELECT ?start ?end ?uniqueID ?strand ?uri ?entrezGeneID ?name ?description",
+                  "PREFIX qualifier: <http://www.wikidata.org/prop/qualifier/>",
+                  "SELECT ?start ?end ?uniqueID ?strand ?uri ?entrezGeneID ?name ?description ?refSeq",
                   "WHERE { ?gene wdt:P279 wd:Q7187; wdt:P703 ?strain; wdt:P351 ?uniqueID; wdt:P351 ?entrezGeneID;",
-                  "wdt:P2393 ?name; rdfs:label ?description; wdt:P644 ?start; wdt:P645 ?end; wdt:P2548 ?wdstrand .",
+                  "wdt:P2393 ?name; rdfs:label ?description; wdt:P644 ?start; wdt:P645 ?end; wdt:P2548 ?wdstrand ;",
+                  "p:P644 ?chr.",
+                  "OPTIONAL {?chr qualifier:P2249 ?refSeq.} FILTER(?refSeq = \"{ref}\") "
                   "?strain wdt:P685",
                   "'" + taxid + "'.",
                   "bind( IF(?wdstrand = wd:Q22809680, '1', '-1') as ?strand). bind(str(?gene) as ?uri).",
@@ -95,10 +80,9 @@ class PrepareRefSeqs(object):
                   ]
         query = " ".join(query1)
 
-
-
         jbrowse_conf_prefix.append(query)
         # create the tracks.conf file and print each line to it
+
         def ensure_dir(f):
             d = os.path.dirname(f)
             if not os.path.exists(d):
@@ -138,3 +122,4 @@ class PrepareRefSeqs(object):
         # return the genome fasta file as a tempfile
         return genome
 
+tester = PrepareRefSeqs()

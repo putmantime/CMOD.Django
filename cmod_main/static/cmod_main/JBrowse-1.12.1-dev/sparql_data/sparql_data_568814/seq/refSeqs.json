@@ -1,1 +1,1 @@
-[{"end":2170872,"seqChunkSize":20000,"start":0,"description":"Streptococcus suis BM407 chromosome, complete genome","name":"NC_012926.1"}]
+[{"start":0,"seqChunkSize":20000,"description":"Streptococcus suis BM407 chromosome, complete genome","name":"NC_012926.1","end":2146229},{"seqChunkSize":20000,"start":0,"end":24579,"name":"NC_012923.1","description":"Streptococcus suis BM407 plasmid pBM407, complete sequence"}]

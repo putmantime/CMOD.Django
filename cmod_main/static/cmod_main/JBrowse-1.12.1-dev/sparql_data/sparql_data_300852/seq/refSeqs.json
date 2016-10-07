@@ -1,1 +1,1 @@
-[{"description":"Thermus thermophilus HB8 chromosome, complete genome","name":"NC_006461.1","start":0,"end":2116181,"seqChunkSize":20000}]
+[{"name":"NC_006461.1","start":0,"description":"Thermus thermophilus HB8 chromosome, complete genome","end":1849742,"seqChunkSize":20000},{"description":"Thermus thermophilus HB8 plasmid pTT27, complete sequence","seqChunkSize":20000,"end":256992,"name":"NC_006462.1","start":0},{"end":9322,"seqChunkSize":20000,"description":"Thermus thermophilus HB8 plasmid pTT8, complete sequence","start":0,"name":"NC_006463.1"}]

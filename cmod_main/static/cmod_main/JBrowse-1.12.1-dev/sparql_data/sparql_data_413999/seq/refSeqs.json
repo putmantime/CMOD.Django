@@ -1,1 +1,1 @@
-[{"start":0,"seqChunkSize":20000,"name":"NC_009495.1","end":3903337,"description":"Clostridium botulinum A str. ATCC 3502 chromosome, complete genome"}]
+[{"end":3886916,"seqChunkSize":20000,"description":"Clostridium botulinum A str. ATCC 3502 chromosome, complete genome","start":0,"name":"NC_009495.1"},{"description":"Clostridium botulinum A str. ATCC 3502 plasmid pBOT3502, complete sequence","end":16344,"seqChunkSize":20000,"name":"NC_009496.1","start":0}]

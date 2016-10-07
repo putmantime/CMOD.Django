@@ -1,1 +1,1 @@
-[{"end":5358328,"start":0,"seqChunkSize":20000,"description":"Escherichia coli UMN026 chromosome, complete genome","name":"NC_011751.1"}]
+[{"description":"Escherichia coli UMN026 chromosome, complete genome","start":0,"seqChunkSize":20000,"name":"NC_011751.1","end":5202090},{"seqChunkSize":20000,"start":0,"description":"Escherichia coli UMN026 plasmid p2ESCUM, complete sequence","name":"NC_011739.1","end":33809},{"name":"NC_011749.1","end":122301,"description":"Escherichia coli UMN026 plasmid p1ESCUM, complete sequence","start":0,"seqChunkSize":20000}]

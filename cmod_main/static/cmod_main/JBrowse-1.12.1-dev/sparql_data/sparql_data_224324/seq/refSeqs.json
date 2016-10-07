@@ -1,1 +1,1 @@
-[{"seqChunkSize":20000,"name":"NC_000918.1","end":1590849,"start":0,"description":"Aquifex aeolicus VF5 chromosome, complete genome"}]
+[{"seqChunkSize":20000,"description":"Aquifex aeolicus VF5 chromosome, complete genome","end":1551335,"start":0,"name":"NC_000918.1"},{"name":"NC_001880.1","description":"Aquifex aeolicus VF5 plasmid ece1, complete sequence","end":39456,"start":0,"seqChunkSize":20000}]

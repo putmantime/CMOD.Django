@@ -1,1 +1,1 @@
-[{"end":4951468,"description":"Salmonella enterica subsp. enterica serovar Typhimurium str. LT2 chromosome, complete genome","start":0,"name":"NC_003197.1","seqChunkSize":20000}]
+[{"name":"NC_003197.1","seqChunkSize":20000,"end":4857432,"description":"Salmonella enterica subsp. enterica serovar Typhimurium str. LT2 chromosome, complete genome","start":0},{"seqChunkSize":20000,"name":"NC_003277.1","start":0,"description":"Salmonella enterica subsp. enterica serovar Typhimurium str. LT2 plasmid pSLT, complete sequence","end":93939}]

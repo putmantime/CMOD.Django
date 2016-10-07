@@ -47,17 +47,7 @@ $(document).ready(function () {
                         geneForm.init(currentTaxa.Taxid);
                         //render organism data
                         orgData.init(currentTaxa);
-                        //launch jbrowse
-                        jbrowse.init(
-                            currentTaxa.Taxid,
-                            currentTaxa.RefSeq,
-                            ":100000..200000&tracks=genes_canvas_mod",
-                            currentTaxa.Name
-                        );
-                        //if (window.location.pathname == '/CMOD/') {
-                        //    console.log(currentTaxa.Name);
-                        //    window.location.replace('/CMOD/main_page')
-                        //}
+
                         if (window.location.pathname === '/CMOD/') {
                             location.href = "main_page.html?id=" + currentTaxa.Taxid;
 
@@ -115,7 +105,8 @@ $(document).ready(function () {
                             ui.item.genomicstart,
                             ui.item.genomicend,
                             ui.item.strand,
-                            currentTaxa[3]
+                            ui.item.chromosome
+
                         ];
                         this.currentProtein = [
                             ui.item.proteinLabel,
@@ -139,7 +130,7 @@ $(document).ready(function () {
                         //focus jbrowse on selected gene
                         var gstart = this.currentGene[4] - 1000;
                         var gend = this.currentGene[5] - (-1000);
-                        jbrowse.init(currentTaxa.Taxid, currentTaxa.RefSeq, ":" + gstart + ".." + gend, currentTaxa.Name);
+                        jbrowse.init(currentTaxa.Taxid, this.currentGene[7], ":" + gstart + ".." + gend, currentTaxa.Name);
                         return false;
                     }
                 })
@@ -151,6 +142,7 @@ $(document).ready(function () {
                         .appendTo(ul);
                 };
                 //initialize gene and protein boxes on page load with random gene/protein
+                console.log(geneTags[0]);
                 var first_gene = [
                     geneTags[0].name,
                     geneTags[0].id,
@@ -158,7 +150,8 @@ $(document).ready(function () {
                     geneTags[0].locustag,
                     geneTags[0].genomicstart,
                     geneTags[0].genomicend,
-                    geneTags[0].strand
+                    geneTags[0].strand,
+                    geneTags[0].chromosome
 
                 ];
                 var first_protein = [
@@ -179,7 +172,7 @@ $(document).ready(function () {
                 var gstart = first_gene[4] - 1000;
                 var gend = first_gene[5] - (-1000);
                 //console.log(gend);
-                jbrowse.init(currentTaxa.Taxid, currentTaxa.RefSeq, ":" + gstart + ".." + gend, currentTaxa.Name);
+                jbrowse.init(currentTaxa.Taxid, first_gene[7], ":" + gstart + ".." + gend, currentTaxa.Name);
             })
         }
 
@@ -442,7 +435,7 @@ $(document).ready(function () {
             };
             this.$tid.html("<span><h5>NCBI Taxonomy ID:</h5>" + data['organism']['Taxid'] + "</span>");
             this.$qid.html("<span><h5>Wikidata Item ID</h5>" + data['organism']['QID'] + "</span>");
-            this.$rsid.html("<span><h5>NCBI RefSeq ID</h5>" + data['organism']['RefSeq'] + "</span>");
+            //this.$rsid.html("<span><h5>NCBI RefSeq ID</h5>" + data['organism']['RefSeq'] + "</span>");
 
         }
     };
