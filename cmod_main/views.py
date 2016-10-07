@@ -3,7 +3,8 @@ from django.template import Context, loader, RequestContext
 from django.shortcuts import render
 import json
 from .scripts.wikidatabots.ProteinBoxBot_Core import PBB_login, PBB_Core
-from time import gmtime, strftime
+from .scripts.wikidatabots.genes.microbes import MicrobeBotWDFunctions as WDO
+from time import gmtime, strftime, sleep
 import pprint
 from django.views.decorators.csrf import ensure_csrf_cookie
 
@@ -37,26 +38,46 @@ def wd_go_edit(request):
         statementData = json.dumps(request.POST)
         request.session['go'] = statementData
         credentials = json.loads(request.session['credentials'])
+
         print("wd_go_edit " + str(credentials))
+
         try:
             print(credentials['userName'], credentials['password'])
             login = PBB_login.WDLogin(credentials['userName'], credentials['password'])
-            print(login)
+
             credentials["login"] = "success"
             statementDict = json.loads(statementData)
             print(statementDict)
+
             goProp = {
                 "Q14860489": "P680",
                 "Q5058355": "P681",
                 "Q2996394": "P682"
             }
+
             refs = [
                     PBB_Core.WDItemID(value='Q1860', prop_nr='P407', is_reference=True),  # language
-                    PBB_Core.WDString(value=statementDict['PMID'], prop_nr='P698', is_reference=True),  # PMID
                     PBB_Core.WDItemID(value='Q26489220', prop_nr='P143', is_reference=True),  # imorted from CMOD
-                    PBB_Core.WDTime(str(strftime("+%Y-%m-%dT00:00:00Z", gmtime())), prop_nr='P813', is_reference=True)
-                    # timestamp
+                    PBB_Core.WDTime(str(strftime("+%Y-%m-%dT00:00:00Z", gmtime())), prop_nr='P813', is_reference=True) # timestamp
                     ]
+
+            # Check to see if wikidata has PMID item
+            PMID_QID = WDO.WDSparqlQueries(prop='P698', string=statementDict['PMID[pmid]']).wd_prop2qid()
+            #reference it if it does
+            print("hello")
+            print(PMID_QID)
+            if PMID_QID != 'None':
+                print('PMID_QID != None' )
+                refs.append(PBB_Core.WDItemID(value=PMID_QID, prop_nr='P248', is_reference=True))
+
+            #create it if it doesn't
+            else:
+                pmid_item_statements = [
+                    PBB_Core.WDString(prop_nr='P698', value=statementDict['PMID[pmid]'])
+                ]
+                pmid_wd_item = PBB_Core.WDItemEngine(item_name=statementDict['PMID[title]'], domain=None, data=pmid_item_statements)
+                pmid_wd_item.write(login)
+                refs.append(PBB_Core.WDItemID(value=pmid_wd_item.wd_item_id, prop_nr='P248', is_reference=True))
 
             for ref in refs:
                 ref.overwrite_references = False
@@ -75,6 +96,7 @@ def wd_go_edit(request):
                 print("found the item")
                 credentials["item_search"] = "success"
                 print("Found item " + wd_item_protein.get_label())
+                pprint.pprint(wd_item_protein.get_wd_json_representation())
                 wd_item_protein.write(login)
                 credentials["write"] = "success"
                 print("Wrote item " + wd_item_protein.get_label())

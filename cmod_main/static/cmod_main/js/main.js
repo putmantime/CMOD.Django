@@ -137,8 +137,8 @@ $(document).ready(function () {
                         //console.log(this.currentProtein[2]);
                         goFormAll.init(this.currentProtein[2]);
                         //focus jbrowse on selected gene
-                        var gstart = this.currentGene[4] - 400;
-                        var gend = this.currentGene[5] - (-400);
+                        var gstart = this.currentGene[4] - 1000;
+                        var gend = this.currentGene[5] - (-1000);
                         jbrowse.init(currentTaxa.Taxid, currentTaxa.RefSeq, ":" + gstart + ".." + gend, currentTaxa.Name);
                         return false;
                     }
@@ -176,8 +176,8 @@ $(document).ready(function () {
                 //goData.init(first_protein[1]);
                 goData.init(first_protein[1]);
                 goFormAll.init(first_protein[2]);
-                var gstart = first_gene[4] - 400;
-                var gend = first_gene[5] - (-400);
+                var gstart = first_gene[4] - 1000;
+                var gend = first_gene[5] - (-1000);
                 //console.log(gend);
                 jbrowse.init(currentTaxa.Taxid, currentTaxa.RefSeq, ":" + gstart + ".." + gend, currentTaxa.Name);
             })
@@ -350,7 +350,10 @@ $(document).ready(function () {
                     });
                 },
                 select: function (event, ui) {
-                    goFormAll.goFormData["PMID"] = ui.item.id;
+                    goFormAll.goFormData["PMID"] = {'pmid': ui.item.id,
+                                                    'title': ui.item.label
+                    };
+
                     //console.log(goFormAll.goFormData);
                 }
             })
@@ -587,19 +590,19 @@ $(document).ready(function () {
         },
         render: function (goTerms) {
             var $molf = this.$mf;
-                $molf.html('');
+            $molf.html('');
             var $biop = this.$bp;
-                $biop.html('');
+            $biop.html('');
             var $celc = this.$cc;
-                $celc.html('');
+            $celc.html('');
             var ecNumbers = [];
 
             var nodata = {
-                'gotermValueLabel':{'value': 'No Data Available'},
-                'goID':{'value': '--------'},
-                'determination':{'value': ''},
-                'determinationLabel':{'value': '---'},
-                'referenceID':{'value': ''}
+                'gotermValueLabel': {'value': 'No Data Available'},
+                'goID': {'value': '--------'},
+                'determination': {'value': ''},
+                'determinationLabel': {'value': '---'},
+                'referenceID': {'value': ''}
             };
             this.$molTab.text('Molecular Function (' + goTerms['molecularFunction'].length + ')');
             this.$biopTab.text('Biological Process (' + goTerms['biologicalProcess'].length + ')');
@@ -687,7 +690,7 @@ $(document).ready(function () {
             var allEC = [];
 
             if (enzData.length === 0) {
-              allEC.push(EnzymeData.generate_ec_template('No Enzyme Data Available'));
+                allEC.push(EnzymeData.generate_ec_template('No Enzyme Data Available'));
             }
             else {
                 $.each(enzData, function (index, ec) {
@@ -748,25 +751,25 @@ $(document).ready(function () {
 
 
     var operonData = {
-        init: function(entrez){
+        init: function (entrez) {
             this.cacheDOM();
             this.$opData.html('');
             this.$opGenes.html('');
-            this.$opTab.text("Operon (0)" );
+            this.$opTab.text("Operon (0)");
             this.operonData(entrez);
             this.operonIdentifier(entrez);
         },
-        operonIdentifier: function (entrez){
-            getOperon(entrez, function (operon){
-                if(operon['Operon'].length > 0){
+        operonIdentifier: function (entrez) {
+            getOperon(entrez, function (operon) {
+                if (operon['Operon'].length > 0) {
                     operonData.renderOP(operon);
                 }
 
             });
         },
-        operonData: function (entrez){
+        operonData: function (entrez) {
             getOperonData(entrez, function (operonGenes) {
-                if (operonGenes['Operon'].length > 0){
+                if (operonGenes['Operon'].length > 0) {
                     operonData.renderOPGenes(operonGenes);
                 }
 
@@ -779,20 +782,22 @@ $(document).ready(function () {
             this.$opGenes = this.$opBox.find('#operonGenesdata');
         },
         generate_operon_template: function (operon_identifier) {
+            var wdid = operon_identifier['Operon'][0]['operon']['value'].split("/");
+            var operonQID = wdid.slice(-1)[0];
             var data = {
                 'operon_label': operon_identifier['Operon'][0]['operonLabel']['value'],
-                'operon_qid': operon_identifier['Operon'][0]['operon']['value'],
+                'operon_wduri': operon_identifier['Operon'][0]['operon']['value'],
+                'operon_qid': operonQID
             };
 
             var op_template = _.template(
                 "<div style='margin-bottom: 10px' class='row main-data'>" +
                 "<div class='col-md-2'><%= operon_label %></div> " +
-                "<div class='col-md-4'><%= operon_qid %></div> " +
+                "<div class='col-md-4'><a target='_blank' href='<%= operon_wduri %>'><%= operon_qid %> </a></div> " +
                 "<div class='col-md-2'></div>  " +
                 "<div class='col-md-2'></div>  " +
                 "<div class='col-md-2'></div>" +
                 "</div>"
-
             );
             return (op_template(data));
         },
@@ -823,27 +828,26 @@ $(document).ready(function () {
             var op_gene_template = _.template(
                 "<div class='row main-data'>" +
                 "<div class='col-md-4 dat-space-bottom'><%= gene_label %></div>" +
-                "<div class='col-md-1 dat-space-bottom'><%= entrez %></div>" +
-                "<div class='col-md-1 dat-space-bottom'><%= locus_tag %></div>" +
-                "<div class='col-md-1 dat-space-bottom'><%= geneQID %></div>" +
+                "<div class='col-md-1 dat-space-bottom'><a target='_blank' href='http://www.ncbi.nlm.nih.gov/gene/?term=<%= entrez %>'><%= entrez %></a></div>" +
+                "<div class='col-md-1 dat-space-bottom'><a target='_blank' href='http://www.ncbi.nlm.nih.gov/gene/?term=<%= locus_tag %>'><%= locus_tag %></a></div>" +
+                "<div class='col-md-1 dat-space-bottom'><a target='_blank' href='<%= gene %>'><%= geneQID %></a></div>" +
                 "<div class='col-md-1 dat-space-bottom'><%= genStart %></div>" +
                 "<div class='col-md-1 dat-space-bottom'><%= genEnd %></div>" +
                 "<div class='col-md-2 dat-space-bottom'><%= strand %></div>" +
                 "<div class='col-md-1 dat-space-bottom'></div>" +
                 "</div>"
-
             );
             return (op_gene_template(data));
         },
 
         renderOP: function (operon) {
-            this.$opTab.text("Operon (1)" );
+            this.$opTab.text("Operon (1)");
             this.$opData.html(this.generate_operon_template(operon));
         },
 
         renderOPGenes: function (operonGenes) {
             console.log(operonGenes);
-            $.each(operonGenes['Operon'], function(key, element){
+            $.each(operonGenes['Operon'], function (key, element) {
                 console.log(element);
                 operonData.$opGenes.append(operonData.generate_opGenes_template(element));
             });
@@ -992,8 +996,6 @@ $(document).ready(function () {
             this.$orgTitle = this.$jb.find('#main-organism-name');
             this.$name = this.$orgTitle.find('i');
 
-            this.templateJB = this.$jb.find('#jbrowse-template').html();
-
 
         },
         render: function (taxid, refseq, coords, name) {
@@ -1010,6 +1012,7 @@ $(document).ready(function () {
 
 
     };
+
 /////////////////////////////////////////////////End Jbrowse module/////////////////////////////////////////////////////
 // ///////////////////////////////////////////////Begin Authentication module///////////////////////////////////////////
 

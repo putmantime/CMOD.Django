@@ -11,7 +11,6 @@ import os
 
 import copy
 import pprint
-from. import wd_property_store
 import json
 
 """

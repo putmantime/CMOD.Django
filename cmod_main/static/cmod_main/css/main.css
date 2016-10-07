@@ -15,7 +15,7 @@ html, body {
 
 }
 
-,
+
 #main-wdlogo-div {
     float: right;
     border-radius: 2px;
@@ -145,11 +145,12 @@ html, body {
 }
 
 .main-go-box {
-    min-height: 180px;
+    /*min-height: 180px;*/
     /*border: solid #cce0ff 2px;*/
     /*border-radius: 10px;*/
     margin-top: 5px;
     color: #385d94;
+    /*border-bottom: solid #D3D9F7 3px;*/
 
 }
 .main-operon-box {
@@ -158,6 +159,7 @@ html, body {
     /*border-radius: 10px;*/
     margin-top: 5px;
     color: #385d94;
+    border-bottom: solid #D3D9F7 3px;
 
 }
 
@@ -167,6 +169,8 @@ html, body {
     /*border-radius: 10px;*/
     margin-top: 5px;
     color: #385d94;
+    border-bottom: solid #D3D9F7 3px;
+
 
 }
 .main-annotaion-box {
@@ -270,9 +274,9 @@ html, body {
     padding-bottom: 10px;
 }
 
-.main-modal-position {
-    margin-top: 500px;
-}
+/*.main-modal-position {*/
+    /*margin-top: -500px;*/
+/*}*/
 
 .wd-logo {
     max-height: 40px;
@@ -281,12 +285,11 @@ html, body {
 }
 
 .modal-dialog {
-
     position: relative;
 
     height: 500px;
     top: 50%;
-    margin-top: 300px;
+    /*margin-top: 300px;*/
 }
 
 #hpylori {
