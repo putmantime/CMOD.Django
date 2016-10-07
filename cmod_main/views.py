@@ -56,7 +56,6 @@ def wd_go_edit(request):
             }
 
             refs = [
-                    PBB_Core.WDItemID(value='Q1860', prop_nr='P407', is_reference=True),  # language
                     PBB_Core.WDItemID(value='Q26489220', prop_nr='P143', is_reference=True),  # imorted from CMOD
                     PBB_Core.WDTime(str(strftime("+%Y-%m-%dT00:00:00Z", gmtime())), prop_nr='P813', is_reference=True) # timestamp
                     ]
@@ -67,16 +66,20 @@ def wd_go_edit(request):
             print("hello")
             print(PMID_QID)
             if PMID_QID != 'None':
-                print('PMID_QID != None' )
-                refs.append(PBB_Core.WDItemID(value=PMID_QID, prop_nr='P248', is_reference=True))
+                ifPub = WDO.WDSparqlQueries(prop='P31', qid=PMID_QID)
+                if ifPub == 'Q13442814':
+                    refs.append(PBB_Core.WDItemID(value=PMID_QID, prop_nr='P248', is_reference=True))
 
             #create it if it doesn't
             else:
+
                 pmid_item_statements = [
-                    PBB_Core.WDString(prop_nr='P698', value=statementDict['PMID[pmid]'])
+                    PBB_Core.WDString(prop_nr='P698', value=statementDict['PMID[pmid]']),
+                    PBB_Core.WDItemID(prop_nr='P31', value='Q13442814')
                 ]
                 pmid_wd_item = PBB_Core.WDItemEngine(item_name=statementDict['PMID[title]'], domain=None, data=pmid_item_statements)
                 pmid_wd_item.write(login)
+                # now reference the new item that was just created
                 refs.append(PBB_Core.WDItemID(value=pmid_wd_item.wd_item_id, prop_nr='P248', is_reference=True))
 
             for ref in refs:

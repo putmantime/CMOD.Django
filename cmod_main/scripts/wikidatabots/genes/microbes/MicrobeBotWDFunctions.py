@@ -63,6 +63,24 @@ class WDSparqlQueries(object):
             final_qid.append('None')
         return final_qid[0]
 
+    def wd_qid2property(self):
+        """
+        :param string: 'Q2458943' String value
+        :return: "property value'
+        """
+        arguments = ' wd:{} wdt:{} ?prop.'.format(self.qid, self.prop)
+        select_where = 'SELECT ?prop WHERE {{{}}}'.format(arguments)
+        query = self.wd + " " + select_where
+        results = self.execute_query(query)
+        final_qid = []
+        try:
+            rawqid = results['results']['bindings'][0]['prop']['value']
+            final_qid.append(rawqid)
+        except Exception:
+            final_qid.append('None')
+        return final_qid[0].split("/")[-1]
+
+
 
 def reference_store(source='', identifier=''):
     """
@@ -89,4 +107,7 @@ def reference_store(source='', identifier=''):
     for ref in refs:
         ref.overwrite_references = True
     return refs
+
+
+
 
