@@ -16,9 +16,12 @@ def index(request):
 
 @ensure_csrf_cookie
 def main_page(request):
-    org_data = json.loads(request.session['org'])
-    # template = loader.get_template("cmod_main/main_page.html")
-    return render(request, "cmod_main/main_page.html", org_data)
+    if 'org' in request.session:
+        org_data = json.loads(request.session['org'])
+        return render(request, "cmod_main/main_page.html", org_data)
+    else:
+        org_data = {'QID': 'Q21065231', 'RefSeq': 'NC_000915.1', 'Taxid': '85962', 'Name': 'Helicobacter pylori 26695'}
+        return render(request, "cmod_main/main_page.html", org_data)
 
 @ensure_csrf_cookie
 def get_orgs(request):
