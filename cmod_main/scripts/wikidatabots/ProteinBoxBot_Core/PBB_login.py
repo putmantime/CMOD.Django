@@ -75,9 +75,9 @@ class WDLogin(object):
         }
         response = requests.get(self.base_url, params=params) #, cookies=self.cookie_jar)
         self.edit_token = response.json()['query']['tokens']['csrftoken']
-
+        return response.json()['query']['tokens']['csrftoken']
         #self.cookie_jar.update(response.cookies)
-        print(self.edit_token)
+
         #return self.cookie_jar
 
     # def get_edit_cookie(self):
