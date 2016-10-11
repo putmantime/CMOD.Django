@@ -16,7 +16,7 @@ def get_login_token():
             'format': 'json'
         }
         response = requests.get('https://www.wikidata.org/w/api.php', params=params)
-        return response
+        return response.json()
 
 @ensure_csrf_cookie
 def index(request):
