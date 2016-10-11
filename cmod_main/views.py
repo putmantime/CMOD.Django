@@ -17,6 +17,7 @@ def index(request):
 
 @ensure_csrf_cookie
 def main_page(request):
+    print(request.body)
     if 'org' in request.session:
         org_data = json.loads(request.session['org'])
         return render(request, "cmod_main/main_page.html", org_data)
@@ -149,9 +150,3 @@ def wd_oauth(request):
         red = mwoa.wd_oauth_handshake()
         return HttpResponse(json.dumps(red), content_type='application/json')
 
-
-@ensure_csrf_cookie
-def wd_tokens(request, a, b):
-    print(a,b)
-
-    return render(request, {"yes": "no"})
