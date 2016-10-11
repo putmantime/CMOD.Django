@@ -14,7 +14,7 @@ class WDLogin(object):
     A class which handles the login to Wikidata and the generation of edit-tokens
     """
 
-    def __init__(self, user=None, pwd=None, server='www.wikidata.org', token_renew_period=1800):
+    def __init__(self, user, pwd, server='www.wikidata.org', token_renew_period=1800):
         """
         constructor
         :param user: the username which should be used for the login
@@ -42,26 +42,26 @@ class WDLogin(object):
             'format': 'json'
         }
 
-        #r1 = requests.post(self.base_url, params=params)
+        r1 = requests.post(self.base_url, params=params)
 
-        #cookies = r1.cookies
-        #login_token = r1.json()['login']['token']
-        #self.token = login_token
+        cookies = r1.cookies
+        login_token = r1.json()['login']['token']
+        self.token = login_token
 
         # do the login using the login token
-        #params.update({'lgtoken': login_token})
-        #r2 = requests.post(self.base_url, params=params, cookies=cookies)
-        #self.cookie_jar = r2.cookies.copy()
+        params.update({'lgtoken': login_token})
+        r2 = requests.post(self.base_url, params=params, cookies=cookies)
+        self.cookie_jar = r2.cookies.copy()
 
         self.generate_edit_credentials()
 
-        #self.login_reply = r2.json()
+        self.login_reply = r2.json()
 
-        #if 'NotExists' in self.login_reply['login']['result']:
-        #    raise ValueError('Wrong username!')
+        if 'NotExists' in self.login_reply['login']['result']:
+            raise ValueError('Wrong username!')
 
-        #if 'WrongPass' in self.login_reply['login']['result']:
-        #    raise ValueError('Wrong password!')
+        if 'WrongPass' in self.login_reply['login']['result']:
+            raise ValueError('Wrong password!')
 
     def generate_edit_credentials(self):
         """
@@ -73,31 +73,33 @@ class WDLogin(object):
             'meta': 'tokens',
             'format': 'json'
         }
-        response = requests.get(self.base_url, params=params) #, cookies=self.cookie_jar)
+        response = requests.get(self.base_url, params=params, cookies=self.cookie_jar)
         self.edit_token = response.json()['query']['tokens']['csrftoken']
-        return response.json()['query']['tokens']['csrftoken']
-        #self.cookie_jar.update(response.cookies)
 
-        #return self.cookie_jar
+        self.cookie_jar.update(response.cookies)
 
-    # def get_edit_cookie(self):
-    #     """
-    #     Can be called in order to retrieve the cookies from an instance of WDLogin
-    #     :return: Returns a json with all relevant cookies, aka cookie jar
-    #     """
-    #     if not self.cookie_jar or (time.time() - self.instantiation_time) > self.token_renew_period:
-    #         self.generate_edit_credentials()
-    #         self.instantiation_time = time.time()
-    #
-    #     return self.cookie_jar
-    #
-    # def get_edit_token(self):
-    #     """
-    #     Can be called in order to retrieve the edit token from an instance of WDLogin
-    #     :return: returns the edit token
-    #     """
-    #     if not self.edit_token or (time.time() - self.instantiation_time) > self.token_renew_period:
-    #         self.generate_edit_credentials()
-    #         self.instantiation_time = time.time()
-    #
-    #     return self.edit_token
+        return self.cookie_jar
+
+    def get_edit_cookie(self):
+        """
+        Can be called in order to retrieve the cookies from an instance of WDLogin
+        :return: Returns a json with all relevant cookies, aka cookie jar
+        """
+        if not self.cookie_jar or (time.time() - self.instantiation_time) > self.token_renew_period:
+            self.generate_edit_credentials()
+            self.instantiation_time = time.time()
+
+        return self.cookie_jar
+
+    def get_edit_token(self):
+        """
+        Can be called in order to retrieve the edit token from an instance of WDLogin
+        :return: returns the edit token
+        """
+        if not self.edit_token or (time.time() - self.instantiation_time) > self.token_renew_period:
+            self.generate_edit_credentials()
+            self.instantiation_time = time.time()
+
+        return self.edit_token
+
+

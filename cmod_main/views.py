@@ -7,6 +7,16 @@ from .scripts.wikidatabots.genes.microbes import MicrobeBotWDFunctions as WDO
 from time import gmtime, strftime, sleep
 import pprint
 from django.views.decorators.csrf import ensure_csrf_cookie
+import requests
+
+def get_login_token():
+        params = {
+            'action': 'query',
+            'meta': 'tokens',
+            'format': 'json'
+        }
+        response = requests.get('https://www.wikidata.org/w/api.php', params=params)
+        return response
 
 @ensure_csrf_cookie
 def index(request):
@@ -20,8 +30,7 @@ def main_page(request):
     if 'oauth_verifier' in request.GET.keys():
         request.session['oauth_verifier'] = request.GET['oauth_verifier']
         request.session['oauth_token'] = request.GET['oauth_token']
-        logger = PBB_login.WDLogin()
-        print(logger.generate_edit_credentials())
+        print(get_login_token())
 
     if 'org' in request.session:
         org_data = json.loads(request.session['org'])
