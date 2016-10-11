@@ -17,19 +17,24 @@ def index(request):
 
 @ensure_csrf_cookie
 def main_page(request):
-    print(request.body)
+    print(request.GET)
+    if 'oauth_verifier' in request.GET.keys():
+        request.session['oauth_verifier'] = request.GET['oauth_verifier']
+        request.session['oauth_token'] = request.GET['oauth_token']
     if 'org' in request.session:
         org_data = json.loads(request.session['org'])
+        print(request.session.keys())
         return render(request, "cmod_main/main_page.html", org_data)
+	
     else:
         org_data = {'QID': 'Q21065231', 'RefSeq': 'NC_000915.1', 'Taxid': '85962', 'Name': 'Helicobacter pylori 26695'}
+        print(request.session.keys())
         return render(request, "cmod_main/main_page.html", org_data)
 
 @ensure_csrf_cookie
 def get_orgs(request):
     if request.method == 'POST':
         data = json.dumps(request.POST)
-        print(request.META)
         request.session['org'] = data
         return HttpResponse(request.session['org'], content_type='application/json')
     else:
