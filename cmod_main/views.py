@@ -148,3 +148,10 @@ def wd_oauth(request):
         from .scripts.utils import mw_oauthorization as mwoa
         red = mwoa.wd_oauth_handshake()
         return HttpResponse(json.dumps(red), content_type='application/json')
+
+
+@ensure_csrf_cookie
+def wd_tokens(request, a, b):
+    print(a,b)
+
+    return render(request, {"yes": "no"})
