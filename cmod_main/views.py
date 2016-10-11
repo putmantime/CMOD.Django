@@ -1,12 +1,13 @@
 from django.http import HttpResponse
 from django.template import Context, loader, RequestContext
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import json
 from .scripts.wikidatabots.ProteinBoxBot_Core import PBB_login, PBB_Core
 from .scripts.wikidatabots.genes.microbes import MicrobeBotWDFunctions as WDO
 from time import gmtime, strftime, sleep
 import pprint
 from django.views.decorators.csrf import ensure_csrf_cookie
+
 
 @ensure_csrf_cookie
 def index(request):
@@ -139,3 +140,11 @@ def wd_credentials(request):
         return HttpResponse(json.dumps(user_pass), content_type='application/json')
         # return render(request, "cmod_main/main_page.html", )
 
+@ensure_csrf_cookie
+def wd_oauth(request):
+    if request.method == 'POST':
+        oauth = json.dumps(request.POST)
+        client_message = json.loads(oauth)
+        from .scripts.utils import mw_oauthorization as mwoa
+        red = mwoa.wd_oauth_handshake()
+        return HttpResponse(json.dumps(red), content_type='application/json')

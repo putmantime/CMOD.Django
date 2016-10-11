@@ -1,1 +1,1 @@
-[{"start":0,"name":"NC_007677.1","seqChunkSize":20000,"end":3551823,"description":"Salinibacter ruber DSM 13855 chromosome, complete genome"},{"name":"NC_007678.1","start":0,"description":"Salinibacter ruber DSM 13855 plasmid pSR35, complete sequence","seqChunkSize":20000,"end":35505}]
+[{"description":"Salinibacter ruber DSM 13855 chromosome, complete genome","seqChunkSize":20000,"end":3551823,"name":"NC_007677.1","start":0},{"seqChunkSize":20000,"name":"NC_007678.1","end":35505,"description":"Salinibacter ruber DSM 13855 plasmid pSR35, complete sequence","start":0}]

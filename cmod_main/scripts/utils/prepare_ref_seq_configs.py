@@ -121,5 +121,3 @@ class PrepareRefSeqs(object):
         genome = urllib.request.urlretrieve(url)[0]
         # return the genome fasta file as a tempfile
         return genome
-
-tester = PrepareRefSeqs()

@@ -1027,6 +1027,49 @@ $(document).ready(function () {
     };
 // ///////////////////////////////////////////////End Authentication module///////////////////////////////////////////
 /////////////////////////////////////////////////Begin Wikidata API/////////////////////////////////////////////////////
+    var oauth_authorization = {
+        init: function () {
+            this.cacheDOM();
+            this.initiateOAuth();
+        },
+        cacheDOM: function () {
+            var $authButton = $('#wd-oauth-button');
+        },
+        initiateOAuth: function () {
+            $('#wd-oauth-button').off("click").click(function (e) {
+                e.preventDefault();
+                oauth_authorization.sendToServer({"oauth": "yes"}, '/wd_oauth');
+            });
+
+            },
+        sendToServer: function (data, urlsuf) {
+            var csrftoken = getCookie('csrftoken');
+            $.ajax({
+                type: "POST",
+                url: window.location.pathname + urlsuf,
+                data: data,
+                dataType: 'json',
+                headers: {'X-CSRFToken': csrftoken},
+                success: function (data) {
+                    console.log("OAuth Handshake Success:" + data);
+                    window.location.replace(data);
+                },
+                error: function (data) {
+                   console.log("Error");
+                }
+            });
+        }
+
+
+
+
+    };
+    oauth_authorization.init();
+
+
+
+
+
     var wdLogin = {
         init: function () {
             this.cacheDOM();
@@ -1080,7 +1123,9 @@ $(document).ready(function () {
                     //console.log(data);
                     if (data['login'] === "success") {
                         console.log(wdLogin.credentials);
-                        wdLogin.$loggedin.html("<span>Logged in as <a target='_blank' id='wd-user-button' class='btn btn-primary' href='https://www.wikidata.org/wiki/Special:Contributions/" + data['userName'] + "' role='button'>" + data['userName'] + "</a>");
+                        wdLogin.$loggedin.html("<span>Logged in as <a target='_blank' id='wd-user-button' " +
+                            "class='btn btn-primary' href='https://www.wikidata.org/wiki/Special:Contributions/" +
+                            data['userName'] + "' role='button'>" + data['userName'] + "</a>");
                         wdLogin.$loginButtonDiv.html(
                             "<button id='wd-logout-button' type='button' class='btn btn-primary'> " +
                             "<span>Log out</span> </button>");

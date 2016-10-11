@@ -1,1 +1,1 @@
-[{"end":4607202,"seqChunkSize":20000,"start":0,"name":"NC_004337.2","description":"Shigella flexneri 2a str. 301 chromosome, complete genome"},{"name":"NC_004851.1","seqChunkSize":20000,"start":0,"description":"Shigella flexneri 2a str. 301 plasmid pCP301, complete sequence","end":221618}]
+[{"start":0,"end":4607202,"description":"Shigella flexneri 2a str. 301 chromosome, complete genome","seqChunkSize":20000,"name":"NC_004337.2"},{"start":0,"seqChunkSize":20000,"description":"Shigella flexneri 2a str. 301 plasmid pCP301, complete sequence","end":221618,"name":"NC_004851.1"}]

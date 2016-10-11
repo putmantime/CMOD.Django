@@ -1,1 +1,1 @@
-[{"seqChunkSize":20000,"start":0,"end":1641481,"description":"Campylobacter jejuni subsp. jejuni NCTC 11168 = ATCC 700819 chromosome, complete genome","name":"NC_002163.1"}]
+[{"name":"NC_002163.1","end":1641481,"start":0,"description":"Campylobacter jejuni subsp. jejuni NCTC 11168 = ATCC 700819 chromosome, complete genome","seqChunkSize":20000}]
