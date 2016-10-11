@@ -8,7 +8,6 @@ from time import gmtime, strftime, sleep
 import pprint
 from django.views.decorators.csrf import ensure_csrf_cookie
 
-
 @ensure_csrf_cookie
 def index(request):
     # launch landing page
@@ -21,6 +20,8 @@ def main_page(request):
     if 'oauth_verifier' in request.GET.keys():
         request.session['oauth_verifier'] = request.GET['oauth_verifier']
         request.session['oauth_token'] = request.GET['oauth_token']
+        logger = PBB_login.WDLogin()
+        logger.generate_edit_credentials()
     if 'org' in request.session:
         org_data = json.loads(request.session['org'])
         print(request.session.keys())
@@ -50,6 +51,7 @@ def wd_go_edit(request):
         credentials = json.loads(request.session['credentials'])
 
         print("wd_go_edit " + str(credentials))
+
 
         try:
             print(credentials['userName'], credentials['password'])
