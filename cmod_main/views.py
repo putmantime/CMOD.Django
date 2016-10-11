@@ -21,7 +21,8 @@ def main_page(request):
         request.session['oauth_verifier'] = request.GET['oauth_verifier']
         request.session['oauth_token'] = request.GET['oauth_token']
         logger = PBB_login.WDLogin()
-        logger.generate_edit_credentials()
+        print(logger.generate_edit_credentials())
+
     if 'org' in request.session:
         org_data = json.loads(request.session['org'])
         print(request.session.keys())
