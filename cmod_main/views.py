@@ -32,7 +32,10 @@ def main_page(request):
         request_token = RequestToken(request.session['request_token']['key'].encode(), request.session['request_token']['secret'])
         mw_uri = "https://www.mediawiki.org/w/index.php"
         access_token = complete(mw_uri, consumer_token, request_token, response_qs)
-        print(access_token)
+        identity = identify(mw_uri, consumer_token, access_token)
+        print("Identified as {username}.".format(**identity))
+        # remember to .encode() key and secret before use
+        request.session['access_token'] = {'key': access_token.key.decode(), 'secret': access_token.secret.decode()}
 
     if 'org' in request.session:
         org_data = json.loads(request.session['org'])
