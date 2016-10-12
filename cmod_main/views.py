@@ -10,6 +10,8 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from mwoauth import ConsumerToken, RequestToken, initiate, complete, identify
 import requests
 import time
+import requests
+from requests_oauthlib import OAuth1
 
 # Consruct a "consumer" from the key/secret provided by MediaWiki
 from .scripts.utils import oauth_config
@@ -42,14 +44,27 @@ def main_page(request):
         # remember to .encode() key and secret before use
         request.session['access_token'] = {'key': access_token.key.decode(), 'secret': access_token.secret.decode()}
 
-        authorization_header = {'oauth_consumer_key': consumer_token.key,
-                                'oauth_token': access_token,
-                                'oauth_signature_method': "HMAC-SHA1",
-                                'oauth_timestamp': time.time(),
-                                'oauth_nonce': identity['nonce'],
-                                'oauth_version': '1.0'
+        auth1 = OAuth1(consumer_token.key,
+               client_secret=consumer_token.secret,
+               resource_owner_key=access_token.key,
+               resource_owner_secret=access_token.secret)
+        print("Reading top 10 watchlist items")
+        response = requests.get(
+            "https://en.wikipedia.org/w/api.php",
+            params={
+                'action': "query",
+                'list': "watchlist",
+                'wllimit': 10,
+                'wlprop': "title|comment",
+                'format': "json"
+            },
+            auth=auth1
+)
+        for item in response.json()['query']['watchlist']:
+            print("{title}\t{comment}".format(**item))
 
-                                }
+
+
 
     if 'org' in request.session:
         org_data = json.loads(request.session['org'])
