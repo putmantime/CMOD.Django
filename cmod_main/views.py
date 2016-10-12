@@ -8,7 +8,7 @@ from time import gmtime, strftime, sleep
 import pprint
 from django.views.decorators.csrf import ensure_csrf_cookie
 import requests
-from mwoauth import ConsumerToken, Handshaker, tokens
+from mwoauth import ConsumerToken, RequestToken, initiate, complete, identify
 from django.shortcuts import redirect
 # Consruct a "consumer" from the key/secret provided by MediaWiki
 from .scripts.utils import oauth_config
@@ -26,7 +26,12 @@ def main_page(request):
     if 'oauth_verifier' in request.GET.keys():
         request.session['oauth_verifier'] = request.GET['oauth_verifier']
         request.session['oauth_token'] = request.GET['oauth_token']
-        print(request.session['handshaker'])
+        response_qs = request.META['QUERYSTRING']
+        consumer_token = ConsumerToken(request.session['consumer_token']['key'], request.session['consumer_token']['secret'])
+        request_token = RequestToken(request.session['request_token']['key'].encode(), request.session['request_token']['secret'])
+        mw_uri = "https://www.mediawiki.org/w/index.php"
+        access_token = complete(mw_uri, consumer_token, request_token, response_qs)
+        print(access_token)
 
     if 'org' in request.session:
         org_data = json.loads(request.session['org'])
@@ -159,11 +164,13 @@ def wd_oauth(request):
         oauth = json.dumps(request.POST)
         client_message = json.loads(oauth)
         request.session['oauth'] = client_message['oauth']
-
         consumer_token = ConsumerToken(oauth_config.consumer_key, oauth_config.consumer_secret)
-        handshaker = Handshaker("https://www.mediawiki.org/w/index.php", consumer_token)
-        mw_redirect, request_token = handshaker.initiate()
-        request.session['handshaker'] = handshaker.__dict__
+        print(consumer_token.secret)
+        request.session['consumer_token'] = {'key': consumer_token.key, 'secret': consumer_token.secret}
+        mw_uri = "https://www.mediawiki.org/w/index.php"
+        mw_redirect, request_token = initiate(mw_uri, consumer_token)
+        request.session['request_token'] = {'key': request_token.key.decode(), 'secret': request_token.secret.decode()}
+        print(request_token)
         return HttpResponse(json.dumps(mw_redirect), content_type='application/json')
 
 
