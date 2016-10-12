@@ -60,8 +60,8 @@ def main_page(request):
             },
             auth=auth1
 )
-        for item in response.json()['query']['watchlist']:
-            print("{title}\t{comment}".format(**item))
+        for item in response.json():
+            print(item)
 
 
 
