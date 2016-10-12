@@ -26,6 +26,7 @@ def main_page(request):
     if 'oauth_verifier' in request.GET.keys():
         request.session['oauth_verifier'] = request.GET['oauth_verifier']
         request.session['oauth_token'] = request.GET['oauth_token']
+        print(request.session)
         response_qs = request.META['QUERY_STRING']
         consumer_token = ConsumerToken(request.session['consumer_token']['key'], request.session['consumer_token']['secret'])
         request_token = RequestToken(request.session['request_token']['key'].encode(), request.session['request_token']['secret'])
