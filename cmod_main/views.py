@@ -9,10 +9,12 @@ import pprint
 from django.views.decorators.csrf import ensure_csrf_cookie
 from mwoauth import ConsumerToken, RequestToken, initiate, complete, identify
 import requests
+import time
 
 # Consruct a "consumer" from the key/secret provided by MediaWiki
 from .scripts.utils import oauth_config
 from django.http import HttpResponseRedirect
+
 
 @ensure_csrf_cookie
 def index(request):
@@ -20,24 +22,34 @@ def index(request):
     template = loader.get_template("cmod_main/index.html")
     return HttpResponse(template.render())
 
+
 @ensure_csrf_cookie
 def main_page(request):
-
     if 'oauth_verifier' in request.GET.keys():
         request.session['oauth_verifier'] = request.GET['oauth_verifier']
         request.session['oauth_token'] = request.GET['oauth_token']
         print(request.session)
         response_qs = request.META['QUERY_STRING']
-        consumer_token = ConsumerToken(request.session['consumer_token']['key'], request.session['consumer_token']['secret'])
-        request_token = RequestToken(request.session['request_token']['key'].encode(), request.session['request_token']['secret'])
+        consumer_token = ConsumerToken(request.session['consumer_token']['key'],
+                                       request.session['consumer_token']['secret'])
+        request_token = RequestToken(request.session['request_token']['key'].encode(),
+                                     request.session['request_token']['secret'])
         mw_uri = "https://www.mediawiki.org/w/index.php"
         access_token = complete(mw_uri, consumer_token, request_token, response_qs)
+        print(access_token)
         identity = identify(mw_uri, consumer_token, access_token)
         print("Identified as {username}.".format(**identity))
         # remember to .encode() key and secret before use
         request.session['access_token'] = {'key': access_token.key.decode(), 'secret': access_token.secret.decode()}
-        print(identity)
 
+        authorization_header = {'oauth_consumer_key': consumer_token.key,
+                                'oauth_token': access_token,
+                                'oauth_signature_method': "HMAC-SHA1",
+                                'oauth_timestamp': time.time(),
+                                'oauth_nonce': identity['nonce'],
+                                'oauth_version': '1.0'
+
+                                }
 
     if 'org' in request.session:
         org_data = json.loads(request.session['org'])
@@ -48,6 +60,7 @@ def main_page(request):
         print(request.session.keys())
         return render(request, "cmod_main/main_page.html", org_data)
 
+
 @ensure_csrf_cookie
 def get_orgs(request):
     if request.method == 'POST':
@@ -56,6 +69,7 @@ def get_orgs(request):
         return HttpResponse(request.session['org'], content_type='application/json')
     else:
         return HttpResponse("Hi")
+
 
 @ensure_csrf_cookie
 def wd_go_edit(request):
@@ -67,7 +81,6 @@ def wd_go_edit(request):
         credentials = json.loads(request.session['credentials'])
 
         print("wd_go_edit " + str(credentials))
-
 
         try:
             print(credentials['userName'], credentials['password'])
@@ -84,13 +97,14 @@ def wd_go_edit(request):
             }
 
             refs = [
-                    PBB_Core.WDItemID(value='Q26489220', prop_nr='P143', is_reference=True),  # imorted from CMOD
-                    PBB_Core.WDTime(str(strftime("+%Y-%m-%dT00:00:00Z", gmtime())), prop_nr='P813', is_reference=True) # timestamp
-                    ]
+                PBB_Core.WDItemID(value='Q26489220', prop_nr='P143', is_reference=True),  # imorted from CMOD
+                PBB_Core.WDTime(str(strftime("+%Y-%m-%dT00:00:00Z", gmtime())), prop_nr='P813', is_reference=True)
+                # timestamp
+            ]
 
             # Check to see if wikidata has PMID item
             PMID_QID = WDO.WDSparqlQueries(prop='P698', string=statementDict['PMID[pmid]']).wd_prop2qid()
-            #reference it if it does
+            # reference it if it does
             print("hello")
             print(PMID_QID)
             if PMID_QID != 'None':
@@ -98,14 +112,15 @@ def wd_go_edit(request):
                 if ifPub == 'Q13442814':
                     refs.append(PBB_Core.WDItemID(value=PMID_QID, prop_nr='P248', is_reference=True))
 
-            #create it if it doesn't
+            # create it if it doesn't
             else:
 
                 pmid_item_statements = [
                     PBB_Core.WDString(prop_nr='P698', value=statementDict['PMID[pmid]']),
                     PBB_Core.WDItemID(prop_nr='P31', value='Q13442814')
                 ]
-                pmid_wd_item = PBB_Core.WDItemEngine(item_name=statementDict['PMID[title]'], domain=None, data=pmid_item_statements)
+                pmid_wd_item = PBB_Core.WDItemEngine(item_name=statementDict['PMID[title]'], domain=None,
+                                                     data=pmid_item_statements)
                 pmid_wd_item.write(login)
                 # now reference the new item that was just created
                 refs.append(PBB_Core.WDItemID(value=pmid_wd_item.wd_item_id, prop_nr='P248', is_reference=True))
@@ -116,8 +131,6 @@ def wd_go_edit(request):
             evidence = PBB_Core.WDItemID(value=statementDict['evidenceCode'], prop_nr='P459', is_qualifier=True)
             goStatement = PBB_Core.WDItemID(value=statementDict['goTerm'], prop_nr=goProp[statementDict['goClass']],
                                             references=[refs], qualifiers=[evidence])
-
-
 
             try:
                 # find the appropriate item in wd or make a new one
@@ -141,10 +154,10 @@ def wd_go_edit(request):
             credentials["item_search"] = "error"
             credentials["write"] = "error"
 
-
         return HttpResponse(json.dumps(credentials), content_type='application/json')
 
         # return render(request, "cmod_main/main_page.html",  credentials)
+
 
 @ensure_csrf_cookie
 def wd_credentials(request):
@@ -164,6 +177,7 @@ def wd_credentials(request):
         return HttpResponse(json.dumps(user_pass), content_type='application/json')
         # return render(request, "cmod_main/main_page.html", )
 
+
 @ensure_csrf_cookie
 def wd_oauth(request):
     if request.method == 'POST':
@@ -178,7 +192,3 @@ def wd_oauth(request):
         request.session['request_token'] = {'key': request_token.key.decode(), 'secret': request_token.secret.decode()}
 
         return HttpResponse(json.dumps(mw_redirect), content_type='application/json')
-
-
-
-

@@ -24,7 +24,7 @@ def wd_oauth_handshake_1():
 
     # Step 3: Complete -- obtain authorized key/secret for "resource owner"
 
-    #access_token = handshaker.complete(request_token, response_qs)
+    # access_token = handshaker.complete(request_token, response_qs)
     # print(str(access_token))
 
     # Step 4: Identify -- (optional) get identifying information about the user
@@ -46,4 +46,24 @@ class MWOauthHandshake(object):
 
     def get_access_token(self):
         self.access_token = self.handshaker.complete(self.request_token, self.response_qs)
+
+
+identity = {'registered': '20150803205909', 'aud': '681c7f29afaca3be65e7d4d01a2224f2', 'confirmed_email': True,
+            'sub': 43197231,
+            'groups': ['*', 'user', 'autoconfirmed'], 'blocked': False, 'iat': 1476306516,
+            'grants': ['basic', 'editpage', 'createeditmovepage'], 'username': 'Putmantime', 'exp': 1476306616,
+            'rights': ['createaccount', 'read', 'edit', 'createpage', 'createtalk', 'writeapi', 'editmyusercss',
+                       'editmyuserjs',
+                       'viewmywatchlist', 'editmywatchlist', 'viewmyprivateinfo', 'editmyprivateinfo', 'editmyoptions',
+                       'abusefilter-view', 'abusefilter-log', 'translate', 'flow-hide', 'centralauth-merge',
+                       'codereview-use',
+                       'vipsscaler-test', 'flow-create-board', 'reupload-own', 'move-rootuserpages',
+                       'move-categorypages',
+                       'minoredit', 'purge', 'sendemail', 'applychangetags', 'changetags', 'translate-messagereview',
+                       'translate-groupreview', 'flow-lock', 'lqt-split', 'lqt-merge', 'lqt-react',
+                       'mwoauthmanagemygrants',
+                       'reupload', 'upload', 'move', 'collectionsaveasuserpage', 'collectionsaveascommunitypage',
+                       'autoconfirmed',
+                       'editsemiprotected', 'transcode-reset', 'skipcaptcha', 'flow-edit-post'], 'editcount': 0,
+            'nonce': '16630011116260601501476306536', 'iss': 'https://www.mediawiki.org'}
 
