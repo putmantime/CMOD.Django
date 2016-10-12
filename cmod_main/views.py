@@ -7,9 +7,9 @@ from .scripts.wikidatabots.genes.microbes import MicrobeBotWDFunctions as WDO
 from time import gmtime, strftime, sleep
 import pprint
 from django.views.decorators.csrf import ensure_csrf_cookie
-import requests
 from mwoauth import ConsumerToken, RequestToken, initiate, complete, identify
-from django.shortcuts import redirect
+import requests
+
 # Consruct a "consumer" from the key/secret provided by MediaWiki
 from .scripts.utils import oauth_config
 from django.http import HttpResponseRedirect
@@ -36,6 +36,8 @@ def main_page(request):
         print("Identified as {username}.".format(**identity))
         # remember to .encode() key and secret before use
         request.session['access_token'] = {'key': access_token.key.decode(), 'secret': access_token.secret.decode()}
+        print(identity)
+
 
     if 'org' in request.session:
         org_data = json.loads(request.session['org'])
