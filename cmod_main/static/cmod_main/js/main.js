@@ -1038,7 +1038,7 @@ $(document).ready(function () {
         initiateOAuth: function () {
             $('#wd-oauth-button').off("click").click(function (e) {
                 e.preventDefault();
-                oauth_authorization.sendToServer({"oauth": "yes"}, '/wd_oauth');
+                oauth_authorization.sendToServer({"oauth": "True"}, '/wd_oauth');
             });
 
             },
@@ -1052,6 +1052,7 @@ $(document).ready(function () {
                 headers: {'X-CSRFToken': csrftoken},
                 success: function (data) {
                     console.log("OAuth Handshake Success:" + data);
+
                     window.location.replace(data);
                 },
                 error: function (data) {

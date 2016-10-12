@@ -8,15 +8,11 @@ from time import gmtime, strftime, sleep
 import pprint
 from django.views.decorators.csrf import ensure_csrf_cookie
 import requests
-
-def get_login_token():
-        params = {
-            'action': 'query',
-            'meta': 'tokens',
-            'format': 'json'
-        }
-        response = requests.get('https://www.wikidata.org/w/api.php', params=params)
-        return response.json()
+from mwoauth import ConsumerToken, Handshaker, tokens
+from django.shortcuts import redirect
+# Consruct a "consumer" from the key/secret provided by MediaWiki
+from .scripts.utils import oauth_config
+from django.http import HttpResponseRedirect
 
 @ensure_csrf_cookie
 def index(request):
@@ -26,17 +22,16 @@ def index(request):
 
 @ensure_csrf_cookie
 def main_page(request):
-    print(request.GET)
+
     if 'oauth_verifier' in request.GET.keys():
         request.session['oauth_verifier'] = request.GET['oauth_verifier']
         request.session['oauth_token'] = request.GET['oauth_token']
-        print(get_login_token())
+        print(request.session['handshaker'])
 
     if 'org' in request.session:
         org_data = json.loads(request.session['org'])
         print(request.session.keys())
         return render(request, "cmod_main/main_page.html", org_data)
-	
     else:
         org_data = {'QID': 'Q21065231', 'RefSeq': 'NC_000915.1', 'Taxid': '85962', 'Name': 'Helicobacter pylori 26695'}
         print(request.session.keys())
@@ -163,7 +158,15 @@ def wd_oauth(request):
     if request.method == 'POST':
         oauth = json.dumps(request.POST)
         client_message = json.loads(oauth)
-        from .scripts.utils import mw_oauthorization as mwoa
-        red = mwoa.wd_oauth_handshake()
-        return HttpResponse(json.dumps(red), content_type='application/json')
+        request.session['oauth'] = client_message['oauth']
+
+        consumer_token = ConsumerToken(oauth_config.consumer_key, oauth_config.consumer_secret)
+        handshaker = Handshaker("https://www.mediawiki.org/w/index.php", consumer_token)
+
+        mw_redirect, request_token = handshaker.initiate()
+        request.session['handshaker'] = handshaker.__dict__
+        return HttpResponse(json.dumps(mw_redirect), content_type='application/json')
+
+
+
 
