@@ -162,7 +162,6 @@ def wd_oauth(request):
 
         consumer_token = ConsumerToken(oauth_config.consumer_key, oauth_config.consumer_secret)
         handshaker = Handshaker("https://www.mediawiki.org/w/index.php", consumer_token)
-
         mw_redirect, request_token = handshaker.initiate()
         request.session['handshaker'] = handshaker.__dict__
         return HttpResponse(json.dumps(mw_redirect), content_type='application/json')
