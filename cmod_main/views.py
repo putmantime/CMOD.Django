@@ -165,12 +165,12 @@ def wd_oauth(request):
         client_message = json.loads(oauth)
         request.session['oauth'] = client_message['oauth']
         consumer_token = ConsumerToken(oauth_config.consumer_key, oauth_config.consumer_secret)
-        print(consumer_token.secret)
+
         request.session['consumer_token'] = {'key': consumer_token.key, 'secret': consumer_token.secret}
         mw_uri = "https://www.mediawiki.org/w/index.php"
         mw_redirect, request_token = initiate(mw_uri, consumer_token)
         request.session['request_token'] = {'key': request_token.key.decode(), 'secret': request_token.secret.decode()}
-        print(request_token)
+
         return HttpResponse(json.dumps(mw_redirect), content_type='application/json')
 
 
