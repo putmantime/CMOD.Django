@@ -45,8 +45,8 @@ def main_page(request):
         request.session['access_token'] = {'key': access_token.key.decode(), 'secret': access_token.secret.decode()}
         request.session['client_key'] = consumer_token.key
         request.session['client_secret'] = consumer_token.secret
-        request.session['resource_owner_key'] = access_token.key
-        request.session['resource_owner_secret'] = access_token.secret
+        request.session['resource_owner_key'] = access_token.key.decode()
+        request.session['resource_owner_secret'] = access_token.secret.decode()
 
         auth1 = OAuth1(consumer_token.key,
                        client_secret=consumer_token.secret,
