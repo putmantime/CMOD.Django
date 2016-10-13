@@ -608,15 +608,15 @@ class WDItemEngine(object):
         else:
             return None
 
-    def write(self, login):
+    def write(self, edit_token):
         """
         Writes the WD item Json to WD and after successful write, updates the object with new ids and hashes generated
         by WD. For new items, also returns the new QIDs.
         :param login: a instance of the class PBB_login which provides edit-cookies and edit-tokens
         :return: the WD QID on sucessful write
         """
-        cookies = login.get_edit_cookie()
-        edit_token = login.get_edit_token()
+        # cookies = login.get_edit_cookie()
+        # edit_token = login.get_edit_token()
 
         headers = {
             'content-type': 'application/x-www-form-urlencoded',
@@ -649,7 +649,8 @@ class WDItemEngine(object):
                     and json_data['error']['code'] == 'readonly':
                 print('Wikidata currently is in readonly mode, waiting for 60 seconds')
                 time.sleep(60)
-                return self.write(login=login)
+                #return self.write(login=login)
+                return self.write(edit_token)
 
             if 'error' in json_data.keys() and 'messages' in json_data['error']:
                 if 'wikibase-validator-label-with-description-conflict' == json_data['error']['messages'][0]['name']:

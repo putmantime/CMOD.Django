@@ -64,21 +64,22 @@ def main_page(request):
         )
         # edit_token = response_token.json()['query']['tokens']['csrftoken'].strip('\*')
 
-        data = json.dumps({"labels":{"de":{"language":"de","value":"de-value"},"en":{"language":"en","value":"en-value"}}})
-
-        params = {
-            'action': "wbeditentity",
-            # 'id': 'Q23123900',
-            'format': "json",
-            'new': 'item',
-            'data': data,
-            'token': response_token.json()['query']['tokens']['csrftoken']
-        }
-        response = requests.post(
-            "https://www.wikidata.org/w/api.php", params, auth=auth1
-        )
-
-        print(response.json())
+        # data = json.dumps(
+        #     {"labels": {"de": {"language": "de", "value": "de-value"}, "en": {"language": "en", "value": "en-value"}}})
+        #
+        # params = {
+        #     'action': "wbeditentity",
+        #     # 'id': 'Q23123900',
+        #     'format': "json",
+        #     'new': 'item',
+        #     'data': data,
+        #     'token': response_token.json()['query']['tokens']['csrftoken']
+        # }
+        # response = requests.post(
+        #     "https://www.wikidata.org/w/api.php", params, auth=auth1
+        # )
+        #
+        # print(response.json())
 
     if 'org' in request.session:
         org_data = json.loads(request.session['org'])
@@ -112,10 +113,11 @@ def wd_go_edit(request):
         print("wd_go_edit " + str(credentials))
 
         try:
-            auth = OAuth1(request.session['client_key'],
-                          client_secret=request.session['client_secret'],
-                          resource_owner_key=request.session['resource_owner_key'],
-                          resource_owner_secret=request.session['resource_owner_secret'])
+            auth1 = OAuth1(request.session['client_key'],
+                           client_secret=request.session['client_secret'],
+                           resource_owner_key=request.session['resource_owner_key'],
+                           resource_owner_secret=request.session['resource_owner_secret'])
+
             goProp = {
                 "Q14860489": "P680",
                 "Q5058355": "P681",
@@ -123,11 +125,16 @@ def wd_go_edit(request):
             }
             statementDict = json.loads(statementData)
 
-            print(credentials['userName'], credentials['password'])
-            login = PBB_login.WDLogin(credentials['userName'], credentials['password'])
+            response_token = requests.get("https://www.wikidata.org/w/api.php",
+                                          params={
+                                              'action': "query",
+                                              'meta': "tokens",
+                                              'format': "json"
+                                          }, auth=auth1)
 
-            credentials["login"] = "success"
-            statementDict = json.loads(statementData)
+
+            edit_token = response_token.json()['query']['tokens']['csrftoken']
+            login = edit_token
             print(statementDict)
 
             refs = [
