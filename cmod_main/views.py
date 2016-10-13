@@ -49,37 +49,6 @@ def main_page(request):
         request.session['resource_owner_key'] = access_token.key.decode()
         request.session['resource_owner_secret'] = access_token.secret.decode()
 
-        auth1 = OAuth1(consumer_token.key,
-                       client_secret=consumer_token.secret,
-                       resource_owner_key=access_token.key,
-                       resource_owner_secret=access_token.secret)
-        response_token = requests.get(
-            "https://www.wikidata.org/w/api.php",
-            params={
-                'action': "query",
-                'meta': "tokens",
-                'format': "json"
-            },
-            auth=auth1
-        )
-        # edit_token = response_token.json()['query']['tokens']['csrftoken'].strip('\*')
-
-        # data = json.dumps(
-        #     {"labels": {"de": {"language": "de", "value": "de-value"}, "en": {"language": "en", "value": "en-value"}}})
-        #
-        # params = {
-        #     'action': "wbeditentity",
-        #     # 'id': 'Q23123900',
-        #     'format': "json",
-        #     'new': 'item',
-        #     'data': data,
-        #     'token': response_token.json()['query']['tokens']['csrftoken']
-        # }
-        # response = requests.post(
-        #     "https://www.wikidata.org/w/api.php", params, auth=auth1
-        # )
-        #
-        # print(response.json())
 
     if 'org' in request.session:
         org_data = json.loads(request.session['org'])
@@ -104,16 +73,11 @@ def get_orgs(request):
 @ensure_csrf_cookie
 def wd_go_edit(request):
     if request.method == 'POST':
-
+        edit_status = {}
         # statementData = json.loads(json.dumps(request.POST))
         statementData = json.dumps(request.POST)
         request.session['go'] = statementData
-        # credentials = json.loads(request.session['credentials'])
-
-        # print("wd_go_edit " + str(credentials))
-
         try:
-            print(request.session['client_key'], request.session['client_secret'],request.session['resource_owner_key'],request.session['resource_owner_secret'])
             auth1 = OAuth1(request.session['client_key'],
                            client_secret=request.session['client_secret'],
                            resource_owner_key=request.session['resource_owner_key'],
@@ -124,6 +88,7 @@ def wd_go_edit(request):
                 "Q5058355": "P681",
                 "Q2996394": "P682"
             }
+
             statementDict = json.loads(statementData)
 
             response_token = requests.get("https://www.wikidata.org/w/api.php",
@@ -132,12 +97,10 @@ def wd_go_edit(request):
                                               'meta': "tokens",
                                               'format': "json"
                                           }, auth=auth1)
-
-
+            print(response_token.status_code)
             edit_token = response_token.json()['query']['tokens']['csrftoken']
+
             login = edit_token
-            print(edit_token)
-            print(statementDict)
 
             refs = [
                 PBB_Core.WDItemID(value='Q26489220', prop_nr='P143', is_reference=True),  # imorted from CMOD
@@ -145,12 +108,9 @@ def wd_go_edit(request):
                 # timestamp
             ]
 
-
-
             # Check to see if wikidata has PMID item
             PMID_QID = WDO.WDSparqlQueries(prop='P698', string=statementDict['PMID[pmid]']).wd_prop2qid()
             # reference it if it does
-            print("hello")
             print(PMID_QID)
             if PMID_QID != 'None':
                 ifPub = WDO.WDSparqlQueries(prop='P31', qid=PMID_QID)
