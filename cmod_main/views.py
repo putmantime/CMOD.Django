@@ -66,7 +66,7 @@ def main_page(request):
             },
             auth=auth1
         )
-        print(response)
+        print(response.json())
         # response = requests.get(
         #     "https://www.wikidata.org/w/api.php",
         #     params={
