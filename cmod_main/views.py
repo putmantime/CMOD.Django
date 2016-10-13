@@ -43,26 +43,41 @@ def main_page(request):
         print("Identified as {username}.".format(**identity))
         # remember to .encode() key and secret before use
         request.session['access_token'] = {'key': access_token.key.decode(), 'secret': access_token.secret.decode()}
+        request.session['client_key'] = consumer_token.key
+        request.session['client_secret'] = consumer_token.secret
+        request.session['resource_owner_key'] = access_token.key
+        request.session['resource_owner_secret'] = access_token.secret
 
         auth1 = OAuth1(consumer_token.key,
                        client_secret=consumer_token.secret,
                        resource_owner_key=access_token.key,
                        resource_owner_secret=access_token.secret)
-        print(auth1.__dict__)
-        print("Reading top 10 watchlist items")
 
-
+        data = {"claims": [{"mainsnak": {"snaktype": "value", "property": "P680",
+                                         "datavalue": {"value": "Q14864384", "type": "item"}},
+                            "type": "statement", "rank": "normal"}]}
         response = requests.get(
             "https://www.wikidata.org/w/api.php",
             params={
-                'action': "wbgetentities",
-                'sites': 'enwiki',
-                'ids': 'Q22990398',
-                'format': "json"
+                'action': "wbeditentity",
+                'id': 'Q22990398',
+                'format': "json",
+                'data': data
             },
             auth=auth1
         )
-        print(response.json())
+        print(response)
+        # response = requests.get(
+        #     "https://www.wikidata.org/w/api.php",
+        #     params={
+        #         'action': "wbgetentities",
+        #         'sites': 'enwiki',
+        #         'ids': 'Q22990398',
+        #         'format': "json"
+        #     },
+        #     auth=auth1
+        # )
+        # print(response.json())
 
     if 'org' in request.session:
         org_data = json.loads(request.session['org'])
@@ -96,6 +111,17 @@ def wd_go_edit(request):
         print("wd_go_edit " + str(credentials))
 
         try:
+            auth = OAuth1(request.session['client_key'],
+                          client_secret=request.session['client_secret'],
+                          resource_owner_key=request.session['resource_owner_key'],
+                          resource_owner_secret=request.session['resource_owner_secret'])
+            goProp = {
+                "Q14860489": "P680",
+                "Q5058355": "P681",
+                "Q2996394": "P682"
+            }
+            statementDict = json.loads(statementData)
+
             print(credentials['userName'], credentials['password'])
             login = PBB_login.WDLogin(credentials['userName'], credentials['password'])
 
@@ -103,17 +129,13 @@ def wd_go_edit(request):
             statementDict = json.loads(statementData)
             print(statementDict)
 
-            goProp = {
-                "Q14860489": "P680",
-                "Q5058355": "P681",
-                "Q2996394": "P682"
-            }
-
             refs = [
                 PBB_Core.WDItemID(value='Q26489220', prop_nr='P143', is_reference=True),  # imorted from CMOD
                 PBB_Core.WDTime(str(strftime("+%Y-%m-%dT00:00:00Z", gmtime())), prop_nr='P813', is_reference=True)
                 # timestamp
             ]
+
+
 
             # Check to see if wikidata has PMID item
             PMID_QID = WDO.WDSparqlQueries(prop='P698', string=statementDict['PMID[pmid]']).wd_prop2qid()
