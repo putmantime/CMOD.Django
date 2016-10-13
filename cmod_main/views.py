@@ -61,7 +61,7 @@ def main_page(request):
             },
             auth=auth1
         )
-        print(response_token.json()['query']['tokens']['csrftoken'])
+        edit_token = response_token.json()['query']['tokens']['csrftoken'].strip('\*')
 
         data = {"claims": [{"mainsnak": {"snaktype": "value", "property": "P680",
                                          "datavalue": {"value": "Q14864384", "type": "item"}},
@@ -72,10 +72,10 @@ def main_page(request):
                 'id': 'Q22990398',
                 'format': "json",
                 'data': data,
-                'token': response_token.json()['query']['tokens']['csrftoken'].strip('\*')
+                'token': response_token.json()['query']['tokens']['csrftoken']
             }
         response = requests.post(
-            "https://www.wikidata.org/w/api.php", params
+            "https://www.wikidata.org/w/api.php", params, auth=auth1
         )
 
         print(response.json())
