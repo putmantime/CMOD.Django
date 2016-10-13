@@ -95,7 +95,10 @@ def wd_go_edit(request):
                                               'meta': "tokens",
                                               'format': "json"
                                           }, auth=auth1)
-            print(response_token.status_code)
+            if str(response_token.status_code) == str(200):
+                edit_status['code'] = str(response_token.status_code)
+
+
             edit_token = response_token.json()['query']['tokens']['csrftoken']
 
             login = edit_token
@@ -111,6 +114,7 @@ def wd_go_edit(request):
             # reference it if it does
             print(PMID_QID)
             if PMID_QID != 'None':
+                edit_status['pmid_ref'] = 'exists'
                 ifPub = WDO.WDSparqlQueries(prop='P31', qid=PMID_QID)
                 if ifPub == 'Q13442814':
                     refs.append(PBB_Core.WDItemID(value=PMID_QID, prop_nr='P248', is_reference=True))
@@ -125,6 +129,7 @@ def wd_go_edit(request):
                 pmid_wd_item = PBB_Core.WDItemEngine(item_name=statementDict['PMID[title]'], domain=None,
                                                      data=pmid_item_statements)
                 pmid_wd_item.write(login, auth1)
+                edit_status['pmid_ref'] = 'new'
                 # now reference the new item that was just created
                 refs.append(PBB_Core.WDItemID(value=pmid_wd_item.wd_item_id, prop_nr='P248', is_reference=True))
 
@@ -141,11 +146,11 @@ def wd_go_edit(request):
                                                         data=[goStatement], use_sparql=True,
                                                         append_value=[goProp[statementDict['goClass']]])
                 print("found the item")
-                # credentials["item_search"] = "success"
+                edit_status["item_search"] = "success"
                 print("Found item " + wd_item_protein.get_label())
                 pprint.pprint(wd_item_protein.get_wd_json_representation())
                 wd_item_protein.write(login, auth1)
-                # credentials["write"] = "success"
+                edit_status["write"] = "success"
                 print("Wrote item " + wd_item_protein.get_label())
             except Exception as e:
                 pprint.pprint(e)
@@ -153,11 +158,10 @@ def wd_go_edit(request):
         except Exception as e:
             print(e)
             print("Wikidata edit failed")
-            # credentials["login"] = "error"
-            # credentials["item_search"] = "error"
-            # credentials["write"] = "error"
+            edit_status["item_search"] = "error"
+            edit_status["write"] = "error"
 
-        return HttpResponse(json.dumps(statementDict), content_type='application/json')
+        return HttpResponse(json.dumps(edit_status), content_type='application/json')
 
         # return render(request, "cmod_main/main_page.html",  credentials)
 
