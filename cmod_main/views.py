@@ -113,6 +113,7 @@ def wd_go_edit(request):
         # print("wd_go_edit " + str(credentials))
 
         try:
+            print(request.session['client_key'], request.session['client_secret'],request.session['resource_owner_key'],request.session['resource_owner_secret'])
             auth1 = OAuth1(request.session['client_key'],
                            client_secret=request.session['client_secret'],
                            resource_owner_key=request.session['resource_owner_key'],
@@ -135,6 +136,7 @@ def wd_go_edit(request):
 
             edit_token = response_token.json()['query']['tokens']['csrftoken']
             login = edit_token
+            print(edit_token)
             print(statementDict)
 
             refs = [
