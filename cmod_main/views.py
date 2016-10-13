@@ -63,14 +63,14 @@ def main_page(request):
         )
         # edit_token = response_token.json()['query']['tokens']['csrftoken'].strip('\*')
 
-        data = {}
+        data = {"labels":{"de":{"language":"de","value":"de-value"},"en":{"language":"en","value":"en-value"}}}
 
         params = {
             'action': "wbeditentity",
             # 'id': 'Q23123900',
             'format': "json",
             'new': 'item',
-            'data': {},
+            'data': data,
             'token': response_token.json()['query']['tokens']['csrftoken']
         }
         response = requests.post(
