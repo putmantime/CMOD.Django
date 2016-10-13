@@ -75,7 +75,6 @@ def main_page(request):
                 'data': data,
                 'token': response_token.json()['query']['tokens']['csrftoken']
             },
-            auth=auth1
         )
 
         print(response.json())
