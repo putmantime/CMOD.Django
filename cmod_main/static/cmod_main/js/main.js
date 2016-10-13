@@ -1070,11 +1070,6 @@ $(document).ready(function () {
             if (verified === 'True'){
                 var $Button = $('#wd-oauth-button');
                 $Button.text("Authorized").addClass(".btn-success");
-                $Button.off("click").click(function (e) {
-                e.preventDefault();
-                oauth_authorization.sendToServer({"deauth": "True"}, '/wd_oauth_deauth');
-
-            });
             }
         }
 
