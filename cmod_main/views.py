@@ -66,15 +66,16 @@ def main_page(request):
         data = {"claims": [{"mainsnak": {"snaktype": "value", "property": "P680",
                                          "datavalue": {"value": "Q14864384", "type": "item"}},
                             "type": "statement", "rank": "normal"}]}
-        response = requests.post(
-            "https://www.wikidata.org/w/api.php",
-            params={
+
+        params={
                 'action': "wbeditentity",
                 'id': 'Q22990398',
                 'format': "json",
                 'data': data,
                 'token': response_token.json()['query']['tokens']['csrftoken']
-            },
+            }
+        response = requests.post(
+            "https://www.wikidata.org/w/api.php", params
         )
 
         print(response.json())
