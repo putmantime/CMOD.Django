@@ -28,10 +28,11 @@ def index(request):
 
 @ensure_csrf_cookie
 def main_page(request):
+    main_page_data = {'verified': "False"}
     if 'oauth_verifier' in request.GET.keys():
+        main_page_data['verified'] = "True"
         request.session['oauth_verifier'] = request.GET['oauth_verifier']
         request.session['oauth_token'] = request.GET['oauth_token']
-        print(request.session)
         response_qs = request.META['QUERY_STRING']
         consumer_token = ConsumerToken(request.session['consumer_token']['key'],
                                        request.session['consumer_token']['secret'])
@@ -39,25 +40,22 @@ def main_page(request):
                                      request.session['request_token']['secret'])
         mw_uri = "https://www.mediawiki.org/w/index.php"
         access_token = complete(mw_uri, consumer_token, request_token, response_qs)
-        print(access_token)
         identity = identify(mw_uri, consumer_token, access_token)
-        print("Identified as {username}.".format(**identity))
-        # remember to .encode() key and secret before use
+        request.session['username'] = "{username}.".format(**identity)
         request.session['access_token'] = {'key': access_token.key.decode(), 'secret': access_token.secret.decode()}
         request.session['client_key'] = consumer_token.key
         request.session['client_secret'] = consumer_token.secret
         request.session['resource_owner_key'] = access_token.key.decode()
         request.session['resource_owner_secret'] = access_token.secret.decode()
 
-
     if 'org' in request.session:
-        org_data = json.loads(request.session['org'])
+        main_page_data['org_data'] = json.loads(request.session['org'])
         print(request.session.keys())
-        return render(request, "cmod_main/main_page.html", org_data)
+        return render(request, "cmod_main/main_page.html", main_page_data)
     else:
-        org_data = {'QID': 'Q21065231', 'RefSeq': 'NC_000915.1', 'Taxid': '85962', 'Name': 'Helicobacter pylori 26695'}
+        main_page_data['org_data'] = {'QID': 'Q21065231', 'RefSeq': 'NC_000915.1', 'Taxid': '85962', 'Name': 'Helicobacter pylori 26695'}
         print(request.session.keys())
-        return render(request, "cmod_main/main_page.html", org_data)
+        return render(request, "cmod_main/main_page.html", main_page_data)
 
 
 @ensure_csrf_cookie
@@ -164,23 +162,23 @@ def wd_go_edit(request):
         # return render(request, "cmod_main/main_page.html",  credentials)
 
 
-@ensure_csrf_cookie
-def wd_credentials(request):
-    if request.method == 'POST':
-        creddata = json.dumps(request.POST)
-
-        user_pass = json.loads(creddata)
-        request.session['credentials'] = creddata
-        print("user_pass dj " + str(user_pass))
-        login = PBB_login.WDLogin(user_pass['userName'], user_pass['password'])
-        print("user_pass response wd " + str(login.login_reply))
-        if login.login_reply['login']['result'] == 'Failed':
-            user_pass["login"] = "error"
-        else:
-            user_pass["login"] = "success"
-
-        return HttpResponse(json.dumps(user_pass), content_type='application/json')
-        # return render(request, "cmod_main/main_page.html", )
+# @ensure_csrf_cookie
+# def wd_credentials(request):
+#     if request.method == 'POST':
+#         creddata = json.dumps(request.POST)
+#
+#         user_pass = json.loads(creddata)
+#         request.session['credentials'] = creddata
+#         print("user_pass dj " + str(user_pass))
+#         login = PBB_login.WDLogin(user_pass['userName'], user_pass['password'])
+#         print("user_pass response wd " + str(login.login_reply))
+#         if login.login_reply['login']['result'] == 'Failed':
+#             user_pass["login"] = "error"
+#         else:
+#             user_pass["login"] = "success"
+#
+#         return HttpResponse(json.dumps(user_pass), content_type='application/json')
+#         # return render(request, "cmod_main/main_page.html", )
 
 
 @ensure_csrf_cookie

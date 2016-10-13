@@ -7,6 +7,7 @@ $(document).ready(function () {
         "QID": OrgQID,
         "RefSeq": OrgRefSeq
     };
+    var verified = verification;
 
 
 ///////////////////////////////////////////End Global Variables/////////////////////////////////////////////////////////
@@ -1031,11 +1032,15 @@ $(document).ready(function () {
         init: function () {
             this.cacheDOM();
             this.initiateOAuth();
+
         },
         cacheDOM: function () {
             var $authButton = $('#wd-oauth-button');
         },
         initiateOAuth: function () {
+            if (verified === 'True') {
+
+            };
             $('#wd-oauth-button').off("click").click(function (e) {
                 e.preventDefault();
                 oauth_authorization.sendToServer({"oauth": "True"}, '/wd_oauth');
@@ -1071,93 +1076,93 @@ $(document).ready(function () {
 
 
 
-    var wdLogin = {
-        init: function () {
-            this.cacheDOM();
-            this.sendCredentials();
-
-
-        },
-        credentials: {},
-        cacheDOM: function () {
-            this.$loginForm = $('#main-login-form');
-            this.$userName = this.$loginForm.find('#wduserName');
-            this.$password = this.$loginForm.find('#wdPassword');
-            this.$editButton = this.$loginForm.find('#editWDButton');
-            this.$loginButtonDiv = $('#wd-login-button-div');
-            this.$loginButton = this.$loginButtonDiv.find('#wd-login-button');
-            this.$loggedin = $('#userLogin');
-            this.$userContrib = $('#userContributions');
-
-
-        },
-        sendCredentials: function () {
-
-            wdLogin.$editButton.on("click", function (e) {
-                e.preventDefault();
-                wdLogin.credentials = {
-                    "userName": wdLogin.$userName.val(),
-                    "password": wdLogin.$password.val()
-                };
-                wdLogin.sendToServer(wdLogin.credentials, '/wd_credentials');
-
-                $('form').each(function () {
-                    this.reset()
-                });
-            });
-
-        },
-        sendToServer: function (data, urlsuf) {
-            var csrftoken = getCookie('csrftoken');
-            $.ajax({
-                beforeSend: function () {
-                    wdLogin.$loggedin.html("<img src=" + loader + ">");
-
-                },
-                type: "POST",
-                url: window.location.pathname + urlsuf,
-                data: data,
-                dataType: 'json',
-                headers: {'X-CSRFToken': csrftoken},
-                success: function (data) {
-                    console.log("success");
-                    //console.log(data);
-                    if (data['login'] === "success") {
-                        console.log(wdLogin.credentials);
-                        wdLogin.$loggedin.html("<span>Logged in as <a target='_blank' id='wd-user-button' " +
-                            "class='btn btn-primary' href='https://www.wikidata.org/wiki/Special:Contributions/" +
-                            data['userName'] + "' role='button'>" + data['userName'] + "</a>");
-                        wdLogin.$loginButtonDiv.html(
-                            "<button id='wd-logout-button' type='button' class='btn btn-primary'> " +
-                            "<span>Log out</span> </button>");
-                        $('#wd-logout-button').off("click").click(function (e) {
-                            wdLogin.credentials = {};
-                            console.log(wdLogin.credentials);
-                            wdLogin.$loggedin.html("");
-                            wdLogin.$loginButtonDiv.html(
-                                "<button id='wd-login-button' type='button' class='btn btn-primary' " +
-                                "data-toggle='modal' data-target='#wdLoginModal'> <span>Login to Wikidata</span> </button>");
-                        });
-
-
-                    }
-                    else {
-
-                        $("#userLogin").html("<h5>Could not log in. Please try again</h5>");
-                    }
-
-                },
-                error: function (data) {
-                    console.log("error");
-                    //console.log(data);
-                    //alert("Something went wrong interacting with the server");
-                }
-            });
-        }
-
-    };
-
-    wdLogin.init();
+    //var wdLogin = {
+    //    init: function () {
+    //        this.cacheDOM();
+    //        this.sendCredentials();
+    //
+    //
+    //    },
+    //    credentials: {},
+    //    cacheDOM: function () {
+    //        this.$loginForm = $('#main-login-form');
+    //        this.$userName = this.$loginForm.find('#wduserName');
+    //        this.$password = this.$loginForm.find('#wdPassword');
+    //        this.$editButton = this.$loginForm.find('#editWDButton');
+    //        this.$loginButtonDiv = $('#wd-login-button-div');
+    //        this.$loginButton = this.$loginButtonDiv.find('#wd-login-button');
+    //        this.$loggedin = $('#userLogin');
+    //        this.$userContrib = $('#userContributions');
+    //
+    //
+    //    },
+    //    sendCredentials: function () {
+    //
+    //        wdLogin.$editButton.on("click", function (e) {
+    //            e.preventDefault();
+    //            wdLogin.credentials = {
+    //                "userName": wdLogin.$userName.val(),
+    //                "password": wdLogin.$password.val()
+    //            };
+    //            wdLogin.sendToServer(wdLogin.credentials, '/wd_credentials');
+    //
+    //            $('form').each(function () {
+    //                this.reset()
+    //            });
+    //        });
+    //
+    //    },
+    //    sendToServer: function (data, urlsuf) {
+    //        var csrftoken = getCookie('csrftoken');
+    //        $.ajax({
+    //            beforeSend: function () {
+    //                wdLogin.$loggedin.html("<img src=" + loader + ">");
+    //
+    //            },
+    //            type: "POST",
+    //            url: window.location.pathname + urlsuf,
+    //            data: data,
+    //            dataType: 'json',
+    //            headers: {'X-CSRFToken': csrftoken},
+    //            success: function (data) {
+    //                console.log("success");
+    //                //console.log(data);
+    //                if (data['login'] === "success") {
+    //                    console.log(wdLogin.credentials);
+    //                    wdLogin.$loggedin.html("<span>Logged in as <a target='_blank' id='wd-user-button' " +
+    //                        "class='btn btn-primary' href='https://www.wikidata.org/wiki/Special:Contributions/" +
+    //                        data['userName'] + "' role='button'>" + data['userName'] + "</a>");
+    //                    wdLogin.$loginButtonDiv.html(
+    //                        "<button id='wd-logout-button' type='button' class='btn btn-primary'> " +
+    //                        "<span>Log out</span> </button>");
+    //                    $('#wd-logout-button').off("click").click(function (e) {
+    //                        wdLogin.credentials = {};
+    //                        console.log(wdLogin.credentials);
+    //                        wdLogin.$loggedin.html("");
+    //                        wdLogin.$loginButtonDiv.html(
+    //                            "<button id='wd-login-button' type='button' class='btn btn-primary' " +
+    //                            "data-toggle='modal' data-target='#wdLoginModal'> <span>Login to Wikidata</span> </button>");
+    //                    });
+    //
+    //
+    //                }
+    //                else {
+    //
+    //                    $("#userLogin").html("<h5>Could not log in. Please try again</h5>");
+    //                }
+    //
+    //            },
+    //            error: function (data) {
+    //                console.log("error");
+    //                //console.log(data);
+    //                //alert("Something went wrong interacting with the server");
+    //            }
+    //        });
+    //    }
+    //
+    //};
+    //
+    //wdLogin.init();
 /////////////////////////////////////////////////End Wikidata API///////////////////////////////////////////////////////
 
 

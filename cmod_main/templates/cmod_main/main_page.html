@@ -21,10 +21,11 @@
     <script src="{% static 'cmod_main/js/forms.js' %}"></script>
     <script src="{% static 'cmod_main/js/main.js' %}"></script>
     <script type="text/javascript">
-        var OrgName = "{{ Name }}";
-        var OrgTID = "{{ Taxid }}";
-        var OrgQID = "{{ QID }}";
-        var OrgRefSeq = "{{ RefSeq }}";
+        var OrgName = "{{ org_data.Name }}";
+        var OrgTID = "{{ org_data.Taxid }}";
+        var OrgQID = "{{ org_data.QID }}";
+        var OrgRefSeq = "{{ org_data.RefSeq }}";
+        var verification = "{{ verified }}";
         var loader = "{% static 'cmod_main/img/spin.gif' %}"
     </script>
 
@@ -235,7 +236,7 @@
                         </div>
 
                     </div>
-                    <div class="col-md-6 main-gutter-padding">
+                    <div class="col-md-3 main-gutter-padding">
                         <div id="geneFormModule">
                             <form class="main-form-div form-inline ui-widget">
                                 {# {% csrf_token %}#}
@@ -248,6 +249,11 @@
                             </form>
                         </div>
 
+                    </div>
+                    <div id="wd-oauth-div" class="col-md-3">
+                        <button id="wd-oauth-button" type="button" class="btn btn-primary">
+                            <span>Authorize to Edit Wikidata</span>
+                        </button>
                     </div>
                 </div>
 
@@ -515,10 +521,7 @@
                 <div id="userLogin" class="col-md-4">
                 </div>
                 <div class="col-md-1"></div>
-                <div id="wd-oauth-div" class="col-md-2">
-                    <button id="wd-oauth-button" type="button" class="btn btn-primary">
-                        <span>Authorize to Edit Wikidata</span>
-                    </button>
+                <div class="col-md-2">
                 </div>
                 <div class="col-md-4"></div>
             </div>
