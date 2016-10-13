@@ -8,7 +8,7 @@ $(document).ready(function () {
         "RefSeq": OrgRefSeq
     };
     var verified = verification;
-
+    alert(verification);
 
 ///////////////////////////////////////////End Global Variables/////////////////////////////////////////////////////////
 ///////////////////////////////////////////Begin form modules///////////////////////////////////////////////////////////
@@ -1038,9 +1038,6 @@ $(document).ready(function () {
             var $authButton = $('#wd-oauth-button');
         },
         initiateOAuth: function () {
-            if (verified === 'True') {
-
-            };
             $('#wd-oauth-button').off("click").click(function (e) {
                 e.preventDefault();
                 oauth_authorization.sendToServer({"oauth": "True"}, '/wd_oauth');
