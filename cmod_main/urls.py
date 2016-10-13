@@ -9,4 +9,6 @@ urlpatterns = [
     url(r'^main_page/wd_go_edit', views.wd_go_edit, name='wd_go_edit'),
     # url(r'^main_page/wd_credentials', views.wd_credentials, name='wd_credentials'),
     url(r'^main_page/wd_oauth', views.wd_oauth, name='wd_oauth'),
+    url(r'^main_page/wd_oauth_deauth', views.wd_oauth_deauth, name='wd_oauth_deauth'),
+
 ]

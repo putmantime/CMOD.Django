@@ -119,7 +119,7 @@ html, body {
 }
 
 .main-footer {
-    min-height: 130px;
+    min-height: 40px;
     margin-bottom: 5px;
     background-color: #385d94;
     color: whitesmoke;

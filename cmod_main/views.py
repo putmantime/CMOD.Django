@@ -199,3 +199,13 @@ def wd_oauth(request):
         request.session['request_token'] = {'key': request_token.key.decode(), 'secret': request_token.secret.decode()}
 
         return HttpResponse(json.dumps(mw_redirect), content_type='application/json')
+
+
+@ensure_csrf_cookie
+def wd_oauth_deauth(request):
+    if request.method == 'POST':
+        deauth = json.dumps(request.POST)
+        if deauth['deauth'] == "True":
+            request.session.flush()
+
+

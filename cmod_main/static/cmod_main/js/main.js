@@ -8,7 +8,7 @@ $(document).ready(function () {
         "RefSeq": OrgRefSeq
     };
     var verified = verification;
-    alert(verification);
+
 
 ///////////////////////////////////////////End Global Variables/////////////////////////////////////////////////////////
 ///////////////////////////////////////////Begin form modules///////////////////////////////////////////////////////////
@@ -1028,10 +1028,14 @@ $(document).ready(function () {
     };
 // ///////////////////////////////////////////////End Authentication module///////////////////////////////////////////
 /////////////////////////////////////////////////Begin Wikidata API/////////////////////////////////////////////////////
+
+
     var oauth_authorization = {
         init: function () {
+            this.buttonStatus();
             this.cacheDOM();
             this.initiateOAuth();
+
 
         },
         cacheDOM: function () {
@@ -1061,6 +1065,17 @@ $(document).ready(function () {
                    console.log("Error");
                 }
             });
+        },
+        buttonStatus: function() {
+            if (verified === 'True'){
+                var $Button = $('#wd-oauth-button');
+                $Button.text("Authorized").addClass(".btn-success");
+                $Button.off("click").click(function (e) {
+                e.preventDefault();
+                oauth_authorization.sendToServer({"deauth": "True"}, '/wd_oauth_deauth');
+
+            });
+            }
         }
 
 
