@@ -50,13 +50,14 @@ def main_page(request):
                        resource_owner_secret=access_token.secret)
         print(auth1.__dict__)
         print("Reading top 10 watchlist items")
+
+
         response = requests.get(
-            "https://en.wikipedia.org/w/api.php",
+            "https://www.wikidata.org/w/api.php",
             params={
-                'action': "query",
-                'list': "watchlist",
-                'wllimit': 10,
-                'wlprop': "title|comment",
+                'action': "wbgetentities",
+                'sites': 'enwiki',
+                'ids': 'Q22990398',
                 'format': "json"
             },
             auth=auth1
