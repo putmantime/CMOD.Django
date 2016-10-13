@@ -45,9 +45,9 @@ def main_page(request):
         request.session['access_token'] = {'key': access_token.key.decode(), 'secret': access_token.secret.decode()}
 
         auth1 = OAuth1(consumer_token.key,
-               client_secret=consumer_token.secret,
-               resource_owner_key=access_token.key,
-               resource_owner_secret=access_token.secret)
+                       client_secret=consumer_token.secret,
+                       resource_owner_key=access_token.key.decode(),
+                       resource_owner_secret=access_token.secret.decode())
         print("Reading top 10 watchlist items")
         response = requests.get(
             "https://en.wikipedia.org/w/api.php",
@@ -59,11 +59,8 @@ def main_page(request):
                 'format': "json"
             },
             auth=auth1
-)
+        )
         print(response.json())
-
-
-
 
     if 'org' in request.session:
         org_data = json.loads(request.session['org'])
