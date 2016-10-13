@@ -66,7 +66,7 @@ def main_page(request):
         data = {"claims": [{"mainsnak": {"snaktype": "value", "property": "P680",
                                          "datavalue": {"value": "Q14864384", "type": "item"}},
                             "type": "statement", "rank": "normal"}]}
-        response = requests.get(
+        response = requests.post(
             "https://www.wikidata.org/w/api.php",
             params={
                 'action': "wbeditentity",
