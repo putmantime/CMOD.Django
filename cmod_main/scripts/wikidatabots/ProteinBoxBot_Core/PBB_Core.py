@@ -638,7 +638,7 @@ class WDItemEngine(object):
         base_url = 'https://' + self.server + '/w/api.php'
 
         try:
-            reply = requests.post(base_url, headers=headers, data=payload, cookies=cookies)
+            reply = requests.post(base_url, headers=headers, data=payload)
 
             # if the server does not reply with a string which can be parsed into a json, an error will be raised.
             json_data = reply.json()
