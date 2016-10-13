@@ -56,7 +56,7 @@ def main_page(request):
             "https://www.wikidata.org/w/api.php",
             params={
                 'action': "query",
-                'meta': "tolens",
+                'meta': "tokens",
                 'format': "json"
             },
             auth=auth1
