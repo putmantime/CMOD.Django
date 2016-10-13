@@ -609,7 +609,7 @@ class WDItemEngine(object):
             return None
 
     def write(self, edit_token):
-        print(edit_token)
+        print("PBBC" + str(edit_token))
         """
         Writes the WD item Json to WD and after successful write, updates the object with new ids and hashes generated
         by WD. For new items, also returns the new QIDs.
