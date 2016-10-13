@@ -52,32 +52,33 @@ def main_page(request):
                        client_secret=consumer_token.secret,
                        resource_owner_key=access_token.key,
                        resource_owner_secret=access_token.secret)
-
-        data = {"claims": [{"mainsnak": {"snaktype": "value", "property": "P680",
-                                         "datavalue": {"value": "Q14864384", "type": "item"}},
-                            "type": "statement", "rank": "normal"}]}
-        response = requests.get(
+        response_token = requests.get(
             "https://www.wikidata.org/w/api.php",
             params={
-                'action': "wbeditentity",
-                'id': 'Q22990398',
-                'format': "json",
-                'data': data
+                'action': "query",
+                'meta': "tolens",
+                'format': "json"
             },
             auth=auth1
         )
-        print(response.json())
+        print(response_token.json())
+        #
+        # data = {"claims": [{"mainsnak": {"snaktype": "value", "property": "P680",
+        #                                  "datavalue": {"value": "Q14864384", "type": "item"}},
+        #                     "type": "statement", "rank": "normal"}]}
         # response = requests.get(
         #     "https://www.wikidata.org/w/api.php",
         #     params={
-        #         'action': "wbgetentities",
-        #         'sites': 'enwiki',
-        #         'ids': 'Q22990398',
-        #         'format': "json"
+        #         'action': "wbeditentity",
+        #         'id': 'Q22990398',
+        #         'format': "json",
+        #         'data': data
         #     },
         #     auth=auth1
         # )
+        #
         # print(response.json())
+
 
     if 'org' in request.session:
         org_data = json.loads(request.session['org'])
