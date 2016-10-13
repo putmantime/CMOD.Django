@@ -11,6 +11,7 @@ from mwoauth import ConsumerToken, RequestToken, initiate, complete, identify
 import requests
 import time
 import requests
+import json
 from requests_oauthlib import OAuth1
 
 # Consruct a "consumer" from the key/secret provided by MediaWiki
@@ -63,7 +64,7 @@ def main_page(request):
         )
         # edit_token = response_token.json()['query']['tokens']['csrftoken'].strip('\*')
 
-        data = {"labels":{"de":{"language":"de","value":"de-value"},"en":{"language":"en","value":"en-value"}}}
+        data = json.dumps({"labels":{"de":{"language":"de","value":"de-value"},"en":{"language":"en","value":"en-value"}}})
 
         params = {
             'action': "wbeditentity",
