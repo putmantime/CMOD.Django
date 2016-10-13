@@ -63,64 +63,14 @@ def main_page(request):
         )
         # edit_token = response_token.json()['query']['tokens']['csrftoken'].strip('\*')
 
-        data = {'aliases': {'en': [{'language': 'en', 'value': 'VC0876'}]},
-                'claims': {'P2393': [{'id': 'Q23123900$B8A75C7F-8394-4A8C-B75F-4E2DB72CB520',
-                                      'mainsnak': {'datatype': 'external-id',
-                                                   'datavalue': {'type': 'string',
-                                                                 'value': 'VC0876'},
-                                                   'property': 'P2393',
-                                                   'snaktype': 'value'},
-                                      'qualifiers': {},
-                                      'qualifiers-order': [],
-                                      'rank': 'normal',
-                                      'references': [{'snaks': {'P248': [{'datatype': 'wikibase-item',
-                                                                          'datavalue': {
-                                                                              'type': 'wikibase-entityid',
-                                                                              'value': {'entity-type': 'item',
-                                                                                        'id': 'Q20641742',
-                                                                                        'numeric-id': 20641742}},
-                                                                          'property': 'P248',
-                                                                          'snaktype': 'value'}],
-                                                                'P351': [{'datatype': 'string',
-                                                                          'datavalue': {'type': 'string',
-                                                                                        'value': '2614543'},
-                                                                          'property': 'P351',
-                                                                          'snaktype': 'value'}],
-                                                                'P407': [{'datatype': 'wikibase-item',
-                                                                          'datavalue': {
-                                                                              'type': 'wikibase-entityid',
-                                                                              'value': {'entity-type': 'item',
-                                                                                        'id': 'Q1860',
-                                                                                        'numeric-id': 1860}},
-                                                                          'property': 'P407',
-                                                                          'snaktype': 'value'}],
-                                                                'P813': [{'datatype': 'time',
-                                                                          'datavalue': {'type': 'time',
-                                                                                        'value': {'after': 0,
-                                                                                                  'before': 0,
-                                                                                                  'calendarmodel': 'http://www.wikidata.org/entity/Q1985727',
-                                                                                                  'precision': 11,
-                                                                                                  'time': '+2016-10-13T00:00:00Z',
-                                                                                                  'timezone': 0}},
-                                                                          'property': 'P813',
-                                                                          'snaktype': 'value'}]},
-                                                      'snaks-order': ['P248',
-                                                                      'P407',
-                                                                      'P351',
-                                                                      'P813']}],
-                                      'type': 'statement'}]},
-                'descriptions': {'en': {'language': 'en',
-                                        'value': 'microbial gene found in Vibrio cholerae '
-                                                 'O1 biovar El Tor str. N16961'}},
-                'labels': {'en': {'language': 'en',
-                                  'value': 'hypothetical protein    VC0876'}},
-                'sitelinks': {}}
+        data = {}
 
         params = {
             'action': "wbeditentity",
-            'id': 'Q23123900',
+            # 'id': 'Q23123900',
             'format': "json",
-            'data': data,
+            'new': 'item',
+            'data': {},
             'token': response_token.json()['query']['tokens']['csrftoken']
         }
         response = requests.post(
