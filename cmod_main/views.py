@@ -108,9 +108,9 @@ def wd_go_edit(request):
         # statementData = json.loads(json.dumps(request.POST))
         statementData = json.dumps(request.POST)
         request.session['go'] = statementData
-        credentials = json.loads(request.session['credentials'])
+        # credentials = json.loads(request.session['credentials'])
 
-        print("wd_go_edit " + str(credentials))
+        # print("wd_go_edit " + str(credentials))
 
         try:
             auth1 = OAuth1(request.session['client_key'],
@@ -181,11 +181,11 @@ def wd_go_edit(request):
                                                         data=[goStatement], use_sparql=True,
                                                         append_value=[goProp[statementDict['goClass']]])
                 print("found the item")
-                credentials["item_search"] = "success"
+                # credentials["item_search"] = "success"
                 print("Found item " + wd_item_protein.get_label())
                 pprint.pprint(wd_item_protein.get_wd_json_representation())
                 wd_item_protein.write(login)
-                credentials["write"] = "success"
+                # credentials["write"] = "success"
                 print("Wrote item " + wd_item_protein.get_label())
             except Exception as e:
                 pprint.pprint(e)
@@ -193,11 +193,11 @@ def wd_go_edit(request):
         except Exception as e:
             print(e)
             print("Wikidata edit failed")
-            credentials["login"] = "error"
-            credentials["item_search"] = "error"
-            credentials["write"] = "error"
+            # credentials["login"] = "error"
+            # credentials["item_search"] = "error"
+            # credentials["write"] = "error"
 
-        return HttpResponse(json.dumps(credentials), content_type='application/json')
+        return HttpResponse(json.dumps(statementDict), content_type='application/json')
 
         # return render(request, "cmod_main/main_page.html",  credentials)
 
