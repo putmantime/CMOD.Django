@@ -61,23 +61,24 @@ def main_page(request):
             },
             auth=auth1
         )
-        print(response_token.json())
-        #
-        # data = {"claims": [{"mainsnak": {"snaktype": "value", "property": "P680",
-        #                                  "datavalue": {"value": "Q14864384", "type": "item"}},
-        #                     "type": "statement", "rank": "normal"}]}
-        # response = requests.get(
-        #     "https://www.wikidata.org/w/api.php",
-        #     params={
-        #         'action': "wbeditentity",
-        #         'id': 'Q22990398',
-        #         'format': "json",
-        #         'data': data
-        #     },
-        #     auth=auth1
-        # )
-        #
-        # print(response.json())
+        print(response_token.json()['query']['tokens']['csrftoken'])
+
+        data = {"claims": [{"mainsnak": {"snaktype": "value", "property": "P680",
+                                         "datavalue": {"value": "Q14864384", "type": "item"}},
+                            "type": "statement", "rank": "normal"}]}
+        response = requests.get(
+            "https://www.wikidata.org/w/api.php",
+            params={
+                'action': "wbeditentity",
+                'id': 'Q22990398',
+                'format': "json",
+                'data': data,
+                'token': response_token.json()['query']['tokens']['csrftoken']
+            },
+            auth=auth1
+        )
+
+        print(response.json())
 
 
     if 'org' in request.session:
