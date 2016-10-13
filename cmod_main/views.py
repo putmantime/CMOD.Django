@@ -46,8 +46,9 @@ def main_page(request):
 
         auth1 = OAuth1(consumer_token.key,
                        client_secret=consumer_token.secret,
-                       resource_owner_key=access_token.key.decode(),
-                       resource_owner_secret=access_token.secret.decode())
+                       resource_owner_key=access_token.key,
+                       resource_owner_secret=access_token.secret)
+        print(auth1.__dict__)
         print("Reading top 10 watchlist items")
         response = requests.get(
             "https://en.wikipedia.org/w/api.php",
