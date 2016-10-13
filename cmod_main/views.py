@@ -72,7 +72,7 @@ def main_page(request):
                 'id': 'Q22990398',
                 'format': "json",
                 'data': data,
-                'token': response_token.json()['query']['tokens']['csrftoken']
+                'token': response_token.json()['query']['tokens']['csrftoken'].strip('\*')
             }
         response = requests.post(
             "https://www.wikidata.org/w/api.php", params
