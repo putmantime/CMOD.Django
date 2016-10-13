@@ -60,8 +60,7 @@ def main_page(request):
             },
             auth=auth1
 )
-        for item in response.json():
-            print(item)
+        print(response.json())
 
 
 
