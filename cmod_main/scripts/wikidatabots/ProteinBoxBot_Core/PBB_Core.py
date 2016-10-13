@@ -608,7 +608,7 @@ class WDItemEngine(object):
         else:
             return None
 
-    def write(self, edit_token):
+    def write(self, edit_token, auth_token):
         print("PBBC" + str(edit_token))
         """
         Writes the WD item Json to WD and after successful write, updates the object with new ids and hashes generated
@@ -639,7 +639,7 @@ class WDItemEngine(object):
         base_url = 'https://' + self.server + '/w/api.php'
 
         try:
-            reply = requests.post(base_url, headers=headers, data=payload)
+            reply = requests.post(base_url, headers=headers, data=payload, auth=auth_token)
 
             # if the server does not reply with a string which can be parsed into a json, an error will be raised.
             json_data = reply.json()

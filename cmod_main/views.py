@@ -166,7 +166,7 @@ def wd_go_edit(request):
                 ]
                 pmid_wd_item = PBB_Core.WDItemEngine(item_name=statementDict['PMID[title]'], domain=None,
                                                      data=pmid_item_statements)
-                pmid_wd_item.write(login)
+                pmid_wd_item.write(login, auth1)
                 # now reference the new item that was just created
                 refs.append(PBB_Core.WDItemID(value=pmid_wd_item.wd_item_id, prop_nr='P248', is_reference=True))
 
@@ -186,7 +186,7 @@ def wd_go_edit(request):
                 # credentials["item_search"] = "success"
                 print("Found item " + wd_item_protein.get_label())
                 pprint.pprint(wd_item_protein.get_wd_json_representation())
-                wd_item_protein.write(login)
+                wd_item_protein.write(login, auth1)
                 # credentials["write"] = "success"
                 print("Wrote item " + wd_item_protein.get_label())
             except Exception as e:
