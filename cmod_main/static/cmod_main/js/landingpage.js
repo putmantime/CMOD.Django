@@ -73,11 +73,13 @@ $(document).ready(function () {
                     console.log("success");
                     console.log(data);
                     window.location.href = "main_page";
+                    console.log(window.location.href);
 
                 },
                 error: function (data) {
                     console.log("error");
                     console.log(data);
+                    console.log(window.location.pathname);
                 }
             });
         },

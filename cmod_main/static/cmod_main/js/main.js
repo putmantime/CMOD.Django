@@ -49,10 +49,6 @@ $(document).ready(function () {
                         //render organism data
                         orgData.init(currentTaxa);
 
-                        //if (window.location.pathname === '/CMOD/') {
-                        //    location.href = "main_page.html?id=" + currentTaxa.Taxid;
-                        //
-                        //}
                         return false;
                     }
                 })

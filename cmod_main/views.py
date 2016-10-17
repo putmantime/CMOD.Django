@@ -22,8 +22,7 @@ from django.http import HttpResponseRedirect
 @ensure_csrf_cookie
 def index(request):
     # launch landing page
-    template = loader.get_template("cmod_main/index.html")
-    return HttpResponse(template.render())
+    return render(request, "cmod_main/index.html" ,context={"data":"None"})
 
 
 @ensure_csrf_cookie
