@@ -11,7 +11,7 @@ html, body {
 }
 
 html{
-    background: #99c2ff;
+    /*background: #385d94;*/
 }
 
 body{
@@ -415,5 +415,25 @@ iframe {
 }
 
 .main-op-annotations{
+
+}
+
+.main-landing-page {
+    height: 100%;
+    width: 100%;
+    background-color: #385d94;
+    color: whitesmoke;
+    padding-top: 15em;
+    padding-left: 50px;
+    padding-right: 50px;
+    border: solid #385d94 3px;
+    text-align: center;
+    padding-bottom: 100px;
+
+}
+
+.main-landing-page, .container-fluid {
+    height: 100%;
+    min-height: 1000px;
 
 }
