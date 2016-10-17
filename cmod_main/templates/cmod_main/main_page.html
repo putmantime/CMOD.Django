@@ -6,6 +6,7 @@
 
     {% load static %}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <!--<link rel="stylesheet" type='text/css' href="{% static 'cmod_main/css/main.css' %}"/>-->
     <link rel="stylesheet" type='text/css' href="{% static 'cmod_main/css/main.css' %}"/>
     <link rel='stylesheet' type='text/css' href="{% static 'cmod_main/css/jquery-ui.theme.css' %}"/>
     <link rel='stylesheet' type='text/css' href="{% static 'cmod_main/css/jquery-ui.structure.css' %}"/>
@@ -32,8 +33,6 @@
 
 </head>
 <body>
-{#wd credentials modal#}
-{#dialog#}
 <!--gene reference Modal-->
 <div class="modal" id="wdGeneRefModal" tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel" aria-hidden="true">
@@ -129,40 +128,7 @@
     </div>
 </div>
 <!-- Modal -->
-<div class="modal" id="wdLoginModal" tabindex="-1" role="dialog"
-     aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <img class="wd-logo" src="{% static 'cmod_main/img/GeneWikidata-logo-en.png' %}">
-                <h4 class="modal-title" id="myModalLabel">Login to Wikidata</h4>
-            </div>
-            <div class="modal-body">
-                <form id="main-login-form" class="ui-widget ui-front form-inline">
-                    <div class="form-group">
-                        <input type="text" class="form-control"
-                               id="wduserName"
-                               placeholder="Wikidata User Name"
-                               name="wduserNameItem">
-                        <input type="password" class="form-control"
-                               id="wdPassword"
-                               placeholder="Wikidata Password" name="wdPasswordItem">
-                        <button data-dismiss="modal" id="editWDButton"
-                                class="btn btn-primary"
-                                type="submit">
-                            Login to WD
-                        </button>
 
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button id='modalRefClose' type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!--?molfunc modal form -->
 <!-- Modal -->
 <div class="modal" id="goModal" tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel" aria-hidden="true">
@@ -209,168 +175,99 @@
         </div>
     </div>
 </div>
+<div class="container-fluid full">
+    <div class="row header main-header">
+        <div class="col-xs-6 col">
+            <div id="main-title"><h2>Centralized Model Organism Database</h2></div>
+        </div>
+        <div id="orgFormModule" class="col-xs-4 col orgFormDiv">
 
-
-<div class="container-fluid">
-
-    <div class="row">
-        <div class="col-md-12 main-gutter-padding">
-            <div class="main-header">
-                <div id="main-wdlogo-div">
+            <form class="form-inline ui-widget orgForm form-horizontal">
+                {# {% csrf_token %}#}
+                <div class="form-group">
+                    <label for="orgform">Organism Search: </label>
+                    <input type="text" class="form-control input-sm" id="orgform"
+                           placeholder="choose a new organism" name="orgFormItem">
                 </div>
-
-                <h1 class="main-title">Centralized Model Organism Database</h1>
-
-                <div class="row">
-                    <div class="col-md-6 main-gutter-padding">
-                        <div id="orgFormModule">
-                            <form class="main-form-div form-inline ui-widget">
-                                {# {% csrf_token %}#}
-                                <div class="form-group">
-                                    <label for="orgform"></label>
-                                    <input type="text" class="form-control formborders" id="orgform"
-                                           placeholder="choose a new microbe" name="orgFormItem">
-
-                                </div>
-                            </form>
-                        </div>
-
-                    </div>
-                    <div class="col-md-3 main-gutter-padding">
-                        <div id="geneFormModule">
-                            <form class="main-form-div form-inline ui-widget">
-                                {# {% csrf_token %}#}
-                                <div class="form-group">
-                                    <label for="geneform"></label>
-                                    <input type="text" class="form-control" id="geneform"
-                                           placeholder="choose a gene" name="geneFormItem">
-
-                                </div>
-                            </form>
-                        </div>
-
-                    </div>
-                    <div id="wd-oauth-div" class="col-md-3 main-gutter-padding" >
-                        <button style="margin-right: 15px; float:right" id="wd-oauth-button" type="button" class="btn btn-primary">
-                            <span>Authorize to Edit Wikidata</span>
-                        </button>
+            </form>
+            <div></div>
+        </div>
+        <div id="wd-oauth-div" class="col-xs-2 col">
+            <button id="wd-oauth-button" type="button"
+                    class="btn btn-xs btn-success">
+                <span>Authorize to Edit Wikidata</span>
+            </button>
+        </div>
+    </div>
+    <div class="row top-row">
+        <div class="col-xs-3 col">
+            <div id="orgDataModule" class="box">
+                <div class="main-org-boxheader">
+                    <div id='main-organism-name'>
+                        <h4><strong><i>{{ org_data.Name }}</i></strong></h4>
                     </div>
                 </div>
+                <div id="orgData" class="org-data-box">
 
+                    <div id="taxid" class="main-data"><h6>NCBI Taxonomy ID: </h6>{{ Taxid }}</div>
+                    <div id="QID" class="main-data"><h6>Wikidata QID: </h6>{{ QID }}</div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-9 col">
+            <div id="jbrowseModule" class="box">
+                <div id="jbrowse"></div>
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-3 main-gutter-padding">
-            <div id="orgDataModule" class="main-orgRow main-data-borders">
-                <div class="main-boxheader">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h2 class="main-box-title">Organism</h2>
+    <div class="row bottom-row">
+        <div class="col-xs-3 col">
+            <div id="geneDataModule" class="box">
+                <div class="main-gene-boxheader">
+                    <form id="geneFormModule" class="form-inline ui-widget form-horizontal">
+                        {# {% csrf_token %}#}
+                        <div class="form-group input-sm">
+                            <label for="geneform">Gene Search: </label>
+                            <input type="text" class="form-control" id="geneform"
+                                   placeholder="choose a gene" name="geneFormItem">
                         </div>
-                    </div>
+                    </form>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div id="orgData" class="main-data-box">
-                            <div id="taxid" class="main-data"><h5>NCBI Taxonomy ID: </h5>{{ Taxid }}</div>
-                            <div id="QID" class="main-data"><h5>Wikidata QID: </h5>{{ QID }}</div>
-
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-        <div class="col-md-9 main-gutter-padding">
-            <div id="jbrowseModule" class="main-orgRow main-data-borders">
-                <div class="main-jb-boxheader">
-                    <div class="row">
-                        <div class="col-md-2">
-
-                        </div>
-                        <div id='main-organism-name' class="col-md-10">
-
-                            <h3><i>{{ Name }}</i></h3>
-
-                        </div>
-                    </div>
-                </div>
-                <div id="jbrowse">
-
-                </div>
-            </div>
-
-        </div>
-
-    </div>
-    <div class="row">
-        <div class="col-md-3 main-gutter-padding">
-            <div id="geneDataModule" class="main-gene-protein-row main-data-borders">
-                <div class="main-boxheader">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h2 class="main-box-title">Identifiers</h2>
-                        </div>
-                    </div>
-                </div>
-                <div style="padding-left:20px; padding-right: 20px; padding-top: 10px; padding-bottom:10px;">
+                <div class="tab-data">
                     <ul id='gene-prot-tabs' class="nav nav-tabs" role="tablist">
                         <li role="presentation" class="active"><a href="#gene-tab" aria-controls="gene"
                                                                   role="tab"
-                                                                  data-toggle="tab">Gene</a></li>
+                                                                  data-toggle="tab">Gene</a>
+                        </li>
                         <li role="presentation"><a href="#prot-tab" aria-controls="protein" role="tab"
                                                    data-toggle="tab">Protein
-                        </a></li>
+                        </a>
+                        </li>
                     </ul>
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active" id="gene-tab">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div id="geneDataBox" class="main-data-box">
-                                        <div style='margin-left: -10px; margin-right: -10px;' id="geneData">
-                                        </div>
-                                    </div>
-                                </div>
+                            <div id="geneDataBox">
+                                <div id="geneData"></div>
                             </div>
                         </div>
-                        <div role="tabpanel" class="tab-pane active" id="prot-tab">
-                            <div id="proteinDataModule">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div id="protDataBox" class="main-data-box">
-                                            <div style='margin-left: -10px; margin-right: -10px;'
-                                                 id="protData"></div>
-                                        </div>
-                                    </div>
-                                </div>
+                        <div role="tabpanel" class="tab-pane" id="prot-tab">
+                            <div id="protDataBox">
+                                <div id="protData"></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <div class="col-md-9 main-gutter-padding ">
-            <div id='goBoxes' class="main-gene-protein-row main-data-borders ">
-                <div class="main-boxheader">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h2 class="main-box-title">Annotations</h2>
-                        </div>
-                    </div>
-                </div>
-                <div style="padding-left:20px; padding-right: 20px; padding-top: 10px; padding-bottom:10px;">
+        <div class="col-xs-9 col main-annotations-column">
+            <div id='goBoxes' class="box">
+                <div class="main-annotations-nav main-annotations">
                     <div>
-
                         <!-- Nav tabs -->
                         <ul id='annotations-tabs' class="nav nav-tabs" role="tablist">
-                            <li role="presentation" class="active"><a id='mfTab' href="#mf"
-                                                                      aria-controls="molfunc"
-                                                                      role="tab"
-                                                                      data-toggle="tab">Molecular Function</a>
-                            </li>
+                            <li role="presentation"><a id='mfTab' href="#mf" aria-controls="molfunc" role="tab"
+                                                       data-toggle="tab">Molecular Function</a></li>
                             <li role="presentation"><a id='bpTab' href="#bp" aria-controls="bioproc" role="tab"
                                                        data-toggle="tab">Biological Process</a></li>
                             <li role="presentation"><a id='ccTab' href="#cc" aria-controls="cellcomp" role="tab"
@@ -381,142 +278,155 @@
                                                        data-toggle="tab">Enzymatic Action</a></li>
                             <li role="presentation"><a id='opTab' href="#op" aria-controls="operon" role="tab"
                                                        data-toggle="tab">Operon (0)</a></li>
-                            <li role="presentation"><a id='cmTab' href="#cm" aria-controls="chemical-mutants"
-                                                       role="tab"
-                                                       data-toggle="tab">Mutants (0) </a></li>
+                            <li role="presentation" class="active"><a id='gpTab' href="#gp"
+                                                                      aria-controls="genomic-position"
+                                                                      role="tab"
+                                                                      data-toggle="tab">Genomic Position</a></li>
                         </ul>
-
-                        <!-- Tab panes -->
-                        <div class="tab-content">
-                            <div role="tabpanel" class="tab-pane active" id="mf">
-                                <div class="main-go-box row">
-                                    <div class="col-md-5"><h5>Molecular Function</h5></div>
-                                    <div class="col-md-3"><h5>Gene Ontology ID</h5></div>
-                                    <div class="col-md-2"><h5>Evidence</h5></div>
-                                    <div class="col-md-2"><h5>Reference</h5></div>
-                                    <div id="molfuncdata" class="main-go-data"></div>
-                                    <div class="main-modal-div">
-                                        <!-- Button trigger modal -->
-                                        <button id='mfbutton' type="button"
-                                                class="main-goButton btn btn-primary"
-                                                data-toggle="modal"
-                                                data-target="#goModal">Add a Molecular Function
-                                        </button>
-                                    </div>
-                                </div>
+                    </div>
+                </div>
+                <div class="tab-content main-annotations-content">
+                    <div class="tab-pane" role="tabpanel" id="mf">
+                        <div class="main-go-box row main-annotations main-annotations-content-header">
+                            <div class="col-xs-5"><h5>Molecular Function</h5></div>
+                            <div class="col-xs-3"><h5>Gene Ontology ID</h5></div>
+                            <div class="col-xs-2"><h5>Evidence</h5></div>
+                            <div class="col-xs-2"><h5>Reference</h5></div>
+                        </div>
+                        <div class="main-annotations-content-data">
+                            <div id="molfuncdata" class="main-go-data main-annotations-content-data-content">
                             </div>
-                            <div role="tabpanel" class="tab-pane" id="bp">
-                                <div class="main-go-box row">
-                                    <div class="col-md-5"><h5>Biological Process</h5></div>
-                                    <div class="col-md-3"><h5>Gene Ontology ID</h5></div>
-                                    <div class="col-md-2"><h5>Evidence</h5></div>
-                                    <div class="col-md-2"><h5>Reference</h5></div>
-                                    <div id="bioprocdata" class="main-go-data"></div>
-                                    <div class="main-modal-div">
-                                        <!-- Button trigger modal -->
-                                        <button id='bpbutton' type="button"
-                                                class="main-goButton btn btn-primary"
-                                                data-toggle="modal"
-                                                data-target="#goModal">Add a Biological Process
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div role="tabpanel" class="tab-pane" id="cc">
-                                <div class="main-go-box row">
-                                    <div class="col-md-5"><h5>Cellular Component</h5></div>
-                                    <div class="col-md-3"><h5>Gene Ontology ID</h5></div>
-                                    <div class="col-md-2"><h5>Evidence</h5></div>
-                                    <div class="col-md-2"><h5>Reference</h5></div>
-                                    <div id="celcompdata" class="main-go-data"></div>
-                                    <div class="main-modal-div">
-                                        <!-- Button trigger modal -->
-                                        <button id='ccbutton' type="button"
-                                                class="main-goButton btn btn-primary"
-                                                data-toggle="modal"
-                                                data-target="#goModal">Add a Cellular Component
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div role="tabpanel" class="tab-pane" id="ip">
-                                <div id="interProBoxes">
-                                    <div class="main-go-box row">
-                                        <div class="col-md-5"><h5>InterPro Domain</h5></div>
-                                        <div class="col-md-3"><h5>InterPro ID</h5></div>
-                                        <div class="col-md-2"><h5></h5></div>
-                                        <div class="col-md-2"><h5>Reference</h5></div>
-                                        <div id="interprodata" class="main-go-data"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div role="tabpanel" class="tab-pane" id="ez">
-                                <div id="enzymeBoxes">
-                                    <div class="main-go-box row">
-                                        <div class="col-md-2"><h5>EC Number</h5></div>
-                                        <div class="col-md-4"><h5>Reaction</h5></div>
-                                        <div class="col-md-2"><h5>Products</h5></div>
-                                        <div class="col-md-2"><h5>Substrates</h5></div>
-                                        <div class="col-md-2"><h5>Reference</h5></div>
-                                        <div id="enzymeprodata" class="main-go-data"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div role="tabpanel" class="tab-pane" id="op">
-                                <div id="operonBox">
-                                    <div class="main-operon-box row">
-                                        <div class="col-md-2"><h5>Operon Identifier</h5></div>
-                                        <div class="col-md-4"><h5>Wikidata Identifier</h5></div>
-                                        <div class="col-md-2"><h5></h5></div>
-                                        <div class="col-md-2"><h5></h5></div>
-                                        <div class="col-md-2"><h5>Reference</h5></div>
-
-                                    </div>
-                                    <div id="operondata" class="main-operon-data"></div>
-                                    <div class="main-operon-genes-box row">
-                                        <div class="col-md-4"><h5>Gene Name</h5></div>
-                                        <div class="col-md-1"><h5>Entrez ID</h5></div>
-                                        <div class="col-md-1"><h5>Locus Tag</h5></div>
-                                        <div class="col-md-1"><h5>Wikidata</h5></div>
-                                        <div class="col-md-1"><h5>Genomic Start</h5></div>
-                                        <div class="col-md-1"><h5>Genomic End</h5></div>
-                                        <div class="col-md-2"><h5>Strand</h5></div>
-                                        <div class="col-md-1"><h5>Reference</h5></div>
-
-                                    </div>
-                                    <div id="operonGenesdata" class="main-operon-genes-data"></div>
-                                </div>
-                            </div>
-                            <div role="tabpanel" class="tab-pane" id="cm">
-                                <div id="chemMutBox">
-                                    <div class="main-go-box row">
-                                        <div class="col-md-2"><h5>Type</h5></div>
-                                        <div class="col-md-2"><h5>Nucleotide Change</h5></div>
-                                        <div class="col-md-2"><h5>Amino Acid Change</h5></div>
-                                        <div class="col-md-2"><h5>Genome Coordinate</h5></div>
-                                        <div class="col-md-2"><h5></h5></div>
-                                        <div class="col-md-2"><h5>Reference</h5></div>
-                                        <div id="chemMutData" class="main-go-data"></div>
-                                    </div>
-                                </div>
+                            <div class="main-annotations-content-data-modal main-modal-div">
+                                <button id='mfbutton' type="button"
+                                        class="main-goButton btn btn-xs btn-primary"
+                                        data-toggle="modal"
+                                        data-target="#goModal">Add a Molecular Function
+                                </button>
                             </div>
                         </div>
                     </div>
+                    <div class="tab-pane" role="tabpanel" id="bp">
+                        <div class="main-go-box row main-annotations main-annotations-content-header">
+                            <div class="col-xs-5"><h5>Biological Process</h5></div>
+                            <div class="col-xs-3"><h5>Gene Ontology ID</h5></div>
+                            <div class="col-xs-2"><h5>Evidence</h5></div>
+                            <div class="col-xs-2"><h5>Reference</h5></div>
+
+                        </div>
+                        <div class="main-annotations-content-data">
+                            <div id="bioprocdata" class="main-go-data main-annotations-content-data-content">
+                            </div>
+                            <div class="main-annotations-content-data-modal main-modal-div">
+                                <button id='bpbutton' type="button"
+                                        class="main-goButton btn btn-xs btn-primary"
+                                        data-toggle="modal"
+                                        data-target="#goModal">Add a Biological Proccess
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" role="tabpanel" id="cc">
+                        <div class="main-go-box row main-annotations main-annotations-content-header">
+                            <div class="col-xs-5"><h5>Cellular Component</h5></div>
+                            <div class="col-xs-3"><h5>Gene Ontology ID</h5></div>
+                            <div class="col-xs-2"><h5>Evidence</h5></div>
+                            <div class="col-xs-2"><h5>Reference</h5></div>
+                        </div>
+                        <div class="main-annotations-content-data">
+                            <div id="celcompdata" class="main-go-data main-annotations-content-data-content">
+                            </div>
+                            <div class="main-annotations-content-data-modal main-modal-div">
+                                <button id='ccbutton' type="button"
+                                        class="main-goButton btn btn-xs btn-primary"
+                                        data-toggle="modal"
+                                        data-target="#goModal">Add a Cellular Component
+                                </button>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" role="tabpanel" id="ip">
+                        <div class="main-go-box row main-annotations main-annotations-content-header">
+                            <div class="col-md-5"><h5>InterPro Domain</h5></div>
+                            <div class="col-md-3"><h5>InterPro ID</h5></div>
+                            <div class="col-md-2"><h5></h5></div>
+                            <div class="col-md-2"><h5>Reference</h5></div>
+                        </div>
+                        <div class="main-annotations-content-data">
+                            <div id="interprodata" class="main-go-data main-annotations-content-data-content"></div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" role="tabpanel" id="ez">
+                        <div class="main-go-box row main-annotations main-annotations-content-header">
+                            <div class="col-xs-2"><h5>EC Number</h5></div>
+                            <div class="col-xs-4"><h5>Reaction</h5></div>
+                            <div class="col-xs-2"><h5>Products</h5></div>
+                            <div class="col-xs-2"><h5>Substrates</h5></div>
+                            <div class="col-xs-2"><h5>Reference</h5></div>
+                        </div>
+                        <div class="main-annotations-content-data">
+                            <div id="enzymeprodata" class="main-go-data main-annotations-content-data-content"></div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" role="tabpanel" id="op">
+                        <div id="operonBox">
+                            <div class="main-operon-box row main-annotations">
+                                <div class="col-xs-2"><h5>Operon Identifier</h5></div>
+                                <div class="col-xs-4"><h5>Wikidata Identifier</h5></div>
+                                <div class="col-xs-2"><h5></h5></div>
+                                <div class="col-xs-2"><h5></h5></div>
+                                <div class="col-xs-2"><h5>Reference</h5></div>
+                            </div>
+                            <div id="operondata" class="main-operon-data"></div>
+                            <div class="main-operon-genes-box row main-annotations">
+                                <div class="col-xs-4"><h5>Gene Name</h5></div>
+                                <div class="col-xs-1"><h5>Entrez ID</h5></div>
+                                <div class="col-xs-1"><h5>Locus Tag</h5></div>
+                                <div class="col-xs-1"><h5>Wikidata</h5></div>
+                                <div class="col-xs-1"><h5>Genomic Start</h5></div>
+                                <div class="col-xs-1"><h5>Genomic End</h5></div>
+                                <div class="col-xs-2"><h5>Strand</h5></div>
+                                <div class="col-xs-1"><h5>Reference</h5></div>
+
+                            </div>
+                            <div id="operonGenesdata" class="main-operon-genes-data"></div>
+                        </div>
+
+                    </div>
+                    <div class="tab-pane active" role="tabpanel" id="gp">
+                        <div class="main-go-box row main-annotations main-annotations-content-header">
+                            <div class="col-xs-2"><h5>Chromosome</h5></div>
+                            <div class="col-xs-2"><h5>Genomic Start</h5></div>
+                            <div class="col-xs-2"><h5>Genomic End</h5></div>
+                            <div class="col-xs-2"><h5>Strand</h5></div>
+                            <div class="col-xs-2"><h5></h5></div>
+                            <div class="col-xs-2"><h5>Reference</h5></div>
+                        </div>
+                        <div class="main-annotations-content-data">
+                             <div id="genPosData" class="main-go-data main-annotations-content-data-content"></div>
+                        </div>
+                    </div>
                 </div>
+
             </div>
+
         </div>
     </div>
-
-
-    <div class="row main-gutter-padding">
-        <div class="main-footer col-md-12">
-            <div class="row main-gutter-padding">
-
-            </div>
+    <div class="row footer">
+        <div class="col-xs-12 col">
+            <div class="main-footer"></div>
         </div>
-
     </div>
 </div>
-</body>
 
+</body>
 </html>
+
+
+<!--<div class="row">-->
+<!--<div class="col-md-12 main-gutter-padding">-->
+<!--<div class="main-header">-->
+<!--<div id="main-wdlogo-div">-->
+<!--</div>-->
+
+<!--<h1 class="main-title">Centralized Model Organism Database</h1>-->

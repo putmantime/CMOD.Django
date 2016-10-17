@@ -1,211 +1,155 @@
-/**{border: dashed black 1px;}*/
+
+/**{  border: dashed black 1px;  }*/
+html, body {
+    /*min-height: 600px;*/
+    min-width: 1150px;
+    max-width: 2000px;
+    max-height: 1200px;
+    height: 100%;
+    padding: 5px;
+    margin: auto auto;
+}
+
+html{
+    background: #99c2ff;
+}
+
+body{
+
+    border-radius: 10px;
+
+
+}
+
+
 iframe {
     width: 100%;
-    height: 345px;
-
-}
-
-html, body {
     height: 100%;
-}
-
-.main-landing-page, .container-fluid {
-    height: 100%;
-    min-height: 1000px;
 
 }
 
-
-#main-wdlogo-div {
-    float: right;
-    border-radius: 2px;
-    background: whitesmoke
-}
-
-.main-landing-page {
-    height: 100%;
+#jbrowse {
     width: 100%;
+    height: 100%;
+
+}
+
+.full {
+    height: 100%;
+}
+
+.top-row {
+    height: 35%;
+}
+
+.bottom-row {
+    height: 50%;
+}
+
+.box {
+    border: solid #99c2ff 2px;
+    border-radius: 3px;
+    height: 100%;
+    overflow:hidden;
+
+}
+
+.jb-box {
+    border: solid #99c2ff 2px;
+    border-radius: 3px;
+    height: 100%;
+
+}
+
+.col {
+    padding: 1px;
+    height: 100%
+}
+
+.footer {
+    height: 50px;
+}
+
+.header {
+    height: 70px;
+    /*min-height: 50px;*/
+
+}
+
+.main-header {
     background-color: #385d94;
     color: whitesmoke;
-    padding-top: 15em;
-    padding-left: 50px;
-    padding-right: 50px;
-    border: solid #385d94 3px;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    margin-bottom: 1px;
+}
+
+.main-footer {
+    background-color: #385d94;
+    color: whitesmoke;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    height: 100%
+
+}
+
+#main-title {
+    padding-left: 10px
+}
+
+.main-boxheader {
+    background-color: #99c2ff;
+    height: 50px;
+    border-top-right-radius: 1px;
+    border-top-left-radius: 1px;
+    color: #385d94;
+    padding: 5px;
+    display: flex;
+
+}
+
+.main-gene-boxheader {
+    background-color: #99c2ff;
+    height: 50px;
+    border-top-right-radius: 1px;
+    border-top-left-radius: 1px;
+    color: #385d94;
+    padding-right: 10px;
     text-align: center;
-    padding-bottom: 100px;
-
 }
 
-#main-jb-footer {
-    height: 5px;
-    background: #99c2ff;
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
-    margin-top: -5px;
-}
-
-.main-data-footer {
-    height: 20px;
-    background: #99c2ff;
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
-
-}
-
-.main-title {
-    border-bottom: solid whitesmoke 3px;
+.main-org-boxheader {
+    background-color: #99c2ff;
+    height: 50px;
+    border-top-right-radius: 1px;
+    border-top-left-radius: 1px;
+    color: #385d94;
     padding: 5px;
 }
 
-.main-data-box {
+#wd-oauth-div {
+    padding: 25px;
+    text-align: right;
+}
+
+#orgFormModule {
+    padding-top: 21px;
+
+}
+
+.org-data-box {
     padding: 10px;
     overflow: auto;
-    height: 480px;
-
+    height: 65%;
 }
 
 .main-data {
     color: #385d94;
     border-bottom: solid #385d94 1px;
-
-}
-
-.main-box-title {
-    border-bottom: solid #385d94 3px;
-    margin-top: .3em;
-    padding: 5px;
-}
-
-.main-gutter-padding {
-    padding: 2px;
-}
-
-.main-data-borders {
-    border: solid #99c2ff 2px;
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-.main-boxheader {
-    background-color: #99c2ff;
-    height: 80px;
-    border-top-right-radius: 6px;
-    border-top-left-radius: 6px;
-    color: #385d94;
-    padding-left: 10px;
-    padding-right: 10px;
-
-}
-
-.main-jb-boxheader {
-    background-color: #99c2ff;
-    height: 60px;
-    border-top-right-radius: 6px;
-    border-top-left-radius: 6px;
-    color: #385d94;
-    padding-left: 10px;
-    padding-right: 10px;
-}
-
-.main-header {
-    min-height: 130px;
-    margin-top: 5px;
-    background-color: #385d94;
-    color: whitesmoke;
-    padding: 10px;
-    border: solid #385d94 3px;
-    border-radius: 10px;
-
-}
-
-.main-footer {
-    min-height: 40px;
-    margin-bottom: 5px;
-    background-color: #385d94;
-    color: whitesmoke;
-    padding: 10px;
-    border: solid #385d94 3px;
-    border-radius: 10px;
-
-}
-
-.main-orgRow {
-    height: 400px;
-
-}
-
-.main-form-div {
-    padding-left: 15px;
-    padding-right: 15px;
-}
-
-.main-gene-protein-row {
-    height: 580px;
-
-}
-
-.main-go-box {
-    /*min-height: 180px;*/
-    /*border: solid #cce0ff 2px;*/
-    /*border-radius: 10px;*/
-    margin-top: 5px;
-    color: #385d94;
-    /*border-bottom: solid #D3D9F7 3px;*/
-
-}
-.main-operon-box {
-    min-height: 30px;
-    /*border: solid #cce0ff 2px;*/
-    /*border-radius: 10px;*/
-    margin-top: 5px;
-    color: #385d94;
-    border-bottom: solid #D3D9F7 3px;
-
-}
-
-.main-operon-genes-box {
-    min-height: 30px;
-    /*border: solid #cce0ff 2px;*/
-    /*border-radius: 10px;*/
-    margin-top: 5px;
-    color: #385d94;
-    border-bottom: solid #D3D9F7 3px;
-
-
-}
-.main-annotaion-box {
-    min-height: 40px;
-    border: solid #cce0ff 2px;
-    border-radius: 10px;
-    margin-top: 5px;
-    color: #385d94;
-
-}
-
-.main-go-boxheader {
-    background-color: #cce0ff;
-    min-height: 40px;
-    border-top-right-radius: 8px;
-    border-top-left-radius: 8px;
-
-    color: #385d94;
-    padding: 5px;
-
-}
-
-#main-go-form {
-    margin-bottom: 15px;
-}
-
-.main-go-form-box-footer {
-    background: #cce0ff;
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
-    padding-top: 20px;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-bottom: 5px;
-
 }
 
 .main-dataul {
@@ -215,132 +159,50 @@ html, body {
 
 .main-go-data {
     padding: 20px;
-    height: 320px;
     overflow: auto;
-
+    /*border: dashed black 1px;*/
+    color: #385d94;
+    /*position: absolute;*/
+    /*top: 20%;*/
+    /*border-top: solid #99c2ff 1px;*/
+    width: 98%;
+    /*max-height: 52%;*/
+    /*margin-top: 5px;*/
+    /*position: absolute;*/
+    /*top:0;*/
 }
 
-.main-operon-data {
-    padding: 20px;
-    height: 50px;
+.main-go-box {
 
-
-}
-.main-operon-genes-data {
-    padding: 20px;
-    height: 300px;
-    overflow: auto;
-
-}
-
-#goBoxes {
-    /*padding: 10px*/
-}
-
-#enzymeBoxes {
-    /*padding: 10px;*/
-}
-#interProBoxes {
-    /*padding: 10px;*/
-}
-
-#geneAnnotationBoxes {
-    padding: 10px;
-}
-
-#goTermForm.ui-autocomplete-loading {
-    background-image: url('../img/spin.gif');
-    background-position: left center;
-    background-repeat: no-repeat;
-}
-
-
-
-.form-control {
-    padding-left: 25px;
     margin-top: 5px;
-    margin-bottom: 5px;
-
-}
-
-.main-go-buttons {
-    width: 100%;
-    margin-top: 10px;
-    /*margin-bottom: 10px*/
-}
-
-.main-modal-div {
-    padding-left: 10px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
-
-/*.main-modal-position {*/
-    /*margin-top: -500px;*/
-/*}*/
-
-.wd-logo {
-    max-height: 40px;
-    float: right;
-    clear: right;
-}
-
-.modal-dialog {
-    position: relative;
-
-    height: 500px;
-    top: 50%;
-    /*margin-top: 300px;*/
-}
-
-#hpylori {
-    max-width: 100%;
-    height: auto;
-    text-align: center;
-    margin-top: 50px;
-}
-
-.wd-logo-div {
-    background: white;
-    border-radius: 20px;
-    height: 225px;
-    width: 300px;
-    text-align: center;
-}
-
-#indexFormModule {
-    margin-top: 100px
-}
-
-#wd-login-button {
-    background: whitesmoke;
     color: #385d94;
+    height: 100%;
+
 }
 
-#loginSpin {
-    background-image: url('../img/spin.gif');
-    background-position: left center;
-    background-repeat: no-repeat;
-}
-
-#main-ref-button {
-    padding: 5px;
-}
-
-.main-button-ref {
-    border: solid #385d94 1px;
-    border-radius: 5px;
-    max-height: 20px;
-    max-width: 20px;
-    background: whitesmoke;
-    color: #385d94;
+#main-organism-name {
     text-align: center;
-    padding: 5px;
-    margin-left: 25px;
+}
+
+#geneFormModule {
+    margin-bottom: 100px;
+    text-align: right;
+}
+
+#main-gene-name {
+    text-align: center;
+}
+
+.tab-data {
+    padding: 5px
+}
+
+#gene-prot-tabs.nav-tabs li {
+    width: 50%;
 }
 
 .ui-autocomplete {
-    max-height: 600px;
+    max-height: 200px;
     overflow-y: scroll;
     overflow-x: hidden;
     z-index: 0;
@@ -399,33 +261,159 @@ html, body {
     background-image: none;
 }
 
-
-
 #evdocbutton {
-    float:right;
-    display:block;
-    margin-right:0;
-    clear:left;
-    margin-left:10px;
+    float: right;
+    display: block;
+    margin-right: 0;
+    clear: left;
+    margin-left: 10px;
 }
 
-#evCodeChoice{
+#hpylori {
+    max-width: 100%;
+    height: auto;
+    text-align: center;
+    margin-top: 50px;
+}
+
+#evCodeChoice {
     font-family: "Roboto", "Lucida Grande", Verdana, Arial, sans-serif;
-    padding:5px
+    padding: 5px
 }
 
-.hov:hover{
+.hov:hover {
     color: #385d94;
 
-}​,
+}
 
+​,
 .dropdown-menu {
     max-height: 200px;
     overflow: auto;
- }
+}
+
+.wd-logo {
+    max-height: 40px;
+    float: right;
+    clear: right;
+}
+
+.modal-dialog {
+    position: relative;
+    height: 500px;
+    top: 50%;
+    /*margin-top: 300px;*/
+}
 
 
- .dat-space-bottom{
-     margin-bottom: 5px;
-     margin-top: 5px
- }
+
+.main-button-ref {
+
+}
+
+.main-operon-box {
+    min-height: 20px;
+    /*border: solid #cce0ff 2px;*/
+    /*border-radius: 10px;*/
+
+    margin-top: 5px;
+    color: #385d94;
+    border-bottom: solid #D3D9F7 1px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.main-operon-genes-box {
+    min-height: 20px;
+    /*border: solid #cce0ff 2px;*/
+    /*border-radius: 10px;*/
+    margin-top: 5px;
+    color: #385d94;
+    border-bottom: solid #D3D9F7 1px;
+
+}
+
+#goTermForm.ui-autocomplete-loading {
+    background-image: url('../img/spin.gif');
+    background-position: left center;
+    background-repeat: no-repeat;
+}
+
+.form-control {
+    padding-left: 25px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+
+}
+
+.main-annotations {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+
+
+
+
+.main-modal-div {
+    /*position: absolute;*/
+    /*bottom: 2%;*/
+    padding-left:5px;
+    /*height:10%;*/
+    /*position: absolute;*/
+    /*bottom:0;*/
+    /*width: 100%*/
+
+}
+
+.main-annotations-column {
+
+    height: 100%
+}
+
+.main-annotations-nav {
+
+    height: 20%
+}
+
+.main-annotations-content {
+    overflow-y: auto;
+    overflow-x: hidden;
+    height:70%
+
+}
+
+.main-annotations-content-header {
+    height: 20%
+}
+
+.main-annotations-content-data {
+
+    height: 80%
+}
+
+.main-annotations-content-data-content {
+
+    height: 90%;
+    overflow: auto;
+}
+
+.main-annotations-content-data-modal {
+    padding-top:5px;
+    height: 10%;
+    position:absolute;
+    bottom:0;
+    right:1px;
+    left:1px;
+    background: white;
+    border:solid #99c2ff 2px;
+    border-radius: 0 0 3px 3px;
+}
+
+.main-op-annotations{
+
+}

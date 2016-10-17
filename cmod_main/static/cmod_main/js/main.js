@@ -122,6 +122,7 @@ $(document).ready(function () {
                         goData.init(this.currentProtein[1]);
                         operonData.init(this.currentGene[1]);
                         interProData.init(this.currentProtein[1]);
+                        genPosData.init(this.currentGene);
                         //Render the data into the gene and protein boxes
                         geneData.init(this.currentGene);
                         proteinData.init(this.currentProtein);
@@ -167,6 +168,7 @@ $(document).ready(function () {
                 operonData.init(first_gene[1]);
                 proteinData.init(first_protein);
                 interProData.init(first_protein[1]);
+                genPosData.init(first_gene);
                 //goData.init(first_protein[1]);
                 goData.init(first_protein[1]);
                 goFormAll.init(first_protein[2]);
@@ -344,8 +346,9 @@ $(document).ready(function () {
                     });
                 },
                 select: function (event, ui) {
-                    goFormAll.goFormData["PMID"] = {'pmid': ui.item.id,
-                                                    'title': ui.item.label
+                    goFormAll.goFormData["PMID"] = {
+                        'pmid': ui.item.id,
+                        'title': ui.item.label
                     };
 
                     //console.log(goFormAll.goFormData);
@@ -480,13 +483,50 @@ $(document).ready(function () {
                 "<div class='main-data'> <h5>Gene Name: </h5><a target='_blank' href='http://www.ncbi.nlm.nih.gov/gene/?term=<%= entrez %>'><%= name %></a> </div>" +
                 "<div class='main-data'> <h5>Entrez ID: </h5> <a target='_blank' href='http://www.ncbi.nlm.nih.gov/gene/?term=<%= entrez %>'><%= entrez %></a></div>" +
                 "<div class='main-data'> <h5>Wikidata ID: </h5> <a target='_blank' href='https://www.wikidata.org/wiki/<%= qid %>'><%= qid %></a></div>" +
-                "<div class='main-data'> <h5>NCBI Locus Tag: </h5> <a target='_blank' href='http://www.ncbi.nlm.nih.gov/gene/?term=<%= locus_tag %>'><%= locus_tag %></a></div>" +
-                "<div class='main-data'> <h5>Genomic Start: </h5> <%= gen_start %></div>" +
-                "<div class='main-data'> <h5>Genomic End: </h5> <%= gen_end %></div>" +
-                "<div class='main-data'> <h5>Genomic Strand: </h5> <%= strand %></div>"
+                "<div class='main-data'> <h5>NCBI Locus Tag: </h5> <a target='_blank' href='http://www.ncbi.nlm.nih.gov/gene/?term=<%= locus_tag %>'><%= locus_tag %></a></div>"
+
             );
             this.$geneD.html(template(data));
             geneRefModal_obj.init(this.$annotations, '-------', '-------');
+        }
+    };
+
+    var genPosData = {
+        init: function (gene) {
+            this.cacheDOM();
+            this.render(gene);
+        },
+        cacheDOM: function () {
+            this.$gp = $('#genPosData');
+        },
+        render: function (gene_data) {
+            var data = {
+                "accession": gene_data[7],
+                "genStart": gene_data[4],
+                "genEnd": gene_data[5],
+
+            };
+            if (gene_data[6] === 'http://www.wikidata.org/entity/Q22809711') {
+                data['strand'] = 'Reverse';
+            }
+            else {
+                data['strand'] = 'Forward';
+            }
+
+
+            var template = _.template(
+                "<div class='row main-dataul'>" +
+                "<div class='col-xs-2'><h5><%= accession %></h5></div>" +
+                "<div class='col-xs-2'><h5><%= genStart %></h5></div>" +
+                "<div class='col-xs-2'><h5><%= genEnd %></h5></div>" +
+                "<div class='col-xs-2'><h5><%= strand %></h5></div>" +
+                "<div class='col-xs-2'></div>" +
+                "<div id='main-ref-button'class='col-xs-2'>" +
+                "</div></div>"
+            );
+
+            this.$gp.html(template(data));
+
         }
     };
 //////render the protein dat in the Protein box///////
@@ -498,7 +538,7 @@ $(document).ready(function () {
 
         },
         cacheDOM: function () {
-            this.$pd = $("#proteinDataModule");
+            this.$pd = $("#protDataBox");
             this.$ul = this.$pd.find('ul');
             this.$protD = this.$pd.find('#protData');
             this.template = this.$pd.find('#protein-template').html();
@@ -559,13 +599,13 @@ $(document).ready(function () {
 
             var go_template = _.template(
                 "<div class=\"row main-dataul\">" +
-                "<div class=\"col-md-5\"><h5><%= label %></h5></div>" +
-                "<div class=\"col-md-3\">" +
+                "<div class=\"col-xs-5\"><h5><%= label %></h5></div>" +
+                "<div class=\"col-xs-3\">" +
                 "<a target=\"_blank\" href=http://amigo.geneontology.org/amigo/term/<%= goid %>><h5><%= goid %></h5></a></div>" +
-                "<div class=\"col-md-2\">" +
+                "<div class=\"col-xs-2\">" +
                 "<a target=\"_blank\" href='<%= evi_url %>'><h5><%= evi_label %></h5></a></div>" +
-                "<div id='main-ref-button'class=\"col-md-2\">" +
-                "<button type='button' id=<%= referenceID %> class='main-button-ref btn btn-primary div-ref-but' ></button></div>" +
+                "<div id='main-ref-button'class=\"col-xs-2\">" +
+                "<button type='button' id=<%= referenceID %> class='main-button-ref btn btn-default div-ref-but' ></button></div>" +
                 "</div>" +
                 "</div>");
             return (go_template(data))
@@ -659,8 +699,8 @@ $(document).ready(function () {
             this.render(enzData);
         },
         cacheDOM: function () {
-            this.$ec = $('#enzymeBoxes');
-            this.$ecnum = this.$ec.find('#enzymeprodata');
+
+            this.$ecnum = $('#enzymeprodata');
             this.$ezTab = $('#ezTab');
         },
         generate_ec_template: function (ecnumb) {
@@ -669,12 +709,12 @@ $(document).ready(function () {
             };
             var ec_template = _.template(
                 "<div class='row main-dataul'>" +
-                "<div class='col-md-2'><h5><%= ecnumber %></h5></div>" +
-                "<div class='col-md-4'></div>" +
-                "<div class='col-md-2'></div>" +
-                "<div class='col-md-2'></div>" +
-                "<div id='main-ref-button'class='col-md-2'>" +
-                "<button type='button' id='<%= ecnumber %>' class='main-button-ref btn btn-primary div-ref-but' ></button></div>" +
+                "<div class='col-xs-2'><h5><%= ecnumber %></h5></div>" +
+                "<div class='col-xs-4'></div>" +
+                "<div class='col-xs-2'></div>" +
+                "<div class='col-xs-2'></div>" +
+                "<div id='main-ref-button'class='col-xs-2'>" +
+                "<button type='button' id='<%= ecnumber %>' class='main-button-ref btn btn-default div-ref-but' ></button></div>" +
                 "</div></div>");
             return (ec_template(data))
 
@@ -713,8 +753,7 @@ $(document).ready(function () {
 
         },
         cacheDOM: function () {
-            this.$ip = $('#interProBoxes');
-            this.$ipData = this.$ip.find('#interprodata');
+            this.$ipData = $('#interprodata');
             this.$ipTab = $('#ipTab');
 
         },
@@ -734,11 +773,11 @@ $(document).ready(function () {
 
         },
         ipInput: function (iplable, ipid) {
-            return "<div class=\"row main-dataul\"><div class=\"col-md-5\"><h5>" +
+            return "<div class=\"row main-dataul\"><div class=\"col-xs-5\"><h5>" +
                 iplable + "</h5></div>" +
-                "<div class=\"col-md-3\"><h5>" + ipid + "</h5></a></div>" +
-                "<div class=\"col-md-2\"><h5></h5></a></div>" +
-                "<div id='main-ref-button' class=\"col-md-2\"> <button type='button' class='main-button-ref btn btn-primary div-ref-but' ></button></div>" +
+                "<div class=\"col-xs-3\"><h5>" + ipid + "</h5></a></div>" +
+                "<div class=\"col-xs-2\"><h5></h5></a></div>" +
+                "<div id='main-ref-button' class=\"col-xs-2\"> <button type='button' class='main-button-ref btn btn-default div-ref-but' ></button></div>" +
                 "</div>";
         }
     };
@@ -786,11 +825,11 @@ $(document).ready(function () {
 
             var op_template = _.template(
                 "<div style='margin-bottom: 10px' class='row main-data'>" +
-                "<div class='col-md-2'><%= operon_label %></div> " +
-                "<div class='col-md-4'><a target='_blank' href='<%= operon_wduri %>'><%= operon_qid %> </a></div> " +
-                "<div class='col-md-2'></div>  " +
-                "<div class='col-md-2'></div>  " +
-                "<div class='col-md-2'></div>" +
+                "<div class='col-xs-2'><%= operon_label %></div> " +
+                "<div class='col-xs-4'><a target='_blank' href='<%= operon_wduri %>'><%= operon_qid %> </a></div> " +
+                "<div class='col-xs-2'></div>  " +
+                "<div class='col-xs-2'></div>  " +
+                "<div class='col-xs-2'></div>" +
                 "</div>"
             );
             return (op_template(data));
@@ -821,14 +860,14 @@ $(document).ready(function () {
 
             var op_gene_template = _.template(
                 "<div class='row main-data'>" +
-                "<div class='col-md-4 dat-space-bottom'><%= gene_label %></div>" +
-                "<div class='col-md-1 dat-space-bottom'><a target='_blank' href='http://www.ncbi.nlm.nih.gov/gene/?term=<%= entrez %>'><%= entrez %></a></div>" +
-                "<div class='col-md-1 dat-space-bottom'><a target='_blank' href='http://www.ncbi.nlm.nih.gov/gene/?term=<%= locus_tag %>'><%= locus_tag %></a></div>" +
-                "<div class='col-md-1 dat-space-bottom'><a target='_blank' href='<%= gene %>'><%= geneQID %></a></div>" +
-                "<div class='col-md-1 dat-space-bottom'><%= genStart %></div>" +
-                "<div class='col-md-1 dat-space-bottom'><%= genEnd %></div>" +
-                "<div class='col-md-2 dat-space-bottom'><%= strand %></div>" +
-                "<div class='col-md-1 dat-space-bottom'></div>" +
+                "<div class='col-xs-4 dat-space-bottom'><%= gene_label %></div>" +
+                "<div class='col-xs-1 dat-space-bottom'><a target='_blank' href='http://www.ncbi.nlm.nih.gov/gene/?term=<%= entrez %>'><%= entrez %></a></div>" +
+                "<div class='col-xs-1 dat-space-bottom'><a target='_blank' href='http://www.ncbi.nlm.nih.gov/gene/?term=<%= locus_tag %>'><%= locus_tag %></a></div>" +
+                "<div class='col-xs-1 dat-space-bottom'><a target='_blank' href='<%= gene %>'><%= geneQID %></a></div>" +
+                "<div class='col-xs-1 dat-space-bottom'><%= genStart %></div>" +
+                "<div class='col-xs-1 dat-space-bottom'><%= genEnd %></div>" +
+                "<div class='col-xs-2 dat-space-bottom'><%= strand %></div>" +
+                "<div class='col-xs-1 dat-space-bottom'></div>" +
                 "</div>"
             );
             return (op_gene_template(data));
@@ -1047,7 +1086,7 @@ $(document).ready(function () {
                 oauth_authorization.sendToServer({"oauth": "True"}, '/wd_oauth');
             });
 
-            },
+        },
         sendToServer: function (data, urlsuf) {
             var csrftoken = getCookie('csrftoken');
             $.ajax({
@@ -1062,25 +1101,20 @@ $(document).ready(function () {
                     window.location.replace(data);
                 },
                 error: function (data) {
-                   console.log("Error");
+                    console.log("Error");
                 }
             });
         },
-        buttonStatus: function() {
-            if (verified === 'True'){
+        buttonStatus: function () {
+            if (verified === 'True') {
                 var $Button = $('#wd-oauth-button');
                 $Button.text("Authorized").addClass(".btn-success");
             }
         }
 
 
-
-
     };
     oauth_authorization.init();
-
-
-
 
 
     //var wdLogin = {
@@ -1092,10 +1126,10 @@ $(document).ready(function () {
     //    },
     //    credentials: {},
     //    cacheDOM: function () {
-    //        this.$loginForm = $('#main-login-form');
-    //        this.$userName = this.$loginForm.find('#wduserName');
-    //        this.$password = this.$loginForm.find('#wdPassword');
-    //        this.$editButton = this.$loginForm.find('#editWDButton');
+    //        this.$logdefaultrm = $('#main-login-form');
+    //        this.$userName = this.$logdefaultrm.find('#wduserName');
+    //        this.$password = this.$logdefaultrm.find('#wdPassword');
+    //        this.$editButton = this.$logdefaultrm.find('#editWDButton');
     //        this.$loginButtonDiv = $('#wd-login-button-div');
     //        this.$loginButton = this.$loginButtonDiv.find('#wd-login-button');
     //        this.$loggedin = $('#userLogin');
@@ -1137,17 +1171,17 @@ $(document).ready(function () {
     //                if (data['login'] === "success") {
     //                    console.log(wdLogin.credentials);
     //                    wdLogin.$loggedin.html("<span>Logged in as <a target='_blank' id='wd-user-button' " +
-    //                        "class='btn btn-primary' href='https://www.wikidata.org/wiki/Special:Contributions/" +
+    //                        "class='btn btn-default' href='https://www.wikidata.org/wiki/Special:Contributions/" +
     //                        data['userName'] + "' role='button'>" + data['userName'] + "</a>");
     //                    wdLogin.$loginButtonDiv.html(
-    //                        "<button id='wd-logout-button' type='button' class='btn btn-primary'> " +
+    //                        "<button id='wd-logout-button' type='button' class='btn btn-default'> " +
     //                        "<span>Log out</span> </button>");
     //                    $('#wd-logout-button').off("click").click(function (e) {
     //                        wdLogin.credentials = {};
     //                        console.log(wdLogin.credentials);
     //                        wdLogin.$loggedin.html("");
     //                        wdLogin.$loginButtonDiv.html(
-    //                            "<button id='wd-login-button' type='button' class='btn btn-primary' " +
+    //                            "<button id='wd-login-button' type='button' class='btn btn-default' " +
     //                            "data-toggle='modal' data-target='#wdLoginModal'> <span>Login to Wikidata</span> </button>");
     //                    });
     //
