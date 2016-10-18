@@ -244,7 +244,7 @@ iframe {
     -webkit-border-bottom-left-radius: 10px;
     -webkit-border-bottom-right-radius: 10px;
     -moz-border-radius: 10px;
-
+    border-top-right-radius: 10px;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
     -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
