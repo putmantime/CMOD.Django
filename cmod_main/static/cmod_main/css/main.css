@@ -7,10 +7,11 @@ html, body {
     height: 100%;
     padding: 2px;
     margin: auto auto;
+    font-family: Tahoma, Geneva, sans-serif;
 }
 
 html {
-    /*background: #385d94;*/
+    background: #385d94;
 }
 
 body {
@@ -95,7 +96,7 @@ iframe {
 }
 
 #main-title {
-    padding-left: 10px
+    padding-left: 50px
 }
 
 .main-boxheader {
@@ -368,7 +369,7 @@ iframe {
 
 .main-annotations-nav {
 
-    height: 25%
+    max-height: 35%
 }
 
 .main-annotations-content {
@@ -394,7 +395,7 @@ iframe {
 }
 
 .main-annotations-content-data-modal {
-    padding-top: 5px;
+    padding-top: 8px;
     height: 10%;
     position: absolute;
     bottom: 0;
@@ -425,4 +426,9 @@ iframe {
 
 .panel-size {
     width: 100%
+}
+#hpy_logo{
+    max-height: 50px;
+    margin-top: 1.5em;
+    margin-left: 1em
 }

@@ -31,6 +31,7 @@ html, body{
     border: solid #385d94 3px;
     text-align: center;
     padding-bottom: 100px;
+    overflow: hidden;
 
 }
 
@@ -38,5 +39,5 @@ html, body{
     max-width: 100%;
     height: auto;
     text-align: center;
-    margin-top: 50px;
+    margin-top: 20px;
 }

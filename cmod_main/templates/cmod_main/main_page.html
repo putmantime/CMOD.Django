@@ -178,7 +178,10 @@
 <div class="container-fluid full">
     <div class="row header main-header">
         <div class="col-xs-6 col">
-            <div id="main-title"><h2>Centralized Model Organism Database</h2></div>
+            <div class="row">
+                <div style="text-align: right" class="col-xs-1"><img id="hpy_logo" src="{%  static 'cmod_main/img/Hpylori2.png'%}"></div>
+                <div  class="col-xs-11" id="main-title"><h2>WikiGenomes.org</h2></div>
+            </div>
         </div>
         <div id="orgFormModule" class="col-xs-4 col orgFormDiv">
 
@@ -228,7 +231,7 @@
                     <form id="geneFormModule" class="form-inline ui-widget form-horizontal">
                         {# {% csrf_token %}#}
                         <div class="form-group input-sm">
-                            <label for="geneform">Gene Search: </label>
+                            <label for="geneform"><strong>Gene Search: </strong></label>
                             <input type="text" class="form-control" id="geneform"
                                    placeholder="choose a gene" name="geneFormItem">
                         </div>
