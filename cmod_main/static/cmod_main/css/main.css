@@ -1,4 +1,3 @@
-
 /**{  border: dashed black 1px;  }*/
 html, body {
     /*min-height: 600px;*/
@@ -6,21 +5,19 @@ html, body {
     max-width: 2000px;
     max-height: 1200px;
     height: 100%;
-    padding: 5px;
+    padding: 2px;
     margin: auto auto;
 }
 
-html{
+html {
     /*background: #385d94;*/
 }
 
-body{
+body {
 
     border-radius: 10px;
 
-
 }
-
 
 iframe {
     width: 100%;
@@ -50,7 +47,7 @@ iframe {
     border: solid #99c2ff 2px;
     border-radius: 3px;
     height: 100%;
-    overflow:hidden;
+    overflow: hidden;
 
 }
 
@@ -165,7 +162,7 @@ iframe {
     /*position: absolute;*/
     /*top: 20%;*/
     /*border-top: solid #99c2ff 1px;*/
-    width: 98%;
+    width: 100%;
     /*max-height: 52%;*/
     /*margin-top: 5px;*/
     /*position: absolute;*/
@@ -305,8 +302,6 @@ iframe {
     /*margin-top: 300px;*/
 }
 
-
-
 .main-button-ref {
 
 }
@@ -355,14 +350,10 @@ iframe {
     padding-bottom: 10px;
 }
 
-
-
-
-
 .main-modal-div {
     /*position: absolute;*/
     /*bottom: 2%;*/
-    padding-left:5px;
+    padding-left: 5px;
     /*height:10%;*/
     /*position: absolute;*/
     /*bottom:0;*/
@@ -377,13 +368,13 @@ iframe {
 
 .main-annotations-nav {
 
-    height: 20%
+    height: 25%
 }
 
 .main-annotations-content {
     overflow-y: auto;
     overflow-x: hidden;
-    height:70%
+    height: 65%
 
 }
 
@@ -403,18 +394,18 @@ iframe {
 }
 
 .main-annotations-content-data-modal {
-    padding-top:5px;
+    padding-top: 5px;
     height: 10%;
-    position:absolute;
-    bottom:0;
-    right:1px;
-    left:1px;
+    position: absolute;
+    bottom: 0;
+    right: 1px;
+    left: 1px;
     background: white;
-    border:solid #99c2ff 2px;
+    border: solid #99c2ff 2px;
     border-radius: 0 0 3px 3px;
 }
 
-.main-op-annotations{
+.main-op-annotations {
 
 }
 
@@ -430,4 +421,8 @@ iframe {
     text-align: center;
     padding-bottom: 100px;
 
+}
+
+.panel-size {
+    width: 100%
 }
