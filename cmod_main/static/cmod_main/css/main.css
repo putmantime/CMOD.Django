@@ -1,4 +1,5 @@
-/**{  border: dashed black 1px;  }*/
+/** {  border: dashed black 1px;  }*/
+
 html, body {
     /*min-height: 600px;*/
     min-width: 1150px;
@@ -8,6 +9,8 @@ html, body {
     padding: 2px;
     margin: auto auto;
     font-family: Tahoma, Geneva, sans-serif;
+    overflow: hidden;
+
 }
 
 html {
@@ -17,6 +20,8 @@ html {
 body {
 
     border-radius: 10px;
+    border: solid white 2px;
+
 
 }
 
@@ -65,7 +70,17 @@ iframe {
 }
 
 .footer {
-    height: 50px;
+    background-color: #385d94;
+    color: whitesmoke;
+    position:relative;
+    bottom: 0;
+    height:500px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+
+
 }
 
 .header {
@@ -91,7 +106,7 @@ iframe {
     border-bottom-left-radius: 10px;
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
-    height: 100%
+
 
 }
 
@@ -427,8 +442,19 @@ iframe {
 .panel-size {
     width: 100%
 }
-#hpy_logo{
+
+#hpy_logo {
     max-height: 50px;
     margin-top: 1.5em;
     margin-left: 1em
+}
+
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus {
+    color: #555555;
+    cursor: default;
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+    border-bottom-color: transparent;
 }

@@ -730,7 +730,7 @@ $(document).ready(function () {
 
             }
             $enz.html(allEC.join(" "));
-            this.$ezTab.text('Enzymatic Action (' + enzData.length + ')');
+            this.$ezTab.text('Enzyme Class (' + enzData.length + ')');
         }
     };
 
