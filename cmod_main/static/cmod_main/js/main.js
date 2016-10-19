@@ -420,7 +420,6 @@ $(document).ready(function () {
             this.geneOperonAC();
             this.pmidForm();
             this.editWD();
-
             this.resetForm();
 
 
@@ -435,7 +434,12 @@ $(document).ready(function () {
         },
         resetForm: function () {
             $('.modal').on('hidden.bs.modal', function () {
-                $(this).find('form')[0].reset();
+                $('form').each(function () {
+                            this.reset()
+                        });
+                $('#opNameStaging').html('');
+                $('#opGeneStaging').html('');
+                $('#opPMIDStaging').html('');
 
             });
 
@@ -576,6 +580,7 @@ $(document).ready(function () {
                 $('#opNameStaging').html("<span><h5><strong>" + operonFormAll.operonFormData["operonName"] + "</strong></h5>");
             });
         },
+
         pmidForm: function () {
             console.log(this.$pmid_input);
             //form for looking a publication to provide as a reference using eutils
@@ -635,10 +640,12 @@ $(document).ready(function () {
 
             this.$editwdButton.off("click").click(function (e) {
                 e.preventDefault();
-                goFormAll.sendToServer(operonFormAll.operonFormData, '/wd_op_edit');
-                $('form').each(function () {
-                    this.reset()
-                });
+                console.log(operonFormAll.operonFormData);
+
+                //goFormAll.sendToServer(operonFormAll.operonFormData, '/wd_op_edit');
+                //$('form').each(function () {
+                //    this.reset()
+                //});
             });
 
 
@@ -670,6 +677,7 @@ $(document).ready(function () {
                 }
             });
         }
+
     };
     ////////////////////////////////////////////////////////////////////
 
