@@ -175,6 +175,68 @@
         </div>
     </div>
 </div>
+<div class="modal" id="operonModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <img class="wd-logo" src="{% static 'cmod_main/img/GeneWikidata-logo-en.png' %}">
+                <h4 class="modal-title" id="myOperonModalLabel">Add operon data</h4>
+            </div>
+            <div class="modal-body">
+
+                <form id="main-operon-form" class="ui-widget ui-front">
+                    <div class="form-group">
+                        <div class="form-inline">
+                            <input style="width:85%" id="operonForm" type="text" class="form-control"
+                                   placeholder="Operon Name"
+                                   name="operonFormItem">
+                            <button style="width:14%" id="opnameButton"
+                                    class="btn btn-primary "
+                                    type="button">
+                                Submit
+                            </button>
+                        </div>
+                        <div class="form-inline">
+                            <input style="width:100%" id="operonGenesForm" type="text" class="form-control"
+                                   placeholder="Genes Under Operon's Regulation"
+                                   name="operonGenesFormItem">
+                        </div>
+                        <div id="opGenesStaging">
+
+                        </div>
+                        <div class="form-inline">
+                            <input style="width:100%" type="text" class="form-control"
+                                   id="op_pmidForm"
+                                   placeholder="PMID" name="pmidrefFormItem">
+                        </div>
+
+                        <button data-dismiss="modal" id="opeditWDButton"
+                                class="btn btn-primary main-go-buttons"
+                                type="button">
+                            Edit Wikidata Item
+                        </button>
+
+                        <div id="statementStaging" class="row">
+                            <div id="opNameStaging" class="col-xs-3 "></div>
+                            <div id="opGeneStaging" class="col-xs-5 "></div>
+                            <div id="opPMIDStaging" class="col-xs-4 "></div>
+                        </div>
+
+
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id='modalRefClose' type="button" class="btn btn-default" data-dismiss="modal">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <div class="container-fluid full">
     <div class="row header main-header">
         <div class="col-xs-6 col">
@@ -209,13 +271,13 @@
             <div id="orgDataModule" class="box">
                 <div class="main-org-boxheader">
                     <div id='main-organism-name'>
-                        <h4><strong><i>{{ org_data.Name }}</i></strong></h4>
+
                     </div>
                 </div>
                 <div id="orgData" class="org-data-box">
 
-                    <div id="taxid" class="main-data"><h6>NCBI Taxonomy ID: </h6>{{ Taxid }}</div>
-                    <div id="QID" class="main-data"><h6>Wikidata QID: </h6>{{ QID }}</div>
+                    <div id="taxid" class="main-data"></div>
+                    <div id="QID" class="main-data"></div>
 
                 </div>
             </div>
@@ -286,7 +348,8 @@
                             <li role="presentation" class="active"><a id='gpTab' href="#gp"
                                                                       aria-controls="genomic-position"
                                                                       role="tab"
-                                                                      data-toggle="tab">Genomic Position</a></li>
+                                                                      data-toggle="tab">Genomic Position</a>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -358,7 +421,8 @@
                             <div class="col-xs-2"><h5>Reference</h5></div>
                         </div>
                         <div class="main-annotations-content-data">
-                            <div id="interprodata" class="main-go-data main-annotations-content-data-content"></div>
+                            <div id="interprodata"
+                                 class="main-go-data main-annotations-content-data-content"></div>
                         </div>
                     </div>
                     <div class="tab-pane" role="tabpanel" id="ez">
@@ -370,7 +434,8 @@
                             <div class="col-xs-2"><h5>Reference</h5></div>
                         </div>
                         <div class="main-annotations-content-data">
-                            <div id="enzymeprodata" class="main-go-data main-annotations-content-data-content"></div>
+                            <div id="enzymeprodata"
+                                 class="main-go-data main-annotations-content-data-content"></div>
                         </div>
                     </div>
                     <div class="tab-pane" role="tabpanel" id="op">
@@ -395,6 +460,14 @@
 
                             </div>
                             <div id="operonGenesdata" class="main-operon-genes-data"></div>
+                            <div class="main-annotations-content-data-modal main-modal-div">
+                                <button id='opbutton' type="button"
+                                        class="main-operonButton btn btn-xs btn-primary"
+                                        data-toggle="modal"
+                                        data-target="#operonModal">Add operon data
+                                </button>
+
+                            </div>
                         </div>
 
                     </div>
@@ -408,7 +481,8 @@
                             <div class="col-xs-2"><h5>Reference</h5></div>
                         </div>
                         <div class="main-annotations-content-data">
-                            <div id="genPosData" class="main-go-data main-annotations-content-data-content"></div>
+                            <div id="genPosData"
+                                 class="main-go-data main-annotations-content-data-content"></div>
                         </div>
                     </div>
                 </div>

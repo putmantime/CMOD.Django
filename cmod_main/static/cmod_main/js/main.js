@@ -43,6 +43,7 @@ $(document).ready(function () {
                             'QID': ui.item.qid,
                             'RefSeq': ui.item.refseq
                         };
+                        console.log(currentTaxa['Name']);
 
                         //initiate gene form with organism data
                         geneForm.init(currentTaxa.Taxid);
@@ -125,6 +126,7 @@ $(document).ready(function () {
                         //initialize the goform
                         //console.log(this.currentProtein[2]);
                         goFormAll.init(this.currentProtein[2]);
+                        operonFormAll.init(this.currentGene[2]);
                         //focus jbrowse on selected gene
                         var gstart = this.currentGene[4] - 1000;
                         var gend = this.currentGene[5] - (-1000);
@@ -168,6 +170,7 @@ $(document).ready(function () {
                 //goData.init(first_protein[1]);
                 goData.init(first_protein[1]);
                 goFormAll.init(first_protein[2]);
+                operonFormAll.init(first_gene[2]);
                 var gstart = first_gene[4] - 1000;
                 var gend = first_gene[5] - (-1000);
                 //console.log(gend);
@@ -402,7 +405,273 @@ $(document).ready(function () {
 
 
 //////////////////////goformdev//////////////////////////
+/////////////////////operon form////////////////////////
+    var operonFormAll = {
+        operonFormData: {
+            operonQID: 'Q139677',
+            otherGenes: [],
+            locusTags: []
+        },
+        endpoint: "https://query.wikidata.org/sparql?format=json&query=",
+        init: function (subjectQID) {
+            this.operonFormData["subject"] = subjectQID;
+            this.cacheDOM();
+            this.operonAC();
+            this.geneOperonAC();
+            this.pmidForm();
+            this.editWD();
 
+            this.resetForm();
+
+
+        },
+        cacheDOM: function () {
+            this.$operonFormGroup = $('#main-operon-form');
+            this.$operon_input = this.$operonFormGroup.find('#operonForm');
+            this.$gene_input = this.$operonFormGroup.find('#operonGenesForm');
+            this.$pmid_input = this.$operonFormGroup.find('#op_pmidForm');
+            this.$editwdButton = this.$operonFormGroup.find('#opeditWDButton');
+
+        },
+        resetForm: function () {
+            $('.modal').on('hidden.bs.modal', function () {
+                $(this).find('form')[0].reset();
+
+            });
+
+        },
+        geneOperonAC: function () {
+            this.$gene_input.autocomplete({
+                delay: 900,
+                autoFocus: true,
+                minLength: 2,
+                appendTo: null,
+                source: function (request, response) {
+                    $.ajax({
+                        type: "GET",
+                        url: operonFormAll.endpoint +
+                        ["SELECT DISTINCT ?gene ?gene_label ?entrez ?locus_tag " +
+                        "WHERE { " +
+                        "?gene wdt:P279 wd:Q7187; " +
+                        "wdt:P703 wd:" + currentTaxa.QID + ";",
+                            "wdt:P351 ?entrez;" +
+                            "wdt:P2393 ?locus_tag;" +
+                            "rdfs:label ?gene_label. " +
+                            "FILTER(lang(?gene_label) = \"en\") " +
+                            "FILTER(CONTAINS(LCASE(?gene_label), \"" +
+                            request.term +
+                            "\" ))}"
+                        ].join(" "),
+                        datatype: 'json',
+                        success: function (data) {
+                            var data_array = [];
+                            var data_hash = {};
+                            $.each(data['results']['bindings'], function (key, element) {
+                                var wdid = element['gene']['value'].split("/");
+                                var geneqid = wdid.slice(-1)[0];
+                                data_hash = {
+                                    'label': element['gene_label']['value'],
+                                    'value': element['gene_label']['value'],
+                                    'id': element['entrez']['value'],
+                                    'lt': element['locus_tag']['value'],
+                                    'qid': geneqid
+                                };
+                                data_array.push(data_hash);
+                            });
+                            response(data_array);
+                        }
+                    });
+                },
+                select: function (event, ui) {
+                    operonFormAll.operonFormData["otherGenes"].push(ui.item.qid);
+                    operonFormAll.operonFormData["locusTags"].push(ui.item.lt);
+                    console.log(operonFormAll.operonFormData);
+                    $('#opGeneStaging').html("<span><h5>has genes: </h5>" + operonFormAll.operonFormData['locusTags'].join(", "));
+                    $('#operonGenesForm').val('');
+                    return false;
+                }
+            })
+                .autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div class='main-data' style=\"border-bottom: solid black 1px\"><strong><u>" + item.label +
+                    "</u></strong><br>Wikidata: " + item.qid + "<br>Entrez ID: " + item.id + "<br>NCBI Locus Tag: " + item.lt + "</div>")
+                    .appendTo(ul);
+            };
+
+
+        },
+        operonAC: function () {
+            this.$operon_input.autocomplete({
+                delay: 900,
+                autoFocus: true,
+                minLength: 3,
+                appendTo: null,
+                source: function (request, response) {
+                    $.ajax({
+                        type: "GET",
+                        url: operonFormAll.endpoint +
+                        ["SELECT DISTINCT ?operon ?operon_label " +
+                        "WHERE { " +
+                        "?operon wdt:P279 wd:Q139677; " +
+                        "wdt:P703 wd:" + currentTaxa.QID,
+                            "; rdfs:label ?operon_label. " +
+                            "FILTER(lang(?operon_label) = \"en\") " +
+                            "FILTER(CONTAINS(LCASE(?operon_label), \"" +
+                            request.term + "\")) }"
+                        ].join(" "),
+
+                        datatype: 'json',
+                        success: function (data) {
+                            var data_array = [];
+                            var data_hash = {};
+                            console.log(data['results']['bindings']);
+                            if (data['results']['bindings'].length === 0) {
+                                data_hash = data_hash = {
+                                    'label': "No operon found --  Enter the full name here and Click 'Submit' to set the operon's name",
+                                    'value': 'None',
+                                    'id': 'None',
+                                    'qid': 'None'
+                                };
+                                operonFormAll.submitNewName();
+                                data_array.push(data_hash);
+                            }
+                            else {
+                                $.each(data['results']['bindings'], function (key, element) {
+                                    var wdid = element['operon']['value'].split("/");
+                                    var opqid = wdid.slice(-1)[0];
+                                    data_hash = {
+                                        'label': element['operon_label']['value'],
+                                        'value': element['operon_label']['value'],
+                                        'id': opqid,
+                                        'qid': opqid
+                                    };
+                                    data_array.push(data_hash);
+                                });
+                            }
+                            response(data_array);
+                        }
+                    });
+                },
+                select: function (event, ui) {
+                    operonFormAll.operonFormData["operonQID"] = ui.item.qid;
+                    if (ui.item.value != 'None') {
+                        operonFormAll.operonFormData["operonName"] = ui.item.label;
+                        $('#opNameStaging').html("<span><h5><strong>" + operonFormAll.operonFormData["operonName"] + "</strong></h5>");
+                    }
+                }
+            })
+                .autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div class='main-data' style=\"border-bottom: solid black 1px\"><strong><u>" + item.label +
+                    "</u></strong><br>Wikidata: " + item.qid + "</div>")
+                    .appendTo(ul);
+            };
+
+
+        },
+        submitNewName: function () {
+            $('#opnameButton').off("click").click(function (e) {
+                e.preventDefault();
+                operonFormAll.operonFormData['operonName'] = operonFormAll.$operon_input.val();
+                $('#opNameStaging').html("<span><h5><strong>" + operonFormAll.operonFormData["operonName"] + "</strong></h5>");
+            });
+        },
+        pmidForm: function () {
+            console.log(this.$pmid_input);
+            //form for looking a publication to provide as a reference using eutils
+            this.$pmid_input.autocomplete({
+                delay: 900,
+                autoFocus: true,
+                minLength: 3,
+                appendTo: null,
+                source: function (request, response) {
+                    $.ajax({
+                        type: "GET",
+                        url: 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&retmode=json&id=' + request.term,
+                        datatype: 'json',
+                        success: function (data) {
+                            console.log('pmid source success');
+                            var data_array = [];
+                            var data_hash = {};
+                            $.each(data['result'], function (key, element) {
+                                data_hash = {
+                                    'label': element['title'],
+                                    'value': element['uid'],
+                                    'id': element['uid'],
+                                    'first_author': element['sortfirstauthor'],
+                                    'journal': element['fulljournalname'],
+                                    'year': element['pubdate']
+
+                                };
+                                data_array.push(data_hash);
+                            });
+                            response([data_array[0]]);
+
+                        }
+                    });
+                },
+                select: function (event, ui) {
+                    operonFormAll.operonFormData["PMID"] = {
+                        'pmid': ui.item.id,
+                        'title': ui.item.label,
+                        'author': ui.item.first_author,
+                        'year': ui.item.year
+                    };
+                    $('#opPMIDStaging').html("<span><h5>stated in:</h5>" + operonFormAll.operonFormData['PMID']['author'] + "<i> et. al </i>" + operonFormAll.operonFormData['PMID']['year']);
+
+
+                }
+            })
+                .autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div class='main-data' style=\"border-bottom: solid black 1px\"><strong><u>" + item.label +
+                    "</u></strong><br>PMID" + item.id + "<br>" + item.first_author + "<i> et al. </i>" + item.year +
+                    "</u></strong><br>Publication:" + item.journal + "</div>")
+                    .appendTo(ul);
+            };
+
+        },
+        editWD: function () {
+
+            this.$editwdButton.off("click").click(function (e) {
+                e.preventDefault();
+                goFormAll.sendToServer(operonFormAll.operonFormData, '/wd_op_edit');
+                $('form').each(function () {
+                    this.reset()
+                });
+            });
+
+
+        },
+        sendToServer: function (data, urlsuf) {
+            var csrftoken = getCookie('csrftoken');
+            $.ajax({
+                type: "POST",
+                url: window.location.pathname + urlsuf,
+                data: data,
+                dataType: 'json',
+                headers: {'X-CSRFToken': csrftoken},
+                success: function (data) {
+                    console.log("go data success");
+                    //console.log(data);
+                    //alert("Successful interaction with the server");
+                    if (data['write'] === "success") {
+                        alert("Wikidata item succesfully edited!\nIt may take a few minutes for it to show up here.");
+                    }
+                    else {
+                        alert("Could not edit Wikidata at this time");
+                    }
+
+                },
+                error: function (data) {
+                    console.log("go data error");
+                    //console.log(data);
+                    //alert("Something went wrong interacting with the server");
+                }
+            });
+        }
+    };
+    ////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////End form modules//////////////////////////////////////////////////////////////
 
@@ -423,6 +692,7 @@ $(document).ready(function () {
             this.$tid = this.$od.find('#taxid');
             this.$qid = this.$od.find('#QID');
             this.$rsid = this.$od.find('#RefSeq');
+            this.$name = this.$od.find('#main-organism-name');
             //this.templateORG = this.$od.find('#org-template').html();
             //console.log($('#org-template').html());
 
@@ -433,8 +703,9 @@ $(document).ready(function () {
                 'organism': taxData,
                 'thing': 'thing'
             };
-            this.$tid.html("<span><h5>NCBI Taxonomy ID:</h5>" + data['organism']['Taxid'] + "</span>");
-            this.$qid.html("<span><h5>Wikidata Item ID</h5>" + data['organism']['QID'] + "</span>");
+            this.$name.html("<span><h4><i><strong>" + data['organism']['Name'] + "</strong></i></h4>");
+            this.$tid.html("<span><h6>NCBI Taxonomy ID:</h6>" + data['organism']['Taxid'] + "</span>");
+            this.$qid.html("<span><h6>Wikidata Item ID</h6>" + data['organism']['QID'] + "</span>");
             //this.$rsid.html("<span><h5>NCBI RefSeq ID</h5>" + data['organism']['RefSeq'] + "</span>");
 
         }
@@ -480,7 +751,6 @@ $(document).ready(function () {
                 "<div class='main-data'> <h5>Entrez ID: </h5> <a target='_blank' href='http://www.ncbi.nlm.nih.gov/gene/?term=<%= entrez %>'><%= entrez %></a></div>" +
                 "<div class='main-data'> <h5>Wikidata ID: </h5> <a target='_blank' href='https://www.wikidata.org/wiki/<%= qid %>'><%= qid %></a></div>" +
                 "<div class='main-data'> <h5>NCBI Locus Tag: </h5> <a target='_blank' href='http://www.ncbi.nlm.nih.gov/gene/?term=<%= locus_tag %>'><%= locus_tag %></a></div>"
-
             );
             this.$geneD.html(template(data));
             geneRefModal_obj.init(this.$annotations, '-------', '-------');
@@ -1111,95 +1381,6 @@ $(document).ready(function () {
 
     };
     oauth_authorization.init();
-
-
-    //var wdLogin = {
-    //    init: function () {
-    //        this.cacheDOM();
-    //        this.sendCredentials();
-    //
-    //
-    //    },
-    //    credentials: {},
-    //    cacheDOM: function () {
-    //        this.$logdefaultrm = $('#main-login-form');
-    //        this.$userName = this.$logdefaultrm.find('#wduserName');
-    //        this.$password = this.$logdefaultrm.find('#wdPassword');
-    //        this.$editButton = this.$logdefaultrm.find('#editWDButton');
-    //        this.$loginButtonDiv = $('#wd-login-button-div');
-    //        this.$loginButton = this.$loginButtonDiv.find('#wd-login-button');
-    //        this.$loggedin = $('#userLogin');
-    //        this.$userContrib = $('#userContributions');
-    //
-    //
-    //    },
-    //    sendCredentials: function () {
-    //
-    //        wdLogin.$editButton.on("click", function (e) {
-    //            e.preventDefault();
-    //            wdLogin.credentials = {
-    //                "userName": wdLogin.$userName.val(),
-    //                "password": wdLogin.$password.val()
-    //            };
-    //            wdLogin.sendToServer(wdLogin.credentials, '/wd_credentials');
-    //
-    //            $('form').each(function () {
-    //                this.reset()
-    //            });
-    //        });
-    //
-    //    },
-    //    sendToServer: function (data, urlsuf) {
-    //        var csrftoken = getCookie('csrftoken');
-    //        $.ajax({
-    //            beforeSend: function () {
-    //                wdLogin.$loggedin.html("<img src=" + loader + ">");
-    //
-    //            },
-    //            type: "POST",
-    //            url: window.location.pathname + urlsuf,
-    //            data: data,
-    //            dataType: 'json',
-    //            headers: {'X-CSRFToken': csrftoken},
-    //            success: function (data) {
-    //                console.log("success");
-    //                //console.log(data);
-    //                if (data['login'] === "success") {
-    //                    console.log(wdLogin.credentials);
-    //                    wdLogin.$loggedin.html("<span>Logged in as <a target='_blank' id='wd-user-button' " +
-    //                        "class='btn btn-default' href='https://www.wikidata.org/wiki/Special:Contributions/" +
-    //                        data['userName'] + "' role='button'>" + data['userName'] + "</a>");
-    //                    wdLogin.$loginButtonDiv.html(
-    //                        "<button id='wd-logout-button' type='button' class='btn btn-default'> " +
-    //                        "<span>Log out</span> </button>");
-    //                    $('#wd-logout-button').off("click").click(function (e) {
-    //                        wdLogin.credentials = {};
-    //                        console.log(wdLogin.credentials);
-    //                        wdLogin.$loggedin.html("");
-    //                        wdLogin.$loginButtonDiv.html(
-    //                            "<button id='wd-login-button' type='button' class='btn btn-default' " +
-    //                            "data-toggle='modal' data-target='#wdLoginModal'> <span>Login to Wikidata</span> </button>");
-    //                    });
-    //
-    //
-    //                }
-    //                else {
-    //
-    //                    $("#userLogin").html("<h5>Could not log in. Please try again</h5>");
-    //                }
-    //
-    //            },
-    //            error: function (data) {
-    //                console.log("error");
-    //                //console.log(data);
-    //                //alert("Something went wrong interacting with the server");
-    //            }
-    //        });
-    //    }
-    //
-    //};
-    //
-    //wdLogin.init();
 /////////////////////////////////////////////////End Wikidata API///////////////////////////////////////////////////////
 
 

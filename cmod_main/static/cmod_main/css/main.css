@@ -196,6 +196,11 @@ iframe {
     height: 100%;
 
 }
+.main-go-buttons {
+    width: 100%;
+    margin-top: 10px;
+    /*margin-bottom: 10px*/
+}
 
 #main-organism-name {
     text-align: center;
@@ -461,4 +466,21 @@ iframe {
     background-color: #ffffff;
     border: 1px solid #dddddd;
     border-bottom-color: transparent;
+}
+
+.statement-staging{
+    min-height:40px;
+    padding:5px;
+}
+
+.staging-col{
+    padding:5px;
+}
+
+#main-operon-form{
+    padding:20px
+}
+
+#operonBox{
+
 }
