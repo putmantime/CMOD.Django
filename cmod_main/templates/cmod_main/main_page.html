@@ -291,17 +291,19 @@
     <div class="row bottom-row">
         <div class="col-xs-3 col">
             <div id="geneDataModule" class="box">
-                <div class="main-gene-boxheader">
-                    <form id="geneFormModule" class="form-inline ui-widget form-horizontal">
+                    <form id="geneFormModule" class="ui-widget form-horizontal">
                         {# {% csrf_token %}#}
-                        <div class="form-group input-sm">
-                            <label for="geneform"><strong>Gene Search: </strong></label>
+                        <div class="form-group input-sm row">
+                            <div class="col-xs-2">
+                            <label  class="form-label" for="geneform"><strong>Gene Search: </strong></label>
+                                </div>
+                            <div class="col-xs-10">
                             <input type="text" class="form-control" id="geneform"
                                    placeholder="choose a gene" name="geneFormItem">
+                                </div>
                         </div>
                     </form>
-                </div>
-                <div class="tab-data">
+                <div  class="tab-data">
                     <ul id='gene-prot-tabs' class="nav nav-tabs" role="tablist">
                         <li role="presentation" class="active"><a href="#gene-tab" aria-controls="gene"
                                                                   role="tab"
@@ -329,7 +331,7 @@
         </div>
         <div class="col-xs-9 col main-annotations-column">
             <div id='goBoxes' class="box">
-                <div class="main-annotations-nav main-annotations">
+                <div class="main-annotations-nav">
                     <div>
                         <!-- Nav tabs -->
                         <ul id='annotations-tabs' class="nav nav-tabs" role="tablist">

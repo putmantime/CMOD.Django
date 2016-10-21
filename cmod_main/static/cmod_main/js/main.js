@@ -128,8 +128,8 @@ $(document).ready(function () {
                         goFormAll.init(this.currentProtein[2]);
                         operonFormAll.init(this.currentGene[2]);
                         //focus jbrowse on selected gene
-                        var gstart = this.currentGene[4] - 1000;
-                        var gend = this.currentGene[5] - (-1000);
+                        var gstart = this.currentGene[4] - 5000;
+                        var gend = this.currentGene[5] - (-5000);
                         jbrowse.init(currentTaxa.Taxid, this.currentGene[7], ":" + gstart + ".." + gend, currentTaxa.Name);
                         return false;
                     }
@@ -171,8 +171,8 @@ $(document).ready(function () {
                 goData.init(first_protein[1]);
                 goFormAll.init(first_protein[2]);
                 operonFormAll.init(first_gene[2]);
-                var gstart = first_gene[4] - 1000;
-                var gend = first_gene[5] - (-1000);
+                var gstart = first_gene[4] - 20000;
+                var gend = first_gene[5] - (-20000);
                 //console.log(gend);
                 jbrowse.init(currentTaxa.Taxid, first_gene[7], ":" + gstart + ".." + gend, currentTaxa.Name);
             })
@@ -1296,7 +1296,7 @@ $(document).ready(function () {
 
         },
         url: "/static/cmod_main/JBrowse-1.12.1-dev/index.html?data=sparql_data/sparql_data_",
-        coordPrefix: "&tracklist=0&tracks=genes_canvas_mod&menu=0&loc=",
+        coordPrefix: "&tracks=genes_canvas_mod,operons_canvas_mod&menu=0&loc=",
         cacheDOM: function () {
             this.$jb = $("#jbrowseModule");
             this.$browser = this.$jb.find('#jbrowse');

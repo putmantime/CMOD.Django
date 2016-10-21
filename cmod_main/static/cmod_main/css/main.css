@@ -206,10 +206,10 @@ iframe {
     text-align: center;
 }
 
-#geneFormModule {
-    margin-bottom: 100px;
-    text-align: right;
-}
+/*#geneFormModule {*/
+    /*margin-bottom: 100px;*/
+    /*text-align: right;*/
+/*}*/
 
 #main-gene-name {
     text-align: center;
@@ -457,17 +457,29 @@ iframe {
     margin-top: 1.5em;
     margin-left: 1em
 }
-
+.nav{
+    padding: 5px;
+    /*background-color: #99c2ff;*/
+    border-top-left-radius: 1px;
+    border-top-right-radius: 1px;
+}
 .nav-tabs > li.active > a,
 .nav-tabs > li.active > a:hover,
 .nav-tabs > li.active > a:focus {
-    color: #555555;
+    color: #385d94;
     cursor: default;
-    background-color: #ffffff;
-    border: 1px solid #dddddd;
-    border-bottom-color: transparent;
+    background-color: white;
+    border: solid #385d94 1px ;
+    border-bottom-color: white;
 }
 
+.nav-tabs > li> a {
+    color: #385d94;
+    cursor: default;
+    background-color: #99c2ff;
+   border: solid #385d94 1px ;
+    /*border-bottom-color: transparent;*/
+}
 .statement-staging{
     min-height:40px;
     padding:5px;
@@ -483,4 +495,10 @@ iframe {
 
 #operonBox{
 
+}
+
+
+
+.form-label{
+    color: #385d94
 }
