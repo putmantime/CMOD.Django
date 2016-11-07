@@ -10,6 +10,7 @@ var getOrgs = function (callbackOnSuccess) {
         "wdt:P685 ?taxid; wdt:P2249 ?RefSeq.",
         "SERVICE wikibase:label {",
         "bd:serviceParam wikibase:language \"en\" .}}"].join(" ");
+    console.log(queryOrgs);
     $.ajax({
         type: "GET",
         url: endpoint + queryOrgs,
@@ -131,7 +132,7 @@ var getGOTerms = function (uniprot, callBackonSuccess) {
         "SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\" .}}"
 
     ].join(" ");
-    //console.log(endpoint + goQuery);
+    console.log(goQuery);
 
     $.ajax({
         type: "GET",
@@ -187,7 +188,7 @@ var getInterPro = function (uniprot, callBackonSuccess) {
         "filter (lang(?interPro_label) = \"en\") .}"
 
     ].join(" ");
-    //console.log(endpoint + ipQuery);
+    console.log(ipQuery);
 
     $.ajax({
         type: "GET",
@@ -220,6 +221,7 @@ var getEvidenceCodes = function (callBackonSuccess) {
             "SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\" .}",
             "}"
         ].join(" ");
+    console.log(ev_query);
 
     $.ajax({
         type: "GET",
@@ -261,7 +263,7 @@ var getOperonData = function (entrez, callBackonSuccess) {
         "bd:serviceParam wikibase:language \"en\" .",
         "}}"
     ].join(" ");
-    //console.log(endpoint + opQuery);
+    console.log(opQuery);
 
     $.ajax({
         type: "GET",
@@ -294,7 +296,7 @@ var getOperon = function (entrez, callBackonSuccess) {
         "bd:serviceParam wikibase:language \"en\" .",
         "}}"
     ].join(" ");
-    //console.log(endpoint + opQuery);
+    console.log(operonQuery);
 
     $.ajax({
         type: "GET",

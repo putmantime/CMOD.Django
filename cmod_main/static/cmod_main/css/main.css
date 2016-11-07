@@ -477,7 +477,8 @@ iframe {
     color: #385d94;
     cursor: default;
     background-color: #99c2ff;
-   border: solid #385d94 1px ;
+    border: solid #385d94 1px ;
+    font-size: .75em;
     /*border-bottom-color: transparent;*/
 }
 .statement-staging{

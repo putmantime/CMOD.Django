@@ -13,6 +13,7 @@ class PrepareRefSeqs(object):
     def __init__(self):
         self.tid_query = "SELECT ?taxid WHERE { ?species wdt:P171* wd:Q10876; wdt:P685 ?taxid; wdt:P2249 ?RefSeq. }"
         self.tids = self.query_results()
+        print(self.tids)
         species_count = 0
         for tid in self.tids:
             species_count += 1
@@ -55,17 +56,28 @@ class PrepareRefSeqs(object):
         :return: tracks.conf with formatted sparql query
         """
         # basic jbrowse configurations
-        jbrowse_conf_prefix = '''[tracks.genes_canvas_mod]
+        print("genes")
+        jbrowse_genes_conf_prefix = '''
+        [trackSelector]
+        type = Faceted
+
+        [tracks.genes_canvas_mod]
         key = SPARQL Genes Tracks.conf
         type = JBrowse/View/Track/CanvasFeatures
         storeClass = JBrowse/Store/SeqFeature/SPARQL
         urlTemplate = https://query.wikidata.org/sparql
-        disablePreflight = true'''
+        disablePreflight = true
+        style.color = function(feature) { return '#FF00AC'; }
+        fmtDetailValue_Name = function(name) { return 'alert(name)'; }
+        '''
+
         # add each line to list
-        jbrowse_conf_prefix = jbrowse_conf_prefix.split("\n")
-        jbrowse_conf_prefix = [x.lstrip() for x in jbrowse_conf_prefix]
+        jbrowse_genes_conf_prefix = jbrowse_genes_conf_prefix.split("\n")
+        jbrowse_genes_conf_prefix = [x.lstrip() for x in jbrowse_genes_conf_prefix]
+
         # sparql query is in one long line...jbrowse was only taking first line of query when it was multiline (this held me up for a while)
-        query1 = ["queryTemplate = PREFIX wdt: <http://www.wikidata.org/prop/direct/> PREFIX wd: <http://www.wikidata.org/entity/>",
+        querygenes = [
+                  "queryTemplate = PREFIX wdt: <http://www.wikidata.org/prop/direct/> PREFIX wd: <http://www.wikidata.org/entity/>",
                   "PREFIX qualifier: <http://www.wikidata.org/prop/qualifier/>",
                   "SELECT ?start ?end ?uniqueID ?strand ?uri ?entrezGeneID ?name ?description ?refSeq",
                   "WHERE { ?gene wdt:P279 wd:Q7187; wdt:P703 ?strain; wdt:P351 ?uniqueID; wdt:P351 ?entrezGeneID;",
@@ -78,9 +90,9 @@ class PrepareRefSeqs(object):
                   "filter ( !(xsd:integer(?start) > {end} || xsd:integer(?end) < {start}))",
                   "}"
                   ]
-        query = " ".join(query1)
+        querygenes = " ".join(querygenes)
 
-        jbrowse_conf_prefix.append(query)
+        jbrowse_genes_conf_prefix.append(querygenes)
         # create the tracks.conf file and print each line to it
 
         def ensure_dir(f):
@@ -91,9 +103,53 @@ class PrepareRefSeqs(object):
         ensure_dir('../../static/cmod_main/JBrowse-1.12.1-dev/sparql_data/sparql_data_{}/'.format(taxid))
         tracks_conf = open(
             '../../static/cmod_main/JBrowse-1.12.1-dev/sparql_data/sparql_data_{}/tracks.conf'.format(taxid), 'w')
-        for i in jbrowse_conf_prefix:
+        for i in jbrowse_genes_conf_prefix:
+            print(i, file=tracks_conf)
+
+        print("operons")
+        jbrowse_operons_conf_prefix = '''
+        [tracks.operons_canvas_mod]
+        key = Operons
+        type = JBrowse/View/Track/CanvasFeatures
+        storeClass = JBrowse/Store/SeqFeature/SPARQL
+        urlTemplate = https://query.wikidata.org/sparql
+        disablePreflight = true
+        style.color = function(feature) { return '#385d94';}
+        '''
+        jbrowse_operons_conf_prefix = jbrowse_operons_conf_prefix.split("\n")
+        jbrowse_operons_conf_prefix = [x.lstrip() for x in jbrowse_operons_conf_prefix]
+
+        queryoperons = ["queryTemplate = PREFIX wdt: <http://www.wikidata.org/prop/direct/>",
+                        "PREFIX wd: <http://www.wikidata.org/entity/> ",
+                        "PREFIX qualifier: <http://www.wikidata.org/prop/qualifier/> ",
+                        "SELECT ?uniqueID ?description ?strand ",
+                        "(MIN(?gstart) AS ?start) ",
+                        "(MAX(?gend) AS ?end) ?uri ",
+                        "WHERE { ",
+                        "?strain wdt:P685 '" + taxid + "'.",
+                        "?operon wdt:P279 wd:Q139677; ",
+                        "wdt:P703 ?strain; ",
+                        "rdfs:label ?description; ",
+                        "wdt:P2548 ?wdstrand; ",
+                        "wdt:P527 ?genes. ",
+                        "?genes wdt:P644 ?gstart; ",
+                        "wdt:P645 ?gend. ",
+                        "bind( IF(?wdstrand = wd:Q22809680, '1', '-1') as ?strand). ",
+                        "bind(str(?operon) as ?uri) ",
+                        "bind( strafter( str(?operon), \"entity/\" ) as ?uniqueID ).",
+                        "} ",
+                        "GROUP BY ?uniqueID ?description ?strand ?uri ?prefix"
+                        ]
+        queryoperons = " ".join(queryoperons)
+
+        jbrowse_operons_conf_prefix.append(queryoperons)
+        for i in jbrowse_operons_conf_prefix:
             print(i, file=tracks_conf)
         tracks_conf.close()
+
+
+
+
 
     @staticmethod
     def get_ref_ftp_path(taxid):
@@ -121,3 +177,5 @@ class PrepareRefSeqs(object):
         genome = urllib.request.urlretrieve(url)[0]
         # return the genome fasta file as a tempfile
         return genome
+
+# new = PrepareRefSeqs()
