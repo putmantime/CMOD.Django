@@ -685,8 +685,8 @@ $(document).ready(function () {
                 },
                 error: function (data) {
                     console.log("operon data error");
-                    //console.log(data);
-                    //alert("Something went wrong interacting with the server");
+                    console.log(data);
+                    alert("Something went wrong interacting with the server");
                 }
             });
         }
