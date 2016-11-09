@@ -193,8 +193,10 @@ def wd_operon_edit(request):
         login = edit_token
 
     except Exception as e:
+
         print(e)
         print('except')
+        return HttpResponse(json.dumps(edit_status), content_type='application/json')
 
     def PMID_reference(operon_data):
         print("PMID PROBLEM",operon_data['PMID[pmid]'][0] )
@@ -229,6 +231,7 @@ def wd_operon_edit(request):
 
         except Exception as e:
             print(e)
+            return HttpResponse(json.dumps(edit_status), content_type='application/json')
         ################# finish construct references.  Create item for publication if one does not exist ################
 
 
@@ -282,6 +285,7 @@ def wd_operon_edit(request):
                         print("existing operon failed", e)
 
 
+
             else:
                 #  edit existing wikidata operon item
                 try:
@@ -295,6 +299,7 @@ def wd_operon_edit(request):
                     opgene_wd_items(operon_data=operon_data)
                 except Exception as e:
                     pprint.pprint(e)
+                    return HttpResponse(json.dumps(edit_status), content_type='application/json')
         else:
             print("WG not authorized")
             pass #return http to alert user they need to authorize the app
@@ -311,6 +316,7 @@ def wd_operon_edit(request):
 
             except Exception as e:
                 print(e)
+                return HttpResponse(json.dumps(edit_status), content_type='application/json')
     if request.method == 'POST':
         # statementData = json.loads(json.dumps(request.POST))
         operon_data = dict(request.POST)
@@ -328,8 +334,7 @@ def wd_operon_edit(request):
         if operon_data['authorized'][0] == 'True':
             PMID_reference(operon_data=operon_data)
             operon_wd_item(operon_data=operon_data)
-
-    return HttpResponse(json.dumps(edit_status), content_type='application/json')
+            return HttpResponse(json.dumps(edit_status), content_type='application/json')
 
 @ensure_csrf_cookie
 def wd_oauth(request):
