@@ -301,9 +301,10 @@ def wd_operon_edit(request):
             other_gene_statements.append(
                 PBB_Core.WDItemID(prop_nr='P361', value=operon_data['operonQID'][0], references=[refs]))
             try:
-                other_gene_item = PBB_Core.WDItemEngine(wd_item_id=gene, domain=None, data=other_gene_statements)
+                other_gene_item = PBB_Core.WDItemEngine(wd_item_id=gene, domain='genes', data=other_gene_statements)
+                pprint.pprint(pprint.pprint(other_gene_item.wd_json_representation))
                 other_gene_item.write(login, auth_token=auth1)
-                # pprint.pprint(pprint.pprint(other_gene_item.wd_json_representation))
+
             except Exception as e:
                 print(e)
     if request.method == 'POST':
