@@ -141,7 +141,7 @@ def wd_go_edit(request):
 
             try:
                 # find the appropriate item in wd or make a new one
-                wd_item_protein = PBB_Core.WDItemEngine(wd_item_id=statementDict['subject'], domain='proteins',
+                wd_item_protein = PBB_Core.WDItemEngine(wd_item_id=statementDict['subject'], domain=None,
                                                         data=[goStatement], use_sparql=True,
                                                         append_value=[goProp[statementDict['goClass']]])
                 print("found the item")
@@ -276,16 +276,17 @@ def wd_operon_edit(request):
                         print(existing_qid)
                         return operon_wd_item(operon_data=operon_data)
                     except Exception as e:
-                        pass # send alert to user
+                        print("existing operon failed", e)
+
 
             else:
                 #  edit existing wikidata operon item
                 try:
                     new_operon_wd_item = PBB_Core.WDItemEngine(wd_item_id=operon_data['operonQID'][0], domain=None,
                                                            data=operon_statements)
+                    print("existing operon just before gene")
                     new_operon_wd_item.write(login, auth_token=auth1)
                     # pprint.pprint(pprint.pprint(new_operon_wd_item.wd_json_representation))
-                    operon_data['operonQID'][0] = new_operon_wd_item.wd_item_id
                     opgene_wd_items(operon_data=operon_data)
                 except Exception as e:
                     pprint.pprint(e)
