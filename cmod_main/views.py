@@ -248,6 +248,7 @@ def wd_operon_edit(request):
         ###################### construct statements.   ################
 
     def operon_wd_item():
+        print("oh yeah")
         if operon_data['authorized'][0] == 'True':  # check if user has authorized wikigenomes
             print("WG authorized")
             if operon_data['operonName'][0] == 'None':  # if the user has not supplied an operon name, generate one from concatenating the locustags
@@ -286,7 +287,7 @@ def wd_operon_edit(request):
                         existing_qid = e.args[0]['error']['messages'][0]['parameters'][-1].split("|")
                         operon_data['operonQID'][0] = existing_qid[1].strip(']]')
                         print(existing_qid)
-                        operon_wd_item()
+                        return operon_wd_item()
                     except Exception as e:
                         pass # send alert to user
 
