@@ -260,9 +260,11 @@ def wd_operon_edit(request):
 
                     new_operon_wd_item = PBB_Core.WDItemEngine(item_name=operon_label, domain=None, data=operon_statements)
                     print("new operon try")
+                    edit_status["item_search"] = "success"
                     new_operon_wd_item.set_label(operon_label)
                     new_operon_wd_item.set_description(operon_description)
                     new_operon_wd_item.write(login, auth_token=auth1)
+                    edit_status["write"] = "success"
                     operon_data['operonQID'][0] = new_operon_wd_item.wd_item_id
                     # pprint.pprint(pprint.pprint(new_operon_wd_item.wd_json_representation))
                     opgene_wd_items(operon_data=operon_data)
@@ -288,6 +290,7 @@ def wd_operon_edit(request):
                     existing_operon_wd_item = PBB_Core.WDItemEngine(wd_item_id=operon_data['operonQID'][0], domain=None, data=operon_statements)
                     print("existing operon just before gene")
                     existing_operon_wd_item.write(login, auth_token=auth1)
+                    edit_status["write"] = "success"
                     pprint.pprint(pprint.pprint(existing_operon_wd_item.wd_json_representation))
                     opgene_wd_items(operon_data=operon_data)
                 except Exception as e:
