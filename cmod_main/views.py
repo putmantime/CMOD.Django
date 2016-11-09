@@ -270,7 +270,7 @@ def wd_operon_edit(request):
             if operon_data['operonQID'][0] == 'None':  # if operon is not in wikidata create a new one
                 try:
 
-                    operon_wd_item = PBB_Core.WDItemEngine(item_name=operon_label, domain='genes', data=operon_statements)
+                    operon_wd_item = PBB_Core.WDItemEngine(item_name=operon_label, domain=None, data=operon_statements)
                     print("new operon try")
                     operon_wd_item.set_label(operon_label)
                     operon_wd_item.set_description(operon_description)
@@ -292,7 +292,7 @@ def wd_operon_edit(request):
             else:
                 #  edit existing wikidata operon item
                 try:
-                    operon_wd_item = PBB_Core.WDItemEngine(wd_item_id=operon_data['operonQID'][0], domain='genes',
+                    operon_wd_item = PBB_Core.WDItemEngine(wd_item_id=operon_data['operonQID'][0], domain=None,
                                                            data=operon_statements)
                     operon_wd_item.write(login, auth_token=auth1)
                     pprint.pprint(pprint.pprint(operon_wd_item.wd_json_representation))
@@ -309,7 +309,7 @@ def wd_operon_edit(request):
             other_gene_statements.append(
                 PBB_Core.WDItemID(prop_nr='P361', value=operon_data['operonQID'][0], references=[refs]))
             try:
-                other_gene_item = PBB_Core.WDItemEngine(wd_item_id=gene, domain='genes', data=other_gene_statements)
+                other_gene_item = PBB_Core.WDItemEngine(wd_item_id=gene, domain=None, data=other_gene_statements)
                 other_gene_item.write(login, auth_token=auth1)
                 pprint.pprint(pprint.pprint(other_gene_item.wd_json_representation))
             except Exception as e:

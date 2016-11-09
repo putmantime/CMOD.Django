@@ -8,7 +8,7 @@ import requests
 import re
 import logging
 import os
-from . import wd_property_store
+
 import copy
 import pprint
 
