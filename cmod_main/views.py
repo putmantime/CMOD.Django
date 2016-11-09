@@ -325,7 +325,7 @@ def wd_operon_edit(request):
 
     if request.method == 'POST':
         # statementData = json.loads(json.dumps(request.POST))
-        oauth = authorization()
+
         operon_data = dict(request.POST)
         operonProp = {
             'operon': 'Q139677'
@@ -336,8 +336,9 @@ def wd_operon_edit(request):
                     # Check to see if wikidata has PMID item
 
         if operon_data['authorized'][0] == 'True':
-            pmid_reference(operon_data=operon_data, login=oauth['login'], auth1=oauth['oauth1'])
-            # operon_wd_item(operon_data=operon_data, login=oauth['login'], auth1=oauth['oauth1'])
+            oauth = authorization()
+            pmid_reference(operon_data=operon_data, login=oauth['login'], auth1=oauth['auth1'])
+            # operon_wd_item(operon_data=operon_data, login=oauth['login'], auth1=oauth['auth1'])
             return HttpResponse(json.dumps(edit_status), content_type='application/json')
 
 @ensure_csrf_cookie
