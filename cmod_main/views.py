@@ -269,6 +269,7 @@ def wd_operon_edit(request):
 
             if operon_data['operonQID'][0] == 'None':  # if operon is not in wikidata create a new one
                 try:
+                    print("new operon try")
                     operon_wd_item = PBB_Core.WDItemEngine(item_name=operon_label, domain='genes', data=operon_statements)
                     operon_wd_item.set_label(operon_label)
                     operon_wd_item.set_description(operon_description)
@@ -278,6 +279,7 @@ def wd_operon_edit(request):
 
                 except Exception as e:
                     try:
+                        print("existing operon try")
                         existing_qid = e.args[0]['error']['messages'][0]['parameters'][-1].split("|")
                         operon_data['operonQID'][0] = existing_qid[1].strip(']]')
                         return operon_wd_item()
