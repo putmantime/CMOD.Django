@@ -263,6 +263,7 @@ def wd_operon_edit(request):
                     new_operon_wd_item.set_label(operon_label)
                     new_operon_wd_item.set_description(operon_description)
                     new_operon_wd_item.write(login, auth_token=auth1)
+                    operon_data['operonQID'][0] = new_operon_wd_item.wd_item_id
                     # pprint.pprint(pprint.pprint(new_operon_wd_item.wd_json_representation))
                     opgene_wd_items(operon_data=operon_data)
 
@@ -349,5 +350,4 @@ def wd_oauth_deauth(request):
         deauth = json.dumps(request.POST)
         if deauth['deauth'] == "True":
             request.session.flush()
-
 
