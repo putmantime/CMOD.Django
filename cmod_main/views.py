@@ -197,6 +197,7 @@ def wd_operon_edit(request):
         print('except')
 
     def PMID_reference(operon_data):
+        print("PMID PROBLEM",operon_data['PMID[pmid]'][0] )
         PMID_QID = WDO.WDSparqlQueries(prop='P698', string=operon_data['PMID[pmid]'][0]).wd_prop2qid()
 
         # reference it if it does
