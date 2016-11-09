@@ -252,17 +252,20 @@ def wd_operon_edit(request):
             print("WG authorized")
             if operon_data['operonName'][0] == 'None':  # if the user has not supplied an operon name, generate one from concatenating the locustags
                 operon_label = 'operon_' + "_".join(operon_data['locusTags[]'])
+                print(operon_label)
             else:
                 #  use operon label supplied by user
                 operon_label = operon_data['operonName'][0]
             operon_description = "Microbial operon found in " + operon_data['organism'][0]
+            print(operon_description)
             operon_statements = []  # statements for operon item
             operon_statements.append(
                 PBB_Core.WDItemID(prop_nr='P279', value=operonProp['operon'], references=[refs]))  # subclass of operon
 
             for gene in operon_data['otherGenes[]']:
                 operon_statements.append(
-                    PBB_Core.WDItemID(prop_nr='P527', value=gene, references=[refs]))  # add each gene using has part predicate
+                    PBB_Core.WDItemID(prop_nr='P527', value=gene, references=[refs]))
+                print(gene) # add each gene using has part predicate
 
             if operon_data['operonQID'][0] == 'None':  # if operon is not in wikidata create a new one
                 try:
