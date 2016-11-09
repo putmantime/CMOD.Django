@@ -283,7 +283,7 @@ def wd_operon_edit(request):
                 #  edit existing wikidata operon item
                 try:
                     print("existing operon just before itemengine")
-                    print(operon_data['operonQID'][0])
+                    print(operon_data['operonQID'][0], operon_statements)
                     existing_operon_wd_item = PBB_Core.WDItemEngine(wd_item_id=operon_data['operonQID'][0], domain=None, data=operon_statements)
                     print("existing operon just before gene")
                     existing_operon_wd_item.write(login, auth_token=auth1)
