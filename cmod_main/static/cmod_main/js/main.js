@@ -675,10 +675,10 @@ $(document).ready(function () {
                     console.log("operon data success");
                     //alert("Successful interaction with the server");
                     if (data['write'] === "success") {
-                        //alert("Wikidata item succesfully edited!\nIt may take a few minutes for it to show up here.");
+                        alert("Wikidata item succesfully edited!\nIt may take a few minutes for it to show up here.");
                     }
                     else {
-                        //alert("Could not edit Wikidata at this time");
+                        alert("Could not edit Wikidata at this time");
                     }
 
                 },
