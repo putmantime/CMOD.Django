@@ -216,7 +216,7 @@ def wd_operon_edit(request):
                     PBB_Core.WDItemID(prop_nr='P31', value='Q13442814')
                 ]
 
-                pmid_wd_item = PBB_Core.WDItemEngine(item_name=operon_data['PMID[title]'][0], domain='genes',
+                pmid_wd_item = PBB_Core.WDItemEngine(item_name=operon_data['PMID[title]'][0], domain=None,
                                                      data=pmid_item_statements)
                 pmid_wd_item.set_label(operon_data['PMID[title]'][0])
                 pmid_wd_item.set_description("Peer reviewed research article")
