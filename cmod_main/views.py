@@ -285,7 +285,8 @@ def wd_operon_edit(request):
                         print("existing operon try")
                         existing_qid = e.args[0]['error']['messages'][0]['parameters'][-1].split("|")
                         operon_data['operonQID'][0] = existing_qid[1].strip(']]')
-                        return operon_wd_item()
+                        print(existing_qid)
+                        operon_wd_item()
                     except Exception as e:
                         pass # send alert to user
 
