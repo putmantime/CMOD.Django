@@ -170,6 +170,9 @@ def wd_operon_edit(request):
     operonProp = {
         'operon': 'Q139677'
         }
+
+    login = ''
+    auth1 = ''
     try:
         auth1 = OAuth1(request.session['client_key'],
                        client_secret=request.session['client_secret'],
@@ -182,7 +185,7 @@ def wd_operon_edit(request):
                                           'meta': "tokens",
                                           'format': "json"
                                       }, auth=auth1)
-
+        print("auth1 worked")
         if str(response_token.status_code) == str(200):
             edit_status['code'] = str(response_token.status_code)
 
@@ -214,9 +217,11 @@ def wd_operon_edit(request):
 
             # reference it if it does
             operon_data['PMID[qid]'] = PMID_QID
+            print("PMID", PMID_QID)
             try:
                 if PMID_QID != 'None':
                     print(PMID_QID, "not None")
+                    print("PMID in WD")
                     edit_status['pmid_ref'] = 'exists'
                     ifPub = WDO.WDSparqlQueries(prop='P31', qid=PMID_QID).wd_qid2property()
 
@@ -231,7 +236,7 @@ def wd_operon_edit(request):
                     ]
                     pmid_wd_item = PBB_Core.WDItemEngine(item_name=operon_data['PMID[title]'], domain=None,
                                                          data=pmid_item_statements)
-                    # pmid_wd_item.write(login, auth1)
+                    pmid_wd_item.write(login, auth1)
                     edit_status['pmid_ref'] = 'new'
                     # now reference the new item that was just created
                     refs.append(PBB_Core.WDItemID(value=pmid_wd_item.wd_item_id, prop_nr='P248', is_reference=True))
@@ -276,7 +281,7 @@ def wd_operon_edit(request):
                     new_operon_wd_item.set_label(operon_label)
                     new_operon_wd_item.set_description(operon_description)
                     new_operon_wd_item.write(login, auth_token=auth1)
-                    pprint.pprint(pprint.pprint(new_operon_wd_item.wd_json_representation))
+                    # pprint.pprint(pprint.pprint(new_operon_wd_item.wd_json_representation))
                     opgene_wd_items()
 
                 except Exception as e:
@@ -297,7 +302,7 @@ def wd_operon_edit(request):
                     new_operon_wd_item = PBB_Core.WDItemEngine(wd_item_id=operon_data['operonQID'][0], domain=None,
                                                            data=operon_statements)
                     new_operon_wd_item.write(login, auth_token=auth1)
-                    pprint.pprint(pprint.pprint(new_operon_wd_item.wd_json_representation))
+                    # pprint.pprint(pprint.pprint(new_operon_wd_item.wd_json_representation))
                     operon_data['operonQID'][0] = new_operon_wd_item.wd_item_id
                     opgene_wd_items()
                 except Exception as e:
@@ -314,7 +319,7 @@ def wd_operon_edit(request):
             try:
                 other_gene_item = PBB_Core.WDItemEngine(wd_item_id=gene, domain=None, data=other_gene_statements)
                 other_gene_item.write(login, auth_token=auth1)
-                pprint.pprint(pprint.pprint(other_gene_item.wd_json_representation))
+                # pprint.pprint(pprint.pprint(other_gene_item.wd_json_representation))
             except Exception as e:
                 print(e)
 
