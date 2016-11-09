@@ -13,7 +13,7 @@ import time
 import requests
 import json
 from requests_oauthlib import OAuth1
-
+from django.views.generic import View
 # Consruct a "consumer" from the key/secret provided by MediaWiki
 from .scripts.utils import oauth_config
 from django.http import HttpResponseRedirect
@@ -162,27 +162,153 @@ def wd_go_edit(request):
 
         return HttpResponse(json.dumps(edit_status), content_type='application/json')
 
-        # return render(request, "cmod_main/main_page.html",  credentials)
 
 
-# @ensure_csrf_cookie
-# def wd_credentials(request):
-#     if request.method == 'POST':
-#         creddata = json.dumps(request.POST)
-#
-#         user_pass = json.loads(creddata)
-#         request.session['credentials'] = creddata
-#         print("user_pass dj " + str(user_pass))
-#         login = PBB_login.WDLogin(user_pass['userName'], user_pass['password'])
-#         print("user_pass response wd " + str(login.login_reply))
-#         if login.login_reply['login']['result'] == 'Failed':
-#             user_pass["login"] = "error"
-#         else:
-#             user_pass["login"] = "success"
-#
-#         return HttpResponse(json.dumps(user_pass), content_type='application/json')
-#         # return render(request, "cmod_main/main_page.html", )
+@ensure_csrf_cookie
+def wd_operon_edit(request):
+    edit_status = {}
+    operonProp = {
+        'operon': 'Q139677'
+        }
+    try:
+        auth1 = OAuth1(request.session['client_key'],
+                       client_secret=request.session['client_secret'],
+                       resource_owner_key=request.session['resource_owner_key'],
+                       resource_owner_secret=request.session['resource_owner_secret'])
 
+        response_token = requests.get("https://www.wikidata.org/w/api.php",
+                                      params={
+                                          'action': "query",
+                                          'meta': "tokens",
+                                          'format': "json"
+                                      }, auth=auth1)
+
+        if str(response_token.status_code) == str(200):
+            edit_status['code'] = str(response_token.status_code)
+
+        edit_token = response_token.json()['query']['tokens']['csrftoken']
+
+        login = edit_token
+
+    except Exception as e:
+        print(e)
+        print('except')
+
+    if request.method == 'POST':
+
+        # statementData = json.loads(json.dumps(request.POST))
+        operon_data = dict(request.POST)
+        operonProp = {
+            'operon': 'Q139677'
+        }
+        print(operon_data)
+        if operon_data['authorized'][0] == 'True':
+            ###################### construct references.  Create item for publication if one does not exist ################
+            refs = [
+                    PBB_Core.WDItemID(value='Q26489220', prop_nr='P143', is_reference=True),  # imorted from CMOD
+                    PBB_Core.WDTime(str(strftime("+%Y-%m-%dT00:00:00Z", gmtime())), prop_nr='P813', is_reference=True) # timestamp
+            ]
+                        # Check to see if wikidata has PMID item
+
+            PMID_QID = WDO.WDSparqlQueries(prop='P698', string=operon_data['PMID[pmid]'][0]).wd_prop2qid()
+
+            # reference it if it does
+            operon_data['PMID[qid]'] = PMID_QID
+            try:
+                if PMID_QID != 'None':
+                    print(PMID_QID, "not None")
+                    edit_status['pmid_ref'] = 'exists'
+                    ifPub = WDO.WDSparqlQueries(prop='P31', qid=PMID_QID).wd_qid2property()
+
+                    if ifPub == 'Q13442814':
+                        refs.append(PBB_Core.WDItemID(value=PMID_QID, prop_nr='P248', is_reference=True))
+                # create it if it doesn't
+                else:
+                    print("pmid not in WD")
+                    pmid_item_statements = [
+                        PBB_Core.WDString(prop_nr='P698', value=operon_data['PMID[pmid]']),
+                        PBB_Core.WDItemID(prop_nr='P31', value='Q13442814')
+                    ]
+                    pmid_wd_item = PBB_Core.WDItemEngine(item_name=operon_data['PMID[title]'], domain=None,
+                                                         data=pmid_item_statements)
+                    # pmid_wd_item.write(login, auth1)
+                    edit_status['pmid_ref'] = 'new'
+                    # now reference the new item that was just created
+                    refs.append(PBB_Core.WDItemID(value=pmid_wd_item.wd_item_id, prop_nr='P248', is_reference=True))
+
+                for ref in refs:
+                    ref.overwrite_references = False
+            except Exception as e:
+                print(e)
+        else:
+            print("WG not authorized")
+        ################# finish construct references.  Create item for publication if one does not exist ################
+
+
+        ###################### construct statements.   ################
+
+    def operon_wd_item():
+        if operon_data['authorized'][0] == 'True':  # check if user has authorized wikigenomes
+            print("WG authorized")
+            if operon_data['operonName'][0] == 'None':  # if the user has not supplied an operon name, generate one from concatenating the locustags
+                operon_label = 'operon_' + "_".join(operon_data['locusTags[]'])
+            else:
+                #  use operon label supplied by user
+                operon_label = operon_data['operonName'][0]
+            operon_description = "Microbial operon found in " + operon_data['organism'][0]
+            operon_statements = []  # statements for operon item
+            operon_statements.append(
+                PBB_Core.WDItemID(prop_nr='P279', value=operonProp['operon'], references=[refs]))  # subclass of operon
+
+            for gene in operon_data['otherGenes[]']:
+                operon_statements.append(
+                    PBB_Core.WDItemID(prop_nr='P527', value=gene, references=[refs]))  # add each gene using has part predicate
+
+            if operon_data['operonQID'][0] == 'None':  # if operon is not in wikidata create a new one
+                try:
+                    operon_wd_item = PBB_Core.WDItemEngine(item_name=operon_label, domain='genes', data=operon_statements)
+                    operon_wd_item.set_label(operon_label)
+                    operon_wd_item.set_description(operon_description)
+                    operon_wd_item.write(login, auth_token=auth1)
+                    pprint.pprint(pprint.pprint(operon_wd_item.wd_json_representation))
+                    opgene_wd_items()
+
+                except Exception as e:
+                    try:
+                        existing_qid = e.args[0]['error']['messages'][0]['parameters'][-1].split("|")
+                        operon_data['operonQID'][0] = existing_qid[1].strip(']]')
+                        return operon_wd_item()
+                    except Exception as e:
+                        pass # send alert to user
+
+            else:
+                #  edit existing wikidata operon item
+                try:
+                    operon_wd_item = PBB_Core.WDItemEngine(wd_item_id=operon_data['operonQID'][0], domain='genes',
+                                                           data=operon_statements)
+                    operon_wd_item.write(login, auth_token=auth1)
+                    pprint.pprint(pprint.pprint(operon_wd_item.wd_json_representation))
+                    opgene_wd_items()
+                except Exception as e:
+                    pprint.pprint(e.args)
+        else:
+            print("WG not authorized")
+            pass #return http to alert user they need to authorize the app
+
+    def opgene_wd_items():
+        other_gene_statements = []
+        for gene in operon_data['otherGenes[]']:
+            other_gene_statements.append(
+                PBB_Core.WDItemID(prop_nr='P361', value=operon_data['operonQID'][0], references=[refs]))
+            try:
+                other_gene_item = PBB_Core.WDItemEngine(wd_item_id=gene, domain='genes', data=other_gene_statements)
+                other_gene_item.write(login)
+                pprint.pprint(pprint.pprint(other_gene_item.wd_json_representation))
+            except Exception as e:
+                print(e)
+
+    operon_wd_item()
+    return HttpResponse(json.dumps(edit_status), content_type='application/json')
 
 @ensure_csrf_cookie
 def wd_oauth(request):
