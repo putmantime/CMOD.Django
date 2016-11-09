@@ -170,7 +170,6 @@ def wd_operon_edit(request):
     operonProp = {
         'operon': 'Q139677'
         }
-
     login = ''
     auth1 = ''
     try:
@@ -197,62 +196,44 @@ def wd_operon_edit(request):
         print(e)
         print('except')
 
-    if request.method == 'POST':
+    def PMID_reference(operon_data):
+        PMID_QID = WDO.WDSparqlQueries(prop='P698', string=operon_data['PMID[pmid]'][0]).wd_prop2qid()
 
-        # statementData = json.loads(json.dumps(request.POST))
-        operon_data = dict(request.POST)
-        operonProp = {
-            'operon': 'Q139677'
-        }
-        print(operon_data)
-        if operon_data['authorized'][0] == 'True':
-            ###################### construct references.  Create item for publication if one does not exist ################
-            refs = [
-                    PBB_Core.WDItemID(value='Q26489220', prop_nr='P143', is_reference=True),  # imorted from CMOD
-                    PBB_Core.WDTime(str(strftime("+%Y-%m-%dT00:00:00Z", gmtime())), prop_nr='P813', is_reference=True) # timestamp
-            ]
-                        # Check to see if wikidata has PMID item
+        # reference it if it does
+        operon_data['PMID[qid]'] = PMID_QID
+        try:
+            if PMID_QID != 'None':
+                edit_status['pmid_ref'] = 'exists'
+                ifPub = WDO.WDSparqlQueries(prop='P31', qid=PMID_QID).wd_qid2property()
 
-            PMID_QID = WDO.WDSparqlQueries(prop='P698', string=operon_data['PMID[pmid]'][0]).wd_prop2qid()
+                if ifPub == 'Q13442814':
+                    refs.append(PBB_Core.WDItemID(value=PMID_QID, prop_nr='P248', is_reference=True))
+            # create it if it doesn't
+            else:
+                pmid_item_statements = [
+                    PBB_Core.WDString(prop_nr='P698', value=operon_data['PMID[pmid]'][0]),
+                    PBB_Core.WDItemID(prop_nr='P31', value='Q13442814')
+                ]
 
-            # reference it if it does
-            operon_data['PMID[qid]'] = PMID_QID
-            print("PMID", PMID_QID)
-            try:
-                if PMID_QID != 'None':
-                    print(PMID_QID, "not None")
-                    print("PMID in WD")
-                    edit_status['pmid_ref'] = 'exists'
-                    ifPub = WDO.WDSparqlQueries(prop='P31', qid=PMID_QID).wd_qid2property()
+                pmid_wd_item = PBB_Core.WDItemEngine(item_name=operon_data['PMID[title]'][0], domain='genes',
+                                                     data=pmid_item_statements)
+                pmid_wd_item.set_label(operon_data['PMID[title]'][0])
+                pmid_wd_item.set_description("Peer reviewed research article")
+                pprint.pprint(pmid_wd_item.wd_json_representation)
+                pmid_wd_item.write(login, auth_token=auth1)
+                edit_status['pmid_ref'] = 'new'
+                print(pmid_wd_item.wd_item_id)
+                # now reference the new item that was just created
+                refs.append(PBB_Core.WDItemID(value=pmid_wd_item.wd_item_id, prop_nr='P248', is_reference=True))
 
-                    if ifPub == 'Q13442814':
-                        refs.append(PBB_Core.WDItemID(value=PMID_QID, prop_nr='P248', is_reference=True))
-                # create it if it doesn't
-                else:
-                    print("pmid not in WD")
-                    pmid_item_statements = [
-                        PBB_Core.WDString(prop_nr='P698', value=operon_data['PMID[pmid]']),
-                        PBB_Core.WDItemID(prop_nr='P31', value='Q13442814')
-                    ]
-                    pmid_wd_item = PBB_Core.WDItemEngine(item_name=operon_data['PMID[title]'], domain=None,
-                                                         data=pmid_item_statements)
-                    pmid_wd_item.write(login, auth1)
-                    edit_status['pmid_ref'] = 'new'
-                    # now reference the new item that was just created
-                    refs.append(PBB_Core.WDItemID(value=pmid_wd_item.wd_item_id, prop_nr='P248', is_reference=True))
-
-                for ref in refs:
-                    ref.overwrite_references = False
-            except Exception as e:
-                print(e)
-        else:
-            print("WG not authorized")
+        except Exception as e:
+            print(e)
         ################# finish construct references.  Create item for publication if one does not exist ################
 
 
         ###################### construct statements.   ################
 
-    def operon_wd_item():
+    def operon_wd_item(operon_data):
         print("oh yeah")
         if operon_data['authorized'][0] == 'True':  # check if user has authorized wikigenomes
             print("WG authorized")
@@ -282,7 +263,7 @@ def wd_operon_edit(request):
                     new_operon_wd_item.set_description(operon_description)
                     new_operon_wd_item.write(login, auth_token=auth1)
                     # pprint.pprint(pprint.pprint(new_operon_wd_item.wd_json_representation))
-                    opgene_wd_items()
+                    opgene_wd_items(operon_data=operon_data)
 
                 except Exception as e:
                     print(e.args[0])
@@ -292,7 +273,7 @@ def wd_operon_edit(request):
                         existing_qid = e.args[0]['error']['messages'][0]['parameters'][-1].split("|")
                         operon_data['operonQID'][0] = existing_qid[1].strip(']]')
                         print(existing_qid)
-                        return operon_wd_item()
+                        return operon_wd_item(operon_data=operon_data)
                     except Exception as e:
                         pass # send alert to user
 
@@ -304,14 +285,14 @@ def wd_operon_edit(request):
                     new_operon_wd_item.write(login, auth_token=auth1)
                     # pprint.pprint(pprint.pprint(new_operon_wd_item.wd_json_representation))
                     operon_data['operonQID'][0] = new_operon_wd_item.wd_item_id
-                    opgene_wd_items()
+                    opgene_wd_items(operon_data=operon_data)
                 except Exception as e:
                     pprint.pprint(e)
         else:
             print("WG not authorized")
             pass #return http to alert user they need to authorize the app
 
-    def opgene_wd_items():
+    def opgene_wd_items(operon_data):
         other_gene_statements = []
         for gene in operon_data['otherGenes[]']:
             other_gene_statements.append(
@@ -322,8 +303,24 @@ def wd_operon_edit(request):
                 # pprint.pprint(pprint.pprint(other_gene_item.wd_json_representation))
             except Exception as e:
                 print(e)
+    if request.method == 'POST':
+        # statementData = json.loads(json.dumps(request.POST))
+        operon_data = dict(request.POST)
+        operonProp = {
+            'operon': 'Q139677'
+        }
+        print(operon_data)
+        ###################### construct references.  Create item for publication if one does not exist ################
+        refs = [
+                PBB_Core.WDItemID(value='Q26489220', prop_nr='P143', is_reference=True),  # imorted from CMOD
+                PBB_Core.WDTime(str(strftime("+%Y-%m-%dT00:00:00Z", gmtime())), prop_nr='P813', is_reference=True) # timestamp
+        ]
+                    # Check to see if wikidata has PMID item
 
-    operon_wd_item()
+        if operon_data['authorized'][0] == 'True':
+            PMID_reference(operon_data=operon_data)
+            operon_wd_item(operon_data=operon_data)
+
     return HttpResponse(json.dumps(edit_status), content_type='application/json')
 
 @ensure_csrf_cookie
