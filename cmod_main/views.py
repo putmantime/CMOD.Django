@@ -271,12 +271,12 @@ def wd_operon_edit(request):
             if operon_data['operonQID'][0] == 'None':  # if operon is not in wikidata create a new one
                 try:
 
-                    operon_wd_item = PBB_Core.WDItemEngine(item_name=operon_label, domain=None, data=operon_statements)
+                    new_operon_wd_item = PBB_Core.WDItemEngine(item_name=operon_label, domain=None, data=operon_statements)
                     print("new operon try")
-                    operon_wd_item.set_label(operon_label)
-                    operon_wd_item.set_description(operon_description)
-                    operon_wd_item.write(login, auth_token=auth1)
-                    pprint.pprint(pprint.pprint(operon_wd_item.wd_json_representation))
+                    new_operon_wd_item.set_label(operon_label)
+                    new_operon_wd_item.set_description(operon_description)
+                    new_operon_wd_item.write(login, auth_token=auth1)
+                    pprint.pprint(pprint.pprint(new_operon_wd_item.wd_json_representation))
                     opgene_wd_items()
 
                 except Exception as e:
