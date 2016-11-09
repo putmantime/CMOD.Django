@@ -408,9 +408,11 @@ $(document).ready(function () {
 /////////////////////operon form////////////////////////
     var operonFormAll = {
         operonFormData: {
-            operonQID: 'Q139677',
+            operonQID: 'None',
             otherGenes: [],
-            locusTags: []
+            locusTags: [],
+            authorized: verified,
+            organism: currentTaxa.Name
         },
         endpoint: "https://query.wikidata.org/sparql?format=json&query=",
         init: function (subjectQID) {
@@ -420,6 +422,7 @@ $(document).ready(function () {
             this.geneOperonAC();
             this.pmidForm();
             this.editWD();
+
             this.resetForm();
 
 
@@ -430,6 +433,7 @@ $(document).ready(function () {
             this.$gene_input = this.$operonFormGroup.find('#operonGenesForm');
             this.$pmid_input = this.$operonFormGroup.find('#op_pmidForm');
             this.$editwdButton = this.$operonFormGroup.find('#opeditWDButton');
+            this.$op_modal_button = $("#opbutton");
 
         },
         resetForm: function () {
@@ -440,7 +444,12 @@ $(document).ready(function () {
                 $('#opNameStaging').html('');
                 $('#opGeneStaging').html('');
                 $('#opPMIDStaging').html('');
-
+            });
+            this.$op_modal_button.off("click").click(function (e) {
+                e.preventDefault();
+                operonFormAll.operonFormData["PMID"] = {};
+                operonFormAll.operonFormData["otherGenes"] = [];
+                operonFormAll.operonFormData["locusTags"] = [];
             });
 
         },
@@ -489,7 +498,7 @@ $(document).ready(function () {
                 select: function (event, ui) {
                     operonFormAll.operonFormData["otherGenes"].push(ui.item.qid);
                     operonFormAll.operonFormData["locusTags"].push(ui.item.lt);
-                    console.log(operonFormAll.operonFormData);
+                    //console.log(operonFormAll.operonFormData);
                     $('#opGeneStaging').html("<span><h5>has genes: </h5>" + operonFormAll.operonFormData['locusTags'].join(", "));
                     $('#operonGenesForm').val('');
                     return false;
@@ -528,9 +537,9 @@ $(document).ready(function () {
                         success: function (data) {
                             var data_array = [];
                             var data_hash = {};
-                            console.log(data['results']['bindings']);
+                            //console.log(data['results']['bindings']);
                             if (data['results']['bindings'].length === 0) {
-                                data_hash = data_hash = {
+                                data_hash = {
                                     'label': "No operon found --  Enter the full name here and Click 'Submit' to set the operon's name",
                                     'value': 'None',
                                     'id': 'None',
@@ -562,6 +571,9 @@ $(document).ready(function () {
                         operonFormAll.operonFormData["operonName"] = ui.item.label;
                         $('#opNameStaging').html("<span><h5><strong>" + operonFormAll.operonFormData["operonName"] + "</strong></h5>");
                     }
+                    else {
+                        operonFormAll.operonFormData["operonName"] = 'None';
+                    }
                 }
             })
                 .autocomplete("instance")._renderItem = function (ul, item) {
@@ -582,7 +594,6 @@ $(document).ready(function () {
         },
 
         pmidForm: function () {
-            console.log(this.$pmid_input);
             //form for looking a publication to provide as a reference using eutils
             this.$pmid_input.autocomplete({
                 delay: 900,
@@ -595,7 +606,6 @@ $(document).ready(function () {
                         url: 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&retmode=json&id=' + request.term,
                         datatype: 'json',
                         success: function (data) {
-                            console.log('pmid source success');
                             var data_array = [];
                             var data_hash = {};
                             $.each(data['result'], function (key, element) {
@@ -642,15 +652,18 @@ $(document).ready(function () {
                 e.preventDefault();
                 console.log(operonFormAll.operonFormData);
 
-                //goFormAll.sendToServer(operonFormAll.operonFormData, '/wd_op_edit');
-                //$('form').each(function () {
-                //    this.reset()
-                //});
+                operonFormAll.sendToServer(operonFormAll.operonFormData, '/wd_operon_edit');
+                $('form').each(function () {
+                    this.reset()
+                });
+
             });
 
 
         },
         sendToServer: function (data, urlsuf) {
+            console.log("send to server");
+            console.log(data);
             var csrftoken = getCookie('csrftoken');
             $.ajax({
                 type: "POST",
@@ -659,19 +672,18 @@ $(document).ready(function () {
                 dataType: 'json',
                 headers: {'X-CSRFToken': csrftoken},
                 success: function (data) {
-                    console.log("go data success");
-                    //console.log(data);
+                    console.log("operon data success");
                     //alert("Successful interaction with the server");
                     if (data['write'] === "success") {
-                        alert("Wikidata item succesfully edited!\nIt may take a few minutes for it to show up here.");
+                        //alert("Wikidata item succesfully edited!\nIt may take a few minutes for it to show up here.");
                     }
                     else {
-                        alert("Could not edit Wikidata at this time");
+                        //alert("Could not edit Wikidata at this time");
                     }
 
                 },
                 error: function (data) {
-                    console.log("go data error");
+                    console.log("operon data error");
                     //console.log(data);
                     //alert("Something went wrong interacting with the server");
                 }
@@ -1071,7 +1083,6 @@ $(document).ready(function () {
                 if (operon['Operon'].length > 0) {
                     operonData.renderOP(operon);
                 }
-
             });
         },
         operonData: function (entrez) {
