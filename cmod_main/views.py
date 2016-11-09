@@ -306,7 +306,7 @@ def wd_operon_edit(request):
                     operon_data['operonQID'][0] = new_operon_wd_item.wd_item_id
                     opgene_wd_items()
                 except Exception as e:
-                    pprint.pprint(e.args)
+                    pprint.pprint(e)
         else:
             print("WG not authorized")
             pass #return http to alert user they need to authorize the app
