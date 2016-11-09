@@ -673,6 +673,7 @@ $(document).ready(function () {
                 headers: {'X-CSRFToken': csrftoken},
                 success: function (data) {
                     console.log("operon data success");
+                    console.log(data);
                     //alert("Successful interaction with the server");
                     if (data['write'] === "success") {
                         alert("Wikidata item succesfully edited!\nIt may take a few minutes for it to show up here.");
