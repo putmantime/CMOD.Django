@@ -294,11 +294,11 @@ def wd_operon_edit(request):
             else:
                 #  edit existing wikidata operon item
                 try:
-                    operon_wd_item = PBB_Core.WDItemEngine(wd_item_id=operon_data['operonQID'][0], domain=None,
+                    new_operon_wd_item = PBB_Core.WDItemEngine(wd_item_id=operon_data['operonQID'][0], domain=None,
                                                            data=operon_statements)
-                    operon_wd_item.write(login, auth_token=auth1)
-                    pprint.pprint(pprint.pprint(operon_wd_item.wd_json_representation))
-                    operon_data['operonQID'][0] = operon_wd_item.wd_item_id
+                    new_operon_wd_item.write(login, auth_token=auth1)
+                    pprint.pprint(pprint.pprint(new_operon_wd_item.wd_json_representation))
+                    operon_data['operonQID'][0] = new_operon_wd_item.wd_item_id
                     opgene_wd_items()
                 except Exception as e:
                     pprint.pprint(e.args)
