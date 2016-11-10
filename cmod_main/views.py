@@ -252,7 +252,7 @@ def wd_operon_edit(request):
             operon_statements.append(
                 PBB_Core.WDItemID(prop_nr='P527', value=gene, references=[operon_refs])
             )  # add each gene using has part predicate
-
+        print(operon_data['operonQID'][0])
         if operon_data['operonQID'][0] == 'None':  # if operon is not in wikidata create a new one
 
             try:
