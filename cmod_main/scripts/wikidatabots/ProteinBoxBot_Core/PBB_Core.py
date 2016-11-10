@@ -7,13 +7,438 @@ import itertools
 import requests
 import re
 import logging
+import sys
 import os
-import wd_property_store
-
 import copy
 import pprint
 
 import json
+
+wd_property_store = {
+    'domain_incompatibilities': {
+        'drugs': [
+
+        ],
+        'genes': [
+
+        ],
+        'proteins': [
+
+        ],
+        'disease ontology': [
+
+        ],
+        'interpro': [
+
+        ]
+    },
+
+    # a collection of values for the property 'subclass of' (P279) which are valid for a certain domain.
+    'valid_instances': {
+        'drugs': [
+            'Q11173',  # chemical compound (only one single, pure chemical compound)
+            'Q79529',  # chemical substance (several defined chemical compounds)
+            'Q8054',  # protein
+            'Q12140',  # pharmaceutical drug
+            'Q422248'  # monoclonal antibodies
+        ],
+        'genes': [
+            'Q7187'
+        ],
+        'proteins': [
+            'Q8054'
+        ],
+        'disease ontology': [
+
+        ],
+        'obo': [
+
+        ],
+        'interpro': [
+            'Q423026',  # active site
+            'Q616005',  # binding site
+            'Q898273',  # domain
+            'Q417841',  # family
+            'Q898362',  # ptm
+        ]
+    },
+
+    'wd_properties': {
+        'P715': {
+            'datatype': 'string',
+            'name': 'Drugbank ID',
+            'domain': ['drugs'],
+            'core_id': 'True'
+        },
+        'P279': {
+            'datatype': 'item',
+            'name': 'subclass of',
+            'domain': ['generic'],
+            'core_id': 'False'
+        },
+        'P31': {
+            'datatype': 'item',
+            'name': 'instance of',
+            'domain': ['generic', 'genomes', 'drugs'],
+            'core_id': 'False'
+        },
+        'P636': {
+            'datatype': 'item',
+            'name': 'route of administration',
+            'domain': ['drugs'],
+            'core_id': 'False'
+        },
+        'P267': {
+            'datatype': 'string',
+            'name': 'ATC code',
+            'domain': ['drugs'],
+            'core_id': 'True'
+        },
+        'P231': {
+            'datatype': 'string',
+            'name': 'CAS registry number',
+            'domain': ['drugs'],
+            'core_id': 'False'
+        },
+        'P486': {
+            'datatype': 'string',
+            'name': 'MeSH ID',
+            'domain': ['drugs', 'diseases'],
+            'core_id': 'True'
+        },
+        'P672': {
+            'datatype': 'string',
+            'name': 'MeSH Code',
+            'domain': ['drugs'],
+            'core_id': 'True'
+        },
+        'P662': {
+            'datatype': 'string',
+            'name': 'PubChem ID (CID)',
+            'domain': ['drugs'],
+            'core_id': 'True'
+        },
+        'P661': {
+            'datatype': 'string',
+            'name': 'ChemSpider ID',
+            'domain': ['drugs'],
+            'core_id': 'True'
+        },
+        'P652': {
+            'datatype': 'string',
+            'name': 'UNII',
+            'domain': ['drugs'],
+            'core_id': 'True'
+        },
+        'P665': {
+            'datatype': 'string',
+            'name': 'KEGG ID',
+            'domain': ['drugs'],
+            'core_id': 'True'
+        },
+        'P683': {
+            'datatype': 'string',
+            'name': 'ChEBI ID',
+            'domain': ['drugs'],
+            'core_id': 'True'
+        },
+        'P274': {
+            'datatype': 'string',
+            'name': 'chemical formula',
+            'domain': ['drugs'],
+            'core_id': 'False'
+        },
+        'P592': {
+            'datatype': 'string',
+            'name': 'ChEMBL ID',
+            'domain': ['drugs'],
+            'core_id': 'True'
+        },
+        'P233': {
+            'datatype': 'string',
+            'name': 'SMILES',
+            'domain': ['drugs'],
+            'core_id': 'False'
+        },
+        'P234': {
+            'datatype': 'string',
+            'name': 'InChI',
+            'domain': ['drugs'],
+            'core_id': 'True'
+        },
+        'P235': {
+            'datatype': 'string',
+            'name': 'InChIKey',
+            'domain': ['drugs'],
+            'core_id': 'True'
+        },
+        'P1805': {
+            'datatype': 'string',
+            'name': 'Word Health Organisation International Nonproprietary Name',
+            'domain': ['drugs'],
+            'core_id': 'True'
+        },
+        'P657': {
+            'datatype': 'string',
+            'name': 'RTECS Number',
+            'domain': ['drugs'],
+            'core_id': 'True'
+        },
+        'P595': {
+            'datatype': 'string',
+            'name': 'IUPHAR ID',
+            'domain': ['drugs'],
+            'core_id': 'True'
+        },
+        'P2115': {
+            'datatype': 'string',
+            'name': 'NDF-RT NUI',
+            'domain': ['drugs'],
+            'core_id': 'True'
+        },
+        'P699': {
+            'datatype': 'string',
+            'name': 'Disease Ontology ID',
+            'domain': ['diseases'],
+            'core_id': 'True'
+        },
+        'P1550': {
+            'datatype': 'string',
+            'name': 'Orphanet ID',
+            'domain': ['diseases'],
+            'core_id': 'True'
+        },
+        'P494': {
+            'datatype': 'string',
+            'name': 'ICD-10',
+            'domain': ['diseases'],
+            'core_id': 'False'
+        },
+        'P493': {
+            'datatype': 'string',
+            'name': 'ICD-9',
+            'domain': ['diseases'],
+            'core_id': 'False'
+        },
+        'P492': {
+            'datatype': 'string',
+            'name': 'OMIM',
+            'domain': ['diseases'],
+            'core_id': 'True'
+        },
+        'P1395': {
+            'datatype': 'string',
+            'name': 'National Cancer Thesaurus ID',
+            'domain': ['diseases'],
+            'core_id': 'True'
+        },
+        'P1748': {
+            'datatype': 'string',
+            'name': 'NCI Thesaurus ID',
+            'domain': ['diseases'],
+            'core_id': 'True'
+        },
+        'P351': {
+            'datatype': 'string',
+            'name': 'Entrez Gene ID',
+            'domain': ['genes'],
+            'core_id': 'True'
+        },
+        'P703': {
+            'datatype': 'item',
+            'name': 'found in taxon',
+            'domain': ['genes'],
+            'core_id': 'False'
+        },
+        'P594': {
+            'datatype': 'string',
+            'name': 'Ensembl Gene ID',
+            'domain': ['genes'],
+            'core_id': 'False'
+        },
+        'P704': {
+            'datatype': 'string',
+            'name': 'Ensembl Transcript ID',
+            'domain': ['genes'],
+            'core_id': 'False'
+        },
+        'P353': {
+            'datatype': 'string',
+            'name': 'Human Gene symbol',
+            'domain': ['genes'],
+            'core_id': 'True'
+        },
+        'P354': {
+            'datatype': 'string',
+            'name': 'HGNC symbol',
+            'domain': ['genes'],
+            'core_id': 'True'
+        },
+        'P593': {
+            'datatype': 'string',
+            'name': 'homologene id',
+            'domain': ['genes'],
+            'core_id': 'False'
+        },
+        'P639': {
+            'datatype': 'string',
+            'name': 'RefSeq RNA ID',
+            'domain': ['genes'],
+            'core_id': 'True'
+        },
+        'P1057': {
+            'datatype': 'item',
+            'name': 'chromosome',
+            'domain': ['genes'],
+            'core_id': 'False'
+        },
+        'P684': {
+            'datatype': 'item',
+            'name': 'ortholog',
+            'domain': ['genes'],
+            'core_id': 'False'
+        },
+        'P638': {
+            'datatype': 'string',
+            'name': 'PDB ID',
+            'domain': ['proteins'],
+            'core_id': 'False'
+        },
+        'P637': {
+            'datatype': 'string',
+            'name': 'Refseq Protein ID',
+            'domain': ['proteins'],
+            'core_id': 'False'
+        },
+        'P352': {
+            'datatype': 'string',
+            'name': 'Uniprot ID',
+            'domain': ['proteins'],
+            'core_id': 'True'
+        },
+        'P591': {
+            'datatype': 'string',
+            'name': 'EC Number',
+            'domain': ['proteins'],
+            'core_id': 'False'
+        },
+        'P705': {
+            'datatype': 'string',
+            'name': 'Ensembl Protein ID',
+            'domain': ['proteins'],
+            'core_id': 'False'
+        },
+        'P702': {
+            'datatype': 'item',
+            'name': 'Encoded By',
+            'domain': ['proteins'],
+            'core_id': 'False'
+        },
+        'P18': {
+            'datatype': 'url',
+            'name': 'Protein Structure Image',
+            'domain': ['proteins'],
+            'core_id': 'True'
+        },
+        'P671': {
+            'datatype': 'url',
+            'name': 'MGI',
+            'domain': ['genes'],
+            'core_id': 'True'
+        },
+        'P644': {
+            'datatype': 'string',
+            'name': 'Genomic start position',
+            'domain': ['genes'],
+            'core_id': 'False'
+        },
+        'P645': {
+            'datatype': 'string',
+            'name': 'Genomic end position',
+            'domain': ['genes'],
+            'core_id': 'False'
+        },
+        'P688': {
+            'datatype': 'item',
+            'name': 'encodes',
+            'domain': ['genes', 'proteins'],
+            'core_id': 'False'
+        },
+        'P225': {
+            'datatype': 'string',
+            'name': 'taxon name',
+            'domain': ['genomes'],
+            'core_id': 'False'
+        },
+        'P685': {
+            'datatype': 'string',
+            'name': 'NCBI Taxonomy ID',
+            'domain': ['genomes'],
+            'core_id': 'True'
+        },
+        'P171': {
+            'datatype': 'item',
+            'name': 'parent taxon',
+            'domain': ['genomes'],
+            'core_id': 'False'
+        },
+        'P1065': {
+            'datatype': 'url',
+            'name': 'Archive url',
+            'domain': ['genomes'],
+            'core_id': 'True'
+        },
+        'P856': {
+            'datatype': 'url',
+            'name': 'offical website',
+            'domain': ['genomes'],
+            'core_id': 'False'
+        },
+        'P680': {
+            'datatype': 'item',
+            'name': 'molecular function',
+            'domain': ['proteins'],
+            'core_id': 'False'
+        },
+        'P681': {
+            'datatype': 'item',
+            'name': 'cell component',
+            'domain': ['proteins'],
+            'core_id': 'False'
+        },
+        'P682': {
+            'datatype': 'item',
+            'name': 'biological process',
+            'domain': ['proteins'],
+            'core_id': 'False'
+        },
+        'P1554': {
+            'datatype': 'item',
+            'name': 'uberon id',
+            'domain': ['anatomical_structure', 'obo'],
+            'core_id': 'False'
+        },
+        'P1709': {
+            'datatype': 'item',
+            'name': 'equivalent class',
+            'domain': ['genes', 'proteins', 'diseases', 'drugs', 'anatomical_structure'],
+            'core_id': 'False'
+        },
+        'P686': {
+            'datatype': 'item',
+            'name': 'Gene Ontology ID',
+            'domain': ['obo'],
+            'core_id': 'True'
+        },
+        'P2926': {
+            'datatype': 'string',
+            'name': 'InterPro ID',
+            'domain': ['interpro'],
+            'core_id': 'True'
+        }
+
+    }
+}
 
 """
 Authors: 
@@ -63,7 +488,6 @@ class WDItemList(object):
 
 
 class WDItemEngine(object):
-
     log_file_name = ''
 
     def __init__(self, wd_item_id='', item_name='', domain='', data=None, server='www.wikidata.org',
@@ -447,10 +871,10 @@ class WDItemEngine(object):
         """
         # generate a set containing all property number of the item currently loaded
         core_props_list = set([
-            x.get_prop_nr()
-            for x in self.statements if x.get_prop_nr() in wd_property_store.wd_properties and
-            wd_property_store.wd_properties[x.get_prop_nr()]['core_id'] == 'True'
-        ])
+                                  x.get_prop_nr()
+                                  for x in self.statements if x.get_prop_nr() in wd_property_store.wd_properties and
+                                  wd_property_store.wd_properties[x.get_prop_nr()]['core_id'] == 'True'
+                                  ])
 
         # compare the claim values of the currently loaded QIDs to the data provided in self.data
         count_existing_ids = 0
@@ -651,7 +1075,7 @@ class WDItemEngine(object):
                     and json_data['error']['code'] == 'readonly':
                 print('Wikidata currently is in readonly mode, waiting for 60 seconds')
                 time.sleep(60)
-                #return self.write(login=login)
+                # return self.write(login=login)
                 print(edit_token)
                 return self.write(edit_token)
 
@@ -826,7 +1250,7 @@ class JsonParser(object):
                         jsn = ref_block['snaks'][prop]
 
                         for prop_ref in jsn:
-                            #pprint.pprint(prop_ref)
+                            # pprint.pprint(prop_ref)
 
                             ref_class = self.get_class_representation(prop_ref)
                             ref_class.is_reference = True
@@ -835,7 +1259,7 @@ class JsonParser(object):
 
                             self.references[count].append(copy.deepcopy(ref_class))
 
-                # print(self.references)
+                            # print(self.references)
             if 'qualifiers' in json_representation:
                 for prop in json_representation['qualifiers-order']:
                     for qual in json_representation['qualifiers'][prop]:
@@ -849,12 +1273,11 @@ class JsonParser(object):
                         qual_class.set_hash(qual_hash)
                         self.qualifiers.append(qual_class)
 
-                # print(self.qualifiers)
+                        # print(self.qualifiers)
             mainsnak = self.get_class_representation(json_representation['mainsnak'])
             mainsnak.set_references(self.references)
             mainsnak.set_qualifiers(self.qualifiers)
             if 'id' in json_representation:
-
                 mainsnak.set_id(json_representation['id'])
             if 'rank' in json_representation:
                 mainsnak.set_rank(json_representation['rank'])
@@ -1621,7 +2044,7 @@ class WDMonolingualText(WDBaseDataType):
         self.language = language
         value = (value, language)
 
-        super(WDMonolingualText, self)\
+        super(WDMonolingualText, self) \
             .__init__(value=value, snak_type=snak_type, data_type=self.DTYPE, is_reference=is_reference,
                       is_qualifier=is_qualifier, references=references, qualifiers=qualifiers, rank=rank,
                       prop_nr=prop_nr, check_qualifier_equality=check_qualifier_equality)
@@ -1629,7 +2052,6 @@ class WDMonolingualText(WDBaseDataType):
         self.set_value(value)
 
     def set_value(self, value):
-
         self.json_representation['datavalue'] = {
             'value': {
                 'text': value[0],
@@ -1819,7 +2241,7 @@ class WDGlobeCoordinate(WDBaseDataType):
         value = (latitude, longitude, precision)
         self.latitude, self.longitude, self.precision = value
 
-        super(WDGlobeCoordinate, self)\
+        super(WDGlobeCoordinate, self) \
             .__init__(value=value, snak_type=snak_type, data_type=self.DTYPE, is_reference=is_reference,
                       is_qualifier=is_qualifier, references=references, qualifiers=qualifiers, rank=rank,
                       prop_nr=prop_nr, check_qualifier_equality=check_qualifier_equality)
@@ -1827,7 +2249,6 @@ class WDGlobeCoordinate(WDBaseDataType):
         self.set_value(value)
 
     def set_value(self, value):
-
         # TODO: Introduce validity checks for coordinates
 
         self.latitude, self.longitude, self.precision = value
