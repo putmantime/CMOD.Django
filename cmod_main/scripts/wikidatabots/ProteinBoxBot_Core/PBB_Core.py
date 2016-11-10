@@ -15,7 +15,7 @@ import pprint
 import json
 
 
-class wd_property_store(object):
+class wd_property_object(object):
     def __init__(self):
         self.domain_incompatibilities = {
             'drugs': [
@@ -458,7 +458,7 @@ along with ProteinBoxBot.  If not, see <http://www.gnu.org/licenses/>.
 
 __author__ = 'Sebastian Burgstaller, Andra Waagmeester'
 __license__ = 'GPL'
-
+wd_property_store = wd_property_object()
 
 class WDItemList(object):
     def __init__(self, wdquery, wdprop=""):
