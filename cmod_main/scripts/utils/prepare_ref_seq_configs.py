@@ -104,12 +104,12 @@ class PrepareRefSeqs(object):
         type = Faceted
 
         [tracks.genes_canvas_mod]
-        key = SPARQL Genes Tracks.conf
+        key = Genes
         type = JBrowse/View/Track/CanvasFeatures
         storeClass = JBrowse/Store/SeqFeature/SPARQL
         urlTemplate = https://query.wikidata.org/sparql
         disablePreflight = true
-        style.color = function(feature) { return '#B00C7A'; }
+        style.color = function(feature) { return '#5C99F3'; }
         fmtDetailValue_Name = function(name) { return 'alert(name)'; }
         '''
 
@@ -190,7 +190,7 @@ class PrepareRefSeqs(object):
         tracks_conf.close()
 
 
-
+PrepareRefSeqs()
 
 #
 #

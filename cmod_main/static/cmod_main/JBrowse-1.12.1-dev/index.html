@@ -4,6 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>JBrowse</title>
     <link rel="stylesheet" type="text/css" href="css/genome.css">
+      <link rel="stylesheet" type="text/css" href="../css/jbrowse.css">
 
 
 
@@ -100,13 +101,18 @@
 
                    // create a JBrowse global variable holding the JBrowse instance
                    JBrowse = new Browser( config );
+                 JBrowse.afterMilestone('loadRefSeqs', function() { dojo.destroy(dojo.byId('loading_screen')); });
         });
     </script>
 
   </head>
 
   <body>
-    <div id="GenomeBrowser" style="height: 100%; width: 100%; padding: 0; border: 0;"></div>
+     <div id="GenomeBrowser" style="height: 100%; width: 100%; padding: 0; border: 0;">
+    <div class="loader_gif" id="loading_screen" style="padding: 50px;">
+    <h1>Loading data</h1>
+    </div>
+  </div>
     <div style="display: none">JBrowseDefaultMainPage</div>
   </body>
 </html>
