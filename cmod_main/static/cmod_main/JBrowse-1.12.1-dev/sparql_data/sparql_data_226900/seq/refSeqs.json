@@ -1,1 +1,1 @@
-[{"name":"NC_004722.1","start":0,"seqChunkSize":20000,"description":"Bacillus cereus ATCC 14579 chromosome, complete genome","end":5411809},{"end":15274,"description":"Bacillus cereus ATCC 14579 plasmid pBClin15, complete sequence","seqChunkSize":20000,"name":"NC_004721.2","start":0}]
+[{"start":0,"description":"Bacillus cereus ATCC 14579 chromosome, complete genome","end":5411809,"seqChunkSize":20000,"name":"NC_004722.1"},{"name":"NC_004721.2","seqChunkSize":20000,"start":0,"description":"Bacillus cereus ATCC 14579 plasmid pBClin15, complete sequence","end":15274}]

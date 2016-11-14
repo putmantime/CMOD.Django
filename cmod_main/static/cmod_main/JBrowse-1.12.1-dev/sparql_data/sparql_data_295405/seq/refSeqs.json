@@ -1,1 +1,1 @@
-[{"name":"NC_006347.1","end":5277274,"start":0,"description":"Bacteroides fragilis YCH46 DNA, complete genome","seqChunkSize":20000},{"description":"Bacteroides fragilis YCH46 plasmid pBFY46, complete sequence","seqChunkSize":20000,"start":0,"end":33716,"name":"NC_006297.1"}]
+[{"end":5277274,"start":0,"seqChunkSize":20000,"name":"NC_006347.1","description":"Bacteroides fragilis YCH46 DNA, complete genome"},{"description":"Bacteroides fragilis YCH46 plasmid pBFY46, complete sequence","name":"NC_006297.1","end":33716,"seqChunkSize":20000,"start":0}]

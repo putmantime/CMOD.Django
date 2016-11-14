@@ -1,16 +1,28 @@
 var endpoint = "https://query.wikidata.org/sparql?format=json&query=";
 
+
+var getOrgsSimple = [
+
+
+];
 //get list of organisms from Wikidata with sparql query
 var getOrgs = function (callbackOnSuccess) {
     var taxids = {};
-    var orgTags = [];
+    var sc = {
+                    "name": "Saccharomyces cerevisiae S288c",
+                    "value": "Saccharomyces cerevisiae S288c" + " | " + "559292" + " | " + "Q27510868",
+                    "taxid": "559292",
+                    "refseq": '',
+                    'qid': "Q27510868"
+                };
+    var orgTags = [sc];
     var queryOrgs = [
         "SELECT ?species ?speciesLabel ?taxid ?RefSeq",
         "WHERE { ?species wdt:P171* wd:Q10876;",
         "wdt:P685 ?taxid; wdt:P2249 ?RefSeq.",
         "SERVICE wikibase:label {",
         "bd:serviceParam wikibase:language \"en\" .}}"].join(" ");
-    console.log(queryOrgs);
+    //console.log(queryOrgs);
     $.ajax({
         type: "GET",
         url: endpoint + queryOrgs,
@@ -27,6 +39,7 @@ var getOrgs = function (callbackOnSuccess) {
                     'qid': qid
                 };
                 orgTags.push(taxids);
+
             });
         }
     });
@@ -44,8 +57,8 @@ var getGenes = function (taxid, callbackOnSuccess) {
         "WHERE {",
         "?specieswd wdt:P685",
         "\"" + taxid + "\".",
-        "?specieswd wdt:P685 ?taxid;",
-        "wdt:P2249 ?genomeaccession.",
+        "?specieswd wdt:P685 ?taxid.",
+        "OPTIONAL {?specieswd wdt:P2249 ?genomeaccession.}",
         "?gene wdt:P703 ?specieswd;",
         "wdt:P351 ?entrezid ;",
         "wdt:P644 ?genomicstart;",
@@ -107,8 +120,8 @@ var getGenes = function (taxid, callbackOnSuccess) {
 
             });
 
-            console.log(gene_count);
-            console.log(chr_count);
+            //console.log(gene_count);
+            //console.log(chr_count);
             callbackOnSuccess(geneTags);
         }
     });
@@ -132,7 +145,7 @@ var getGOTerms = function (uniprot, callBackonSuccess) {
         "SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\" .}}"
 
     ].join(" ");
-    console.log(goQuery);
+    //console.log(goQuery);
 
     $.ajax({
         type: "GET",
@@ -188,7 +201,7 @@ var getInterPro = function (uniprot, callBackonSuccess) {
         "filter (lang(?interPro_label) = \"en\") .}"
 
     ].join(" ");
-    console.log(ipQuery);
+    //console.log(ipQuery);
 
     $.ajax({
         type: "GET",
@@ -221,7 +234,7 @@ var getEvidenceCodes = function (callBackonSuccess) {
             "SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\" .}",
             "}"
         ].join(" ");
-    console.log(ev_query);
+    //console.log(ev_query);
 
     $.ajax({
         type: "GET",
@@ -263,7 +276,7 @@ var getOperonData = function (entrez, callBackonSuccess) {
         "bd:serviceParam wikibase:language \"en\" .",
         "}}"
     ].join(" ");
-    console.log(opQuery);
+    //console.log(opQuery);
 
     $.ajax({
         type: "GET",
@@ -296,7 +309,7 @@ var getOperon = function (entrez, callBackonSuccess) {
         "bd:serviceParam wikibase:language \"en\" .",
         "}}"
     ].join(" ");
-    console.log(operonQuery);
+    //console.log(operonQuery);
 
     $.ajax({
         type: "GET",

@@ -1,1 +1,1 @@
-[{"name":"NC_008526.1","seqChunkSize":20000,"end":2895264,"start":0,"description":"Lactobacillus casei ATCC 334 chromosome, complete genome"},{"end":29061,"seqChunkSize":20000,"name":"NC_008502.1","description":"Lactobacillus casei ATCC 334 plasmid 1, complete sequence","start":0}]
+[{"end":2895264,"name":"NC_008526.1","description":"Lactobacillus casei ATCC 334 chromosome, complete genome","seqChunkSize":20000,"start":0},{"description":"Lactobacillus casei ATCC 334 plasmid 1, complete sequence","end":29061,"name":"NC_008502.1","start":0,"seqChunkSize":20000}]

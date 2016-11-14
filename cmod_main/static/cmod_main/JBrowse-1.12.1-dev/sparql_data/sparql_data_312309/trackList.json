@@ -1,1 +1,1 @@
-{"tracks":[{"type":"SequenceTrack","storeClass":"JBrowse/Store/Sequence/StaticChunked","category":"Reference sequence","urlTemplate":"seq/{refseq_dirpath}/{refseq}-","key":"Reference sequence","chunkSize":20000,"label":"DNA"}],"formatVersion":1}
+{"formatVersion":1,"tracks":[{"storeClass":"JBrowse/Store/Sequence/StaticChunked","label":"DNA","urlTemplate":"seq/{refseq_dirpath}/{refseq}-","type":"SequenceTrack","chunkSize":20000,"key":"Reference sequence","category":"Reference sequence"}]}

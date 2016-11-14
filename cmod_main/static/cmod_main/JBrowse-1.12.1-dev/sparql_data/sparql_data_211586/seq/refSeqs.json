@@ -1,1 +1,1 @@
-[{"seqChunkSize":20000,"start":0,"name":"NC_004347.2","end":4969811,"description":"Shewanella oneidensis MR-1 chromosome, complete genome"},{"seqChunkSize":20000,"start":0,"name":"NC_004349.1","description":"Shewanella oneidensis MR-1 plasmid megaplasmid, complete sequence","end":161613}]
+[{"end":4969811,"description":"Shewanella oneidensis MR-1 chromosome, complete genome","name":"NC_004347.2","start":0,"seqChunkSize":20000},{"seqChunkSize":20000,"description":"Shewanella oneidensis MR-1 plasmid megaplasmid, complete sequence","start":0,"name":"NC_004349.1","end":161613}]

@@ -1,1 +1,1 @@
-[{"description":"Coxiella burnetii RSA 493 chromosome, complete genome","seqChunkSize":20000,"start":0,"name":"NC_002971.3","end":1995281},{"end":37393,"name":"NC_004704.1","start":0,"description":"Coxiella burnetii RSA 493 plasmid pQpH1, complete sequence","seqChunkSize":20000}]
+[{"end":1995281,"description":"Coxiella burnetii RSA 493 chromosome, complete genome","seqChunkSize":20000,"start":0,"name":"NC_002971.3"},{"end":37393,"description":"Coxiella burnetii RSA 493 plasmid pQpH1, complete sequence","seqChunkSize":20000,"name":"NC_004704.1","start":0}]
