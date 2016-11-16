@@ -8,11 +8,7 @@ html, body{
 
 }
 
-/*.main-landing-page, .container-fluid {*/
-    /*height: 100%;*/
-    /*/!*min-height: 1000px;*!/*/
 
-/*}*/
 
 #main-wdlogo-div {
     float: right;
@@ -36,7 +32,7 @@ html, body{
 }
 
 #hpylori {
-    max-width: 100%;
+    max-width: 70%;
     height: auto;
     text-align: center;
     margin-top: 20px;
