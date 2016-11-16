@@ -49,6 +49,7 @@ $(document).ready(function () {
                         geneForm.init(currentTaxa.Taxid);
                         //render organism data
                         orgData.init(currentTaxa);
+                        annotations.init(currentTaxa.Taxid);
 
                         return false;
                     }
@@ -439,8 +440,8 @@ $(document).ready(function () {
         resetForm: function () {
             $('.modal').on('hidden.bs.modal', function () {
                 $('form').each(function () {
-                            this.reset()
-                        });
+                    this.reset()
+                });
                 $('#opNameStaging').html('');
                 $('#opGeneStaging').html('');
                 $('#opPMIDStaging').html('');
@@ -861,7 +862,7 @@ $(document).ready(function () {
         goTermData: function (uniprot) {
 
             getGOTerms(uniprot, function (goTerms) {
-                //console.log(goTerms);
+                console.log(goTerms);
                 goData.render(goTerms);
             });
 
@@ -1402,12 +1403,273 @@ $(document).ready(function () {
     };
     oauth_authorization.init();
 /////////////////////////////////////////////////End Wikidata API///////////////////////////////////////////////////////
+    var annotations = {
+        annotations_data: {},
+        annotations_list: [],
+        annotations_list_list: [],
+        endpoint: "https://query.wikidata.org/sparql?format=json&query=",
+        init: function (taxid) {
+            this.taxid = taxid;
+            this.annotations_list_list = [];
+            this.getGeneOntologyCounts("Molecular Function");
+            this.getGeneOntologyCounts("Cellular Component");
+            this.getGeneOntologyCounts("Biological Process");
+            this.getChildEntityCounts("Genes");
+            this.getChildEntityCounts("Proteins");
+            this.getOperonCounts();
+            this.getInterProCounts();
+            this.getECNumberCounts();
+
+
+            console.log(annotations.annotations_data);
+            console.log(annotations.annotations_list);
+
+        },
+
+        getChildEntityCounts: function (enttype) {
+            var entqids = {
+                "Genes": "Q7187",
+                "Proteins": "Q8054",
+                "Operons": "Q139677"
+            };
+
+            var queryentity = "SELECT (count (distinct ?entity) as ?entity_counts) " +
+                "WHERE { ?strain wdt:P685 '" + this.taxid + "'. " +
+                "?entity wdt:P703 ?strain; wdt:P279 wd:" + entqids[enttype] + ".} GROUP BY ?strain";
+
+
+            $.ajax({
+                type: "GET",
+                url: annotations.endpoint + queryentity,
+                dataType: 'json',
+                success: function (data) {
+                    var dataDict = {
+                        "label": enttype,
+                        "value": 0
+                    };
+                    var dataList = [enttype];
+                    if (data['results']['bindings'].length > 0) {
+                        dataDict["value"] = data['results']['bindings'][0]['entity_counts']['value'];
+                        annotations.annotations_list.push(dataDict);
+                        annotations.annotations_data[enttype] = data['results']['bindings'][0]['entity_counts']['value'];
+                    }
+                    else {
+                        annotations.annotations_data[enttype] = 0;
+                        annotations.annotations_list.push(dataDict);
+                    }
+                }
+            });
+        },
+        getOperonCounts: function () {
+            var entqids = {
+                "Operons": "Q139677"
+            };
+
+            var queryentity = "SELECT (count (distinct ?entity) as ?entity_counts) " +
+                "WHERE { ?strain wdt:P685 '" + this.taxid + "'. " +
+                "?entity wdt:P703 ?strain; wdt:P279 wd:" + entqids["Operons"] + ".} GROUP BY ?strain";
+
+
+            $.ajax({
+                type: "GET",
+                url: annotations.endpoint + queryentity,
+                dataType: 'json',
+                success: function (data) {
+                    console.log("OperonSuccess");
+                    var dataDict = {
+                        "label": "Operons",
+                        "value": 0
+                    };
+                    var dataList = ["Operons"];
+                    if (data['results']['bindings'].length > 0) {
+                        dataDict["value"] = data['results']['bindings'][0]['entity_counts']['value'];
+                        annotations.annotations_list.push(dataDict);
+                        annotations.annotations_data["Operons"] = data['results']['bindings'][0]['entity_counts']['value'];
+
+                        dataList.push(parseInt(data['results']['bindings'][0]['entity_counts']['value']));
+                    }
+                    else {
+                        annotations.annotations_data["Operons"] = 0;
+                        annotations.annotations_list.push(dataDict);
+                        dataList.push(0);
+                    }
+                    annotations.annotations_list_list.push(dataList);
+                    annotations.renderChart(annotations.annotations_list_list);
+                }
+            });
+        },
+
+
+        getGeneOntologyCounts: function (goclass) {
+            var goprops = {
+                "Molecular Function": "P680",
+                "Cellular Component": "P681",
+                "Biological Process": "P682"
+            };
+            var queryMolFunc = "SELECT (count (distinct ?protein) as ?protein_counts) " +
+                "WHERE { ?strain wdt:P685 '" + this.taxid + "'. " +
+                "?protein wdt:P703 ?strain; wdt:P279 wd:Q8054; wdt:" + goprops[goclass] + " ?molfunc.} GROUP BY ?strain";
+
+
+            $.ajax({
+                type: "GET",
+                url: annotations.endpoint + queryMolFunc,
+                dataType: 'json',
+                success: function (data) {
+                    var dataDict = {
+                        "label": goclass,
+                        "value": 0
+                    };
+                    var dataList = [goclass];
+                    if (data['results']['bindings'].length > 0) {
+                        annotations.annotations_data[goclass] = data['results']['bindings'][0]['protein_counts']['value'];
+                        dataDict["value"] = data['results']['bindings'][0]['protein_counts']['value'];
+                        annotations.annotations_list.push(dataDict)
+                        dataList.push(parseInt(data['results']['bindings'][0]['protein_counts']['value']));
+                    }
+                    else {
+                        annotations.annotations_data[goclass] = 0;
+                        annotations.annotations_list.push(dataDict);
+                        dataList.push(0);
+                    }
+                    annotations.annotations_list_list.push(dataList);
+                    annotations.renderChart(annotations.annotations_list_list);
+                }
+            });
+        },
+        getInterProCounts: function () {
+            var queryMolFunc = "SELECT (count (distinct ?protein) as ?protein_counts) " +
+                "WHERE { ?strain wdt:P685 '" + this.taxid + "'. " +
+                "?protein wdt:P703 ?strain; " +
+                "wdt:P279 wd:Q8054; " +
+                "wdt:P527 ?hasPart. " +
+                "?hasPart wdt:P2926 ?interproID. } " +
+                "GROUP BY ?strain";
+
+
+            $.ajax({
+                type: "GET",
+                url: annotations.endpoint + queryMolFunc,
+                dataType: 'json',
+                success: function (data) {
+                    var dataDict = {
+                        "label": "InterPro",
+                        "value": 0
+                    };
+                    var dataList = ["InterPro"];
+                    if (data['results']['bindings'].length > 0) {
+                        annotations.annotations_data['InterPro'] = data['results']['bindings'][0]['protein_counts']['value'];
+                        dataDict["value"] = data['results']['bindings'][0]['protein_counts']['value'];
+                        annotations.annotations_list.push(dataDict);
+                        dataList.push(parseInt(data['results']['bindings'][0]['protein_counts']['value']));
+                    }
+                    else {
+                        annotations.annotations_data['InterPro'] = 0;
+                        annotations.annotations_list.push(dataDict);
+                        dataList.push(0);
+                    }
+                    annotations.annotations_list_list.push(dataList);
+                    annotations.renderChart(annotations.annotations_list_list);
+                }
+            });
+        },
+        getECNumberCounts: function () {
+            var queryEC = "SELECT (count (distinct ?protein) as ?protein_counts) " +
+                "WHERE { ?strain wdt:P685 '" + this.taxid + "'. " +
+                "?protein wdt:P703 ?strain; " +
+                "{?protein wdt:P680 ?goterm.} " +
+                "UNION{?protein wdt:P681 ?goterm.} " +
+                "UNION{?protein wdt:P681 ?goterm.}  " +
+                "?goterm wdt:P591 ?ecnumber. }";
+
+
+            $.ajax({
+                type: "GET",
+                url: annotations.endpoint + queryEC,
+                dataType: 'json',
+                success: function (data) {
+                    var dataDict = {
+                        "label": "ECNumber",
+                        "value": 0
+                    };
+                    var dataList = ['EC Number'];
+                    if (data['results']['bindings'].length > 0) {
+                        annotations.annotations_data['ECNumber'] = data['results']['bindings'][0]['protein_counts']['value'];
+                        dataDict["value"] = data['results']['bindings'][0]['protein_counts']['value'];
+                        annotations.annotations_list.push(dataDict);
+                        dataList.push(parseInt(data['results']['bindings'][0]['protein_counts']['value']));
+                    }
+                    else {
+                        annotations.annotations_data['ECNumber'] = 0;
+                        annotations.annotations_list.push(dataDict);
+                        dataList.push(0);
+                    }
+                    annotations.annotations_list_list.push(dataList);
+                    annotations.renderChart(annotations.annotations_list_list);
+                }
+            });
+        },
+        renderGenesProteins: function (data) {
+            console.log(data['Genes'], data['Proteins']);
+            $('#genecount').html("<span>" + data['Genes'] + "</span>");
+            $('#proteincount').html("<span>" + data['Proteins'] + "</span>");
+
+
+        },
+        renderChart: function (dataSet) {
+            // Load the Visualization API and the corechart package.
+            google.charts.load('current', {'packages': ['corechart']});
+
+            // Set a callback to run when the Google Visualization API is loaded.
+            google.charts.setOnLoadCallback(drawChart);
+
+            // Callback that creates and populates a data table,
+            // instantiates the pie chart, passes in the data and
+            // draws it.
+            function drawChart() {
+
+                // Create the data table.
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Entity');
+                data.addColumn('number', 'Entities');
+                data.addRows(dataSet);
+
+                // Set chart options
+
+                var options = {
+                    width: '100%',
+                    height: '80%',
+                    legend: 'none',
+                    bar: {groupWidth: '95%'},
+                    vAxis: {
+                        gridlines: {count: 4},
+
+
+                    },
+                    hAxis: {
+                        textPosition: 'out',
+                        textStyle: {bold: true}
+                    },
+                    chartArea: {'width': '80%', 'height': '60%'}
+                };
+
+                // Instantiate and draw our chart, passing in some options.
+                var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+
+                chart.draw(data, options);
+                annotations.renderGenesProteins(annotations.annotations_data);
+            }
+
+        }
+
+    };
 
 
 ////////////////////////////////////////////////////Begin preload///////////////////////////////////////////////////////
 
     orgData.init(currentTaxa);
     geneForm.init(currentTaxa['Taxid']);
+    annotations.init(currentTaxa['Taxid']);
 //////////////////////////////////////////////////////End data preload//////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////Experimental /////////////////////////////////////////////////

@@ -16,7 +16,9 @@ html, body {
 html {
     background: #385d94;
 }
-
+a:link {
+   color:inherit;
+}
 body {
 
     border-radius: 10px;
@@ -161,7 +163,7 @@ iframe {
 .org-data-box {
     padding: 10px;
     overflow: auto;
-    height: 65%;
+    height: 80%;
 }
 
 .main-data {

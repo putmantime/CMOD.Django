@@ -343,3 +343,7 @@ def wd_oauth_deauth(request):
         deauth = json.dumps(request.POST)
         if deauth['deauth'] == "True":
             request.session.flush()
+
+
+def annotations(request):
+    return render(request, "cmod_main/annotations.html", context={"data": "None"})

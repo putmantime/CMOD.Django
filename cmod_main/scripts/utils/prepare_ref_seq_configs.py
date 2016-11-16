@@ -190,7 +190,7 @@ class PrepareRefSeqs(object):
         tracks_conf.close()
 
 
-PrepareRefSeqs()
+
 
 #
 #

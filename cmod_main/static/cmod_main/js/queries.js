@@ -1,10 +1,7 @@
 var endpoint = "https://query.wikidata.org/sparql?format=json&query=";
 
 
-var getOrgsSimple = [
 
-
-];
 //get list of organisms from Wikidata with sparql query
 var getOrgs = function (callbackOnSuccess) {
     var taxids = {};
@@ -75,7 +72,7 @@ var getGenes = function (taxid, callbackOnSuccess) {
         "bd:serviceParam wikibase:language \"en\" .",
         "}}"
     ].join(" ");
-    console.log(queryGenes);
+    //console.log(queryGenes);
     $.ajax({
         type: "GET",
         url: endpoint + queryGenes,
@@ -145,7 +142,7 @@ var getGOTerms = function (uniprot, callBackonSuccess) {
         "SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\" .}}"
 
     ].join(" ");
-    //console.log(goQuery);
+    console.log(goQuery);
 
     $.ajax({
         type: "GET",

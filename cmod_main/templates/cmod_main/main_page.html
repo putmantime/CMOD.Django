@@ -11,7 +11,7 @@
     <link rel='stylesheet' type='text/css' href="{% static 'cmod_main/css/jquery-ui.theme.css' %}"/>
     <link rel='stylesheet' type='text/css' href="{% static 'cmod_main/css/jquery-ui.structure.css' %}"/>
     <link rel='stylesheet' type='text/css' href="{% static 'cmod_main/css/jquery-ui.css' %}"/>
-
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
@@ -244,7 +244,7 @@
                 <div style="text-align: right" class="col-xs-1"><img id="hpy_logo"
                                                                      src="{%  static 'cmod_main/img/Hpylori2.png'%}">
                 </div>
-                <div class="col-xs-11" id="main-title"><h2>WikiGenomes</h2></div>
+                <div class="col-xs-11" id="main-title"><a href="www.wikigenome.org"><h2>WikiGenomes</h2></a></div>
             </div>
         </div>
         <div id="orgFormModule" class="col-xs-4 col orgFormDiv">
@@ -278,6 +278,19 @@
 
                     <div id="taxid" class="main-data"></div>
                     <div id="QID" class="main-data"></div>
+                    <div class="main-data" style="text-align: center; margin-top: 20px">
+
+                        <div class="row">
+                            <div class="col-xs-6"><strong>Proteins</strong></div>
+                            <div class="col-xs-6"><strong>Genes</strong></div>
+                        </div>
+                        <div class="row">
+                            <div id='genecount' class="col-xs-6"></div>
+                            <div id='proteincount' class="col-xs-6"></div>
+                        </div>
+                        <div><h5><strong>Annotations</strong></h5></div>
+                    </div>
+                    <div id="chart_div"></div>
 
                 </div>
             </div>
@@ -291,19 +304,19 @@
     <div class="row bottom-row">
         <div class="col-xs-3 col">
             <div id="geneDataModule" class="box">
-                    <form id="geneFormModule" class="ui-widget form-horizontal">
-                        {# {% csrf_token %}#}
-                        <div class="form-group input-sm row">
-                            <div class="col-xs-2">
-                            <label  class="form-label" for="geneform"><strong>Gene Search: </strong></label>
-                                </div>
-                            <div class="col-xs-10">
+                <form id="geneFormModule" class="ui-widget form-horizontal">
+                    {# {% csrf_token %}#}
+                    <div class="form-group input-sm row">
+                        <div class="col-xs-2">
+                            <label class="form-label" for="geneform"><strong>Gene Search: </strong></label>
+                        </div>
+                        <div class="col-xs-10">
                             <input type="text" class="form-control" id="geneform"
                                    placeholder="choose a gene" name="geneFormItem">
-                                </div>
                         </div>
-                    </form>
-                <div  class="tab-data">
+                    </div>
+                </form>
+                <div class="tab-data">
                     <ul id='gene-prot-tabs' class="nav nav-tabs" role="tablist">
                         <li role="presentation" class="active"><a href="#gene-tab" aria-controls="gene"
                                                                   role="tab"
