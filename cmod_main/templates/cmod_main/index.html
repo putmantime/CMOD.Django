@@ -18,44 +18,196 @@
 </head>
 <body>
 <div class="container-fluid main-landing-page">
-    <div class="">
-        <div class="row">
-            <div class="col-md-12">
-                <h1>Welcome to WikiGenomes.org</h1>
-                <h3 style="margin-top: 50px">A freely open, editable, and centralized model organism database <br> for the biological research community.</h3>
-                <h4>powered by Wikidata</h4>
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Welcome to WikiGenomes.org</h1>
+
+            <h3 style="margin-top: 50px">A freely open, editable, and centralized model organism database <br> for the
+                biological research community.</h3>
+            <h4>powered by Wikidata</h4>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <div id="indexFormModule">
+
+
+                <form class="main-form-div  ui-widget">
+                    <div class="form-group">
+                        <label for="indexForm"></label>
+                        <input type="text" class="form-control formborders" id="indexForm"
+                               placeholder="e.g. Helicobacter pylori 26695" name="orgFormItem">
+
+                    </div>
+                </form>
+                <h4>Start typing the name of an organism or click the example below to continue.</h4>
+                <a id="loadHpylori" href=""><h3><u><i>Helicobacter pylori 26695</i></u></h3></a>
             </div>
         </div>
+        <div class="col-md-3"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6"><img id="hpylori" src="{%  static 'cmod_main/img/Hpylori2.png'%}"></div>
+        <div class="col-md-3"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
 
-        <div class="row">
-            <div class="col-md-3"></div>
-            <div class="col-md-6">
-                <div id="indexFormModule">
-
-
-                    <form class="main-form-div  ui-widget">
-                        <div class="form-group">
-                            <label for="indexForm"></label>
-                            <input type="text" class="form-control formborders" id="indexForm"
-                                   placeholder="e.g. Helicobacter pylori 26695" name="orgFormItem">
-
-                        </div>
-                    </form>
-                    <h4>Start typing the name of an organism to continue...</h4>
-                </div>
-            </div>
-            <div class="col-md-3"></div>
         </div>
-        <div class="row">
-            <div class="col-md-3"></div>
-            <div class="col-md-6"><img id="hpylori" src="{%  static 'cmod_main/img/Hpylori2.png'%}"></div>
+    </div>
 
-            <div class="col-md-3"></div>
-        </div>
 
+    <div class="row">
+        <div class="col-xs-1"></div>
+        <ul class="nav nav-pills">
+
+            <li class="hoverBlue centerText col-xs-2"><a href="#aboutWG" data-toggle="modal">About WikiGenomes</a></li>
+            <li class="hoverBlue centerText col-xs-2"><a href="#help" data-toggle="modal">Help</a></li>
+            <li class="hoverBlue centerText col-xs-2"><a href="#code" data-toggle="modal">Source</a></li>
+            <li class="hoverBlue centerText col-xs-2"><a href="#licensing" data-toggle="modal">Terms of Use</a></li>
+            <li class="hoverBlue centerText col-xs-2"><a href="#contact" data-toggle="modal">Contact</a></li>
+
+        </ul>
+         <div class="col-xs-1"></div>
 
     </div>
 
+
 </div>
+
+
+<!-- Modal -->
+<div id="aboutWG" class="modal" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">About WikiGenomes</h4>
+            </div>
+            <div class="modal-body">
+                <h4>WikiGenomes</h4>
+
+                <p>WikiGenomes is a portal to the biological content in the <a href="wikidata.org">Wikidata</a> project.
+                    It currently hosts the genes, proteins, and a variety of functional annotations for 1 yeast and 120
+                    bacteria genomes.
+                    WikiGenomes is designed to be both a resource for basic researchers to browse the collective
+                    knowledge of a variety of
+                    well studied organisms, and a technology layer that allows the user to add to that collective
+                    knowledge. To support this
+                    WikiGenomes provides defined editing forms that prompt the user to provide key information and
+                    references. WikiGenomes
+                    then adds that knowledge to the <a href="wikidata.org">Wikidata</a> knowledge graph.
+                </p>
+                <h4>Related Projects</h4>
+                <a href="https://en.wikipedia.org/wiki/Portal:Gene_Wiki">Gene Wiki</a><br>
+                <a href="https://www.wikidata.org/wiki/Wikidata:WikiProject_Molecular_biology">Wikidata Project
+                    Molecular Biology</a><br>
+                <a href="https://www.wikidata.org/wiki/Wikidata:WikiProject_Microbiology">Wikidata Project
+                    Microbiology</a><br>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div id="help" class="modal" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Help</h4>
+            </div>
+            <div class="modal-body">
+                <p>Embedded video walkthrough here</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div id="code" class="modal" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Source Code</h4>
+            </div>
+            <div class="modal-body">
+                <p>Source code is available to clone here: <a href="https://github.com/putmantime/CMOD.Django">WikiGenomes
+                    Source Code</a></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div id="licensing" class="modal" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Terms of Use</h4>
+            </div>
+            <div class="modal-body">
+                <p>All the data hosted in WikiGenomes and <a href="wikidata.org">Wikidata</a> are <a
+                        href="https://wiki.creativecommons.org/wiki/CC0">CC-0 Public Domain</a>. This means that all may
+                    use it in anyway, with no restrictions. </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div id="contact" class="modal" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Contact Information</h4>
+            </div>
+            <div class="modal-body">
+                <p><strong>Contact us</strong><br><br>
+
+                    <strong>Our mailing address is:</strong><br>
+                    The Scripps Research Institute<br>
+                    MEM-216<br>
+                    10550 North Torrey Pines Road<br>
+                    La Jolla, CA 92037<br><br>
+                    <strong>The Su Lab is physically located at the following location: </strong><br>
+                    Molecular and Experimental Medicine Building<br>
+                    MEM-216<br>
+                    3545 Cray Court<br>
+                    La Jolla, CA 92121</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
 </body>
 </html>

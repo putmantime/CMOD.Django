@@ -726,8 +726,11 @@ $(document).ready(function () {
                 'thing': 'thing'
             };
             this.$name.html("<span><h4><i><strong>" + data['organism']['Name'] + "</strong></i></h4>");
-            this.$tid.html("<span><h6>NCBI Taxonomy ID:</h6>" + data['organism']['Taxid'] + "</span>");
-            this.$qid.html("<span><h6>Wikidata Item ID</h6>" + data['organism']['QID'] + "</span>");
+            this.$tid.html("<span><h6>NCBI Taxonomy ID: " +
+                "</h6><a href='https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Info&id=" +
+                data['organism']['Taxid'] + "'>" + data['organism']['Taxid'] + " </a></span>");
+            console.log(this.$tid.html());
+            this.$qid.html("<span><h6>Wikidata Item ID:</h6><a href='https://www.wikidata.org/wiki/" + data['organism']['QID'] + "'>" + data['organism']['QID']  + "</span>");
             //this.$rsid.html("<span><h5>NCBI RefSeq ID</h5>" + data['organism']['RefSeq'] + "</span>");
 
         }

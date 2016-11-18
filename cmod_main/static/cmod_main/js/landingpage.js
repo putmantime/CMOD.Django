@@ -16,6 +16,7 @@ $(document).ready(function () {
         init: function () {
             this.cacheDOM();
             this.acsource(this.$input);
+            this.loadExample();
 
         },
         cacheDOM: function () {
@@ -97,6 +98,23 @@ $(document).ready(function () {
                 }
             }
             return cookieValue;
+        },
+        loadExample: function () {
+
+            var hpylori = {
+                "Name": "Helicobacter pylori 26695",
+                "Taxid": "85962",
+                "QID": "Q21065231",
+                "RefSeq": "NC_000915.1"
+            };
+            $('#loadHpylori').off("click").click(function (e) {
+                e.preventDefault();
+                console.log("Load Example");
+
+                orgForm.sendToServer(hpylori);
+                console.log(window.location.pathname);
+
+            });
         }
 
 

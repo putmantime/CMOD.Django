@@ -1,3 +1,4 @@
+/** {border: dashed black 1px}*/
 html, body{
     height:100%
 }
@@ -8,8 +9,9 @@ html, body{
 
 }
 
-
-
+a:link {
+   color:inherit;
+}
 #main-wdlogo-div {
     float: right;
     border-radius: 2px;
@@ -21,7 +23,7 @@ html, body{
     width: 100%;
     background-color: #385d94;
     color: whitesmoke;
-    padding-top: 10em;
+    padding-top: 5em;
     padding-left: 50px;
     padding-right: 50px;
     border: solid #385d94 3px;
@@ -36,4 +38,14 @@ html, body{
     height: auto;
     text-align: center;
     margin-top: 20px;
+}
+
+.center-div
+{
+     margin: 0 auto;
+
+}
+
+.centerText {
+    text-align: center;
 }

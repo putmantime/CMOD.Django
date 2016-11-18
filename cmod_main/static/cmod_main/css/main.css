@@ -23,8 +23,13 @@ body {
 
     border-radius: 10px;
     border: solid white 2px;
+}
 
 
+
+
+.centerText {
+    text-align: center;
 }
 .container-fluid{
     border:solid white 2px;
@@ -87,6 +92,9 @@ iframe {
     border-top-right-radius: 2px;
 
 
+}
+.footer a:hover{
+    color: #385d94;
 }
 
 .header {
