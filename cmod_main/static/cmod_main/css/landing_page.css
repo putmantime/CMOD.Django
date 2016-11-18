@@ -49,3 +49,6 @@ a:link {
 .centerText {
     text-align: center;
 }
+a:hover{
+    color: #385d94;
+}
