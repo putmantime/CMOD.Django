@@ -730,7 +730,7 @@ $(document).ready(function () {
                 "</h6><a href='https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Info&id=" +
                 data['organism']['Taxid'] + "'>" + data['organism']['Taxid'] + " </a></span>");
             console.log(this.$tid.html());
-            this.$qid.html("<span><h6>Wikidata Item ID:</h6><a href='https://www.wikidata.org/wiki/" + data['organism']['QID'] + "'>" + data['organism']['QID']  + "</span>");
+            this.$qid.html("<span><h6>Wikidata Item ID:</h6><a href='https://www.wikidata.org/wiki/" + data['organism']['QID'] + "'>" + data['organism']['QID'] + "</span>");
             //this.$rsid.html("<span><h5>NCBI RefSeq ID</h5>" + data['organism']['RefSeq'] + "</span>");
 
         }
@@ -1054,8 +1054,9 @@ $(document).ready(function () {
             if (ipDomains['InterPro'].length > 0) {
                 $.each(ipDomains['InterPro'], function (key, element) {
                     ipD.append(interProData.ipInput(element['interPro_label']['value'], element['ipID']['value']));
-                    interProRefModal_obj.init(ipD, element['reference_stated_inLabel']['value'], element['pubDate']['value'],
-                        element['version']['value'], element['refURL']['value']);
+                    interProRefModal_obj.init(ipD, element['reference_stated_inLabel']['value'], element['refURL']['value']);
+                    console.log(element['reference_stated_inLabel']['value']);
+
                 });
             }
             else {
@@ -1258,34 +1259,29 @@ $(document).ready(function () {
     };
 
     var interProRefModal_obj = {
-        init: function (element, stated_in, pubdate, version, refurl) {
+        init: function (element, stated_in, refurl) {
+            console.log("interp ref obj thingy");
             this.cacheDom();
-            this.openModal(element, stated_in, pubdate, version, refurl);
+            this.openModal(element, stated_in,refurl);
             this.closeModal();
         },
         cacheDom: function () {
             this.$modal = $('#wdIPRefModal');
             this.$modalClose = this.$modal.find('#modalRefClose');
             this.$refStated = this.$modal.find('#main-ref-statedin');
-            this.$refPubDate = this.$modal.find('#main-ref-pubDate');
-            this.$refVersion = this.$modal.find('#main-ref-version');
+
             this.$refURL = this.$modal.find('#main-ref-url');
 
         },
-        openModal: function (element, stated_in, pubdate, version, refurl) {
+        openModal: function (element, stated_in,refurl) {
             var $modal = this.$modal;
             var $stated = this.$refStated;
-            var $pubdate = this.$refPubDate;
-            var $refVersion = this.$refVersion;
             var $refURL = this.$refURL;
 
             element.find('.div-ref-but').on('click', function () {
                 //console.log("clicking ref button");
                 $stated.html(stated_in);
-                $pubdate.html(pubdate);
-                $refVersion.html(version);
                 $refURL.html(refurl);
-
                 $modal.modal('show');
             });
         },

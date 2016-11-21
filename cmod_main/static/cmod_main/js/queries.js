@@ -183,22 +183,23 @@ var getGOTerms = function (uniprot, callBackonSuccess) {
 var getInterPro = function (uniprot, callBackonSuccess) {
     var ipDomains = {};
     var ipQuery = [
-        "SELECT distinct ?protein ?interPro_item ?interPro_label ?ipID ?reference_stated_inLabel ?pubDate ?version ?refURL WHERE {" +
+        "SELECT distinct ?protein ?interPro_item ?interPro_label ?ipID ?reference_stated_inLabel ?refURL WHERE {" +
         "?protein wdt:P352",
         "\"" + uniprot + "\";",
         "p:P527 ?interPro." +
-        "?interPro ps:P527 ?interPro_item;" +
-        "prov:wasDerivedFrom/pr:P248 ?reference_stated_in ;" +  //#where stated
-        "prov:wasDerivedFrom/pr:P577 ?pubDate ;" + //#when published
-        "prov:wasDerivedFrom/pr:P348 ?version ;" + //#software veresion
-        "prov:wasDerivedFrom/pr:P854 ?refURL . " + //#reference URL
+        "?interPro ps:P527 ?interPro_item." +
+        "?interPro prov:wasDerivedFrom/pr:P248 ?reference_stated_in ;" +  //#where stated
+        "prov:wasDerivedFrom/pr:P854 ?refURL ." + //#reference URL
         "?interPro_item wdt:P2926 ?ipID;" +
         "rdfs:label ?interPro_label. " +
         "SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\" .}" +
         "filter (lang(?interPro_label) = \"en\") .}"
 
     ].join(" ");
-    //console.log(ipQuery);
+
+
+
+    console.log(ipQuery);
 
     $.ajax({
         type: "GET",
