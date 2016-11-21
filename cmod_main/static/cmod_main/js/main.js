@@ -1115,11 +1115,10 @@ $(document).ready(function () {
 
             var op_template = _.template(
                 "<div style='margin-bottom: 10px' class='row main-data'>" +
-                "<div class='col-xs-2'><%= operon_label %></div> " +
-                "<div class='col-xs-4'><a target='_blank' href='<%= operon_wduri %>'><%= operon_qid %> </a></div> " +
+                "<div class='col-xs-8'><%= operon_label %></div> " +
+                "<div class='col-xs-2'><a target='_blank' href='<%= operon_wduri %>'><%= operon_qid %> </a></div> " +
                 "<div class='col-xs-2'></div>  " +
-                "<div class='col-xs-2'></div>  " +
-                "<div class='col-xs-2'></div>" +
+
                 "</div>"
             );
             return (op_template(data));
