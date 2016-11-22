@@ -142,7 +142,7 @@ var getGOTerms = function (uniprot, callBackonSuccess) {
         "SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\" .}}"
 
     ].join(" ");
-    console.log(goQuery);
+    //console.log(goQuery);
 
     $.ajax({
         type: "GET",

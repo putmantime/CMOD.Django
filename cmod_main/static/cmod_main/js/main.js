@@ -729,7 +729,7 @@ $(document).ready(function () {
             this.$tid.html("<span><h6>NCBI Taxonomy ID: " +
                 "</h6><a href='https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Info&id=" +
                 data['organism']['Taxid'] + "'>" + data['organism']['Taxid'] + " </a></span>");
-            console.log(this.$tid.html());
+            //console.log(this.$tid.html());
             this.$qid.html("<span><h6>Wikidata Item ID:</h6><a href='https://www.wikidata.org/wiki/" + data['organism']['QID'] + "'>" + data['organism']['QID'] + "</span>");
             //this.$rsid.html("<span><h5>NCBI RefSeq ID</h5>" + data['organism']['RefSeq'] + "</span>");
 
@@ -865,7 +865,7 @@ $(document).ready(function () {
         goTermData: function (uniprot) {
 
             getGOTerms(uniprot, function (goTerms) {
-                console.log(goTerms);
+                //console.log(goTerms);
                 goData.render(goTerms);
             });
 
@@ -1013,14 +1013,15 @@ $(document).ready(function () {
         },
         generate_ec_template: function (ecnumb) {
             var data = {
-                'ecnumber': ecnumb
+                'ecnumber': ecnumb,
+                'ecselector': ecnumb.replace(/\./g, '')
             };
             var ec_template = _.template(
                 "<div class='row main-dataul'>" +
                 "<div class='col-xs-2'><h5><%= ecnumber %></h5></div>" +
                 "<div class='col-xs-8'></div>" +
                 "<div id='main-ref-button'class='col-xs-2'>" +
-                "<button type='button' id='<%= ecnumber %>' class='main-button-ref btn btn-default div-ref-but' ></button></div>" +
+                "<button type='button' id='<%= ecselector %>' class='main-button-ref btn btn-default div-ref-but' ></button></div>" +
                 "</div></div>");
             return (ec_template(data))
 
@@ -1028,25 +1029,28 @@ $(document).ready(function () {
         render: function (enzData) {
             var $enz = this.$ecnum;
             var allEC = [];
+            var newAllEC = [];
 
 
             if (enzData.length === 0) {
                 allEC.push(EnzymeData.generate_ec_template('No Enzyme Data Available'));
+                $enz.html(allEC.join(" "));
+
             }
             else {
                 $.each(enzData, function (index, ec) {
-                    var elem = $('#' + ec['ecnumber']['value']);
-                    console.log(elem);
                     allEC.push(EnzymeData.generate_ec_template(ec['ecnumber']['value']));
-                    ecRefModal_obj.init(elem, ec['reference_stated_inLabel']['value'], ec['reference_retrievedLabel']['value']);
+                    newAllEC = _.uniq(allEC, false);
+                    $enz.html(newAllEC.join(" "));
+                    ecRefModal_obj.init(ec);
 
                 });
 
 
             }
-            var newAllEC = _.uniq(allEC, false);
-            $enz.html(newAllEC.join(" "));
-            if(enzData.length === 0){
+
+            //$enz.html(newAllEC.join(" "));
+            if (enzData.length === 0) {
                 this.$ezTab.text('Enzyme Class (' + 0 + ')');
             }
             else {
@@ -1081,7 +1085,7 @@ $(document).ready(function () {
                 $.each(ipDomains['InterPro'], function (key, element) {
                     ipD.append(interProData.ipInput(element['interPro_label']['value'], element['ipID']['value']));
                     interProRefModal_obj.init(ipD, element['reference_stated_inLabel']['value'], element['refURL']['value']);
-                    console.log(element['reference_stated_inLabel']['value']);
+                    //console.log(element['reference_stated_inLabel']['value']);
 
                 });
             }
@@ -1195,9 +1199,9 @@ $(document).ready(function () {
         },
 
         renderOPGenes: function (operonGenes) {
-            console.log(operonGenes);
+            //console.log(operonGenes);
             $.each(operonGenes['Operon'], function (key, element) {
-                console.log(element);
+                //console.log(element);
                 operonData.$opGenes.append(operonData.generate_opGenes_template(element));
             });
 
@@ -1263,7 +1267,7 @@ $(document).ready(function () {
             var $retrieved = this.$refRetrieved;
             var $pmid = this.$pmid;
 
-            //console.log(element.find('.div-ref-but'));
+            console.log(element.find('.div-ref-but'));
             element.on('click', function () {
                 //console.log("clicking ref button");
                 $stated.html(stated_in);
@@ -1281,10 +1285,9 @@ $(document).ready(function () {
 
     };
     var ecRefModal_obj = {
-        init: function (element, stated_in, retrieved) {
-            console.log(element);
+        init: function (enzData) {
             this.cacheDom();
-            this.openModal(element, stated_in, retrieved);
+            this.openModal(enzData);
             this.closeModal();
         },
         cacheDom: function () {
@@ -1295,23 +1298,19 @@ $(document).ready(function () {
 
 
         },
-        openModal: function (element, stated_in, retrieved) {
+        openModal: function (enzData) {
             var $modal = this.$modal;
             var $stated = this.$refStated;
             var $retrieved = this.$refRetrieved;
-            console.log(element);
+            var $element = $('#' + enzData['ecnumber']['value'].replace(/\./g, ''));
+            var stated_in = enzData['reference_stated_inLabel']['value'];
+            var retrieved = enzData['reference_retrievedLabel']['value'];
 
-            element.off("click").click(function (e) {
-                e.preventDefault();
-                console.log("clicking ref button");
+            $element.on('click', function () {
+                $stated.html(stated_in);
+                $retrieved.html(retrieved);
+                $modal.modal('show');
             });
-
-            //element.on('click', function () {
-            //    console.log("clicking ref button");
-            //    $stated.html(stated_in);
-            //    $retrieved.html(retrieved);
-            //    $modal.modal('show');
-            //});
         },
         closeModal: function () {
 
