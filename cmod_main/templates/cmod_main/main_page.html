@@ -81,10 +81,6 @@
 
                 <div class='main-data' id="main-ref-pmid">
                 </div>
-                <h5>Core Identifier:</h5>
-
-                <div class='main-data' id="main-ref-coreid">
-                </div>
             </div>
             <div class="modal-footer">
                 <button id='modalRefClose' type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -95,6 +91,30 @@
 </div>
 <!--ip reference Modal-->
 <div class="modal" id="wdIPRefModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <img class="wd-logo" src="{% static 'cmod_main/img/GeneWikidata-logo-en.png' %}">
+                <h4 class="modal-title" id="refModal">Wikidata Statement Reference</h4>
+            </div>
+            <div class="modal-body">
+                <h5>Stated in:</h5>
+                <div class='main-data' id="main-ref-statedin">
+                </div>
+                <h5>Reference URL:</h5>
+                <div class='main-data' id="main-ref-url">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id='modalRefClose' type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--EC reference Modal-->
+<div class="modal" id="wdECRefModal" tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -433,9 +453,7 @@
                     <div class="tab-pane" role="tabpanel" id="ez">
                         <div class="main-go-box row main-annotations main-annotations-content-header">
                             <div class="col-xs-2"><h5>EC Number</h5></div>
-                            <div class="col-xs-4"><h5>Reaction</h5></div>
-                            <div class="col-xs-2"><h5>Products</h5></div>
-                            <div class="col-xs-2"><h5>Substrates</h5></div>
+                            <div class="col-xs-8"><h5>Reaction</h5></div>
                             <div class="col-xs-2"><h5>Reference</h5></div>
                         </div>
                         <div class="main-annotations-content-data">

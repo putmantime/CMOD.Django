@@ -199,7 +199,7 @@ var getInterPro = function (uniprot, callBackonSuccess) {
 
 
 
-    console.log(ipQuery);
+
 
     $.ajax({
         type: "GET",

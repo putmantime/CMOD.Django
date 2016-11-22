@@ -43,7 +43,7 @@ $(document).ready(function () {
                             'QID': ui.item.qid,
                             'RefSeq': ui.item.refseq
                         };
-                        console.log(currentTaxa['Name']);
+
 
                         //initiate gene form with organism data
                         geneForm.init(currentTaxa.Taxid);
@@ -143,7 +143,7 @@ $(document).ready(function () {
                         .appendTo(ul);
                 };
                 //initialize gene and protein boxes on page load with random gene/protein
-                console.log(geneTags[0]);
+                //console.log(geneTags[0]);
                 var first_gene = [
                     geneTags[0].name,
                     geneTags[0].id,
@@ -905,12 +905,12 @@ $(document).ready(function () {
             if (results.hasOwnProperty('pmid')) {
                 //console.log(results['pmid']['value']);
                 goRefModal_obj.init(button, results['reference_stated_inLabel']['value'],
-                    results['reference_retrievedLabel']['value'], results['pmid']['value'], results['goID']['value']);
+                    results['reference_retrievedLabel']['value'], results['pmid']['value']);
                 //
             } else {
                 //console.log('hello');
                 goRefModal_obj.init(button, results['reference_stated_inLabel']['value'],
-                    results['reference_retrievedLabel']['value'], 'None', results['goID']['value']);
+                    results['reference_retrievedLabel']['value'], 'None');
             }
         },
         render: function (goTerms) {
@@ -940,7 +940,12 @@ $(document).ready(function () {
                     var $refbut = $molf.find('#mf_' + key);
                     goData.pmidRef($refbut, element);
                     if (element.hasOwnProperty("ecnumber")) {
-                        ecNumbers.push(element['ecnumber']['value']);
+                        if (element['ecnumber']['value'].indexOf('-') > -1) {
+
+                        }
+                        else {
+                            ecNumbers.push(element);
+                        }
                     }
                 });
 
@@ -954,7 +959,12 @@ $(document).ready(function () {
                     var $refbut = $biop.find('#bp_' + key);
                     goData.pmidRef($refbut, element);
                     if (element.hasOwnProperty("ecnumber")) {
-                        ecNumbers.push(element['ecnumber']['value']);
+                        if (element['ecnumber']['value'].indexOf('-') > -1) {
+
+                        }
+                        else {
+                            ecNumbers.push(element);
+                        }
                     }
 
                 });
@@ -969,7 +979,12 @@ $(document).ready(function () {
                     var $refbut = $celc.find('#cc_' + key);
                     goData.pmidRef($refbut, element);
                     if (element.hasOwnProperty("ecnumber")) {
-                        ecNumbers.push(element['ecnumber']['value']);
+                        if (element['ecnumber']['value'].indexOf('-') > -1) {
+
+                        }
+                        else {
+                            ecNumbers.push(element);
+                        }
                     }
                 });
 
@@ -978,6 +993,7 @@ $(document).ready(function () {
             }
 
             var uniqueECs = _.uniq(ecNumbers, false);
+            console.log(uniqueECs);
             EnzymeData.init(uniqueECs);
         }
 
@@ -985,6 +1001,7 @@ $(document).ready(function () {
 
     var EnzymeData = {
         init: function (enzData) {
+            console.log(enzData);
             this.cacheDOM();
             this.$ecnum.html('');
             this.render(enzData);
@@ -1001,9 +1018,7 @@ $(document).ready(function () {
             var ec_template = _.template(
                 "<div class='row main-dataul'>" +
                 "<div class='col-xs-2'><h5><%= ecnumber %></h5></div>" +
-                "<div class='col-xs-4'></div>" +
-                "<div class='col-xs-2'></div>" +
-                "<div class='col-xs-2'></div>" +
+                "<div class='col-xs-8'></div>" +
                 "<div id='main-ref-button'class='col-xs-2'>" +
                 "<button type='button' id='<%= ecnumber %>' class='main-button-ref btn btn-default div-ref-but' ></button></div>" +
                 "</div></div>");
@@ -1014,18 +1029,29 @@ $(document).ready(function () {
             var $enz = this.$ecnum;
             var allEC = [];
 
+
             if (enzData.length === 0) {
                 allEC.push(EnzymeData.generate_ec_template('No Enzyme Data Available'));
             }
             else {
                 $.each(enzData, function (index, ec) {
-                    allEC.push(EnzymeData.generate_ec_template(ec));
+                    var elem = $('#' + ec['ecnumber']['value']);
+                    console.log(elem);
+                    allEC.push(EnzymeData.generate_ec_template(ec['ecnumber']['value']));
+                    ecRefModal_obj.init(elem, ec['reference_stated_inLabel']['value'], ec['reference_retrievedLabel']['value']);
+
                 });
 
 
             }
-            $enz.html(allEC.join(" "));
-            this.$ezTab.text('Enzyme Class (' + enzData.length + ')');
+            var newAllEC = _.uniq(allEC, false);
+            $enz.html(newAllEC.join(" "));
+            if(enzData.length === 0){
+                this.$ezTab.text('Enzyme Class (' + 0 + ')');
+            }
+            else {
+                this.$ezTab.text('Enzyme Class (' + newAllEC.length + ')');
+            }
         }
     };
 
@@ -1218,9 +1244,9 @@ $(document).ready(function () {
     };
 
     var goRefModal_obj = {
-        init: function (element, stated_in, retrieved, pmid, coreid) {
+        init: function (element, stated_in, retrieved, pmid) {
             this.cacheDom();
-            this.openModal(element, stated_in, retrieved, pmid, coreid);
+            this.openModal(element, stated_in, retrieved, pmid);
             this.closeModal();
         },
         cacheDom: function () {
@@ -1229,15 +1255,13 @@ $(document).ready(function () {
             this.$refStated = this.$modal.find('#main-ref-statedin');
             this.$refRetrieved = this.$modal.find('#main-ref-retrieved');
             this.$pmid = this.$modal.find('#main-ref-pmid');
-            this.$core_id = this.$modal.find('#main-ref-coreid');
 
         },
-        openModal: function (element, stated_in, retrieved, pmid, coreid) {
+        openModal: function (element, stated_in, retrieved, pmid) {
             var $modal = this.$modal;
             var $stated = this.$refStated;
             var $retrieved = this.$refRetrieved;
             var $pmid = this.$pmid;
-            var $coreid = this.$core_id;
 
             //console.log(element.find('.div-ref-but'));
             element.on('click', function () {
@@ -1245,9 +1269,49 @@ $(document).ready(function () {
                 $stated.html(stated_in);
                 $retrieved.html(retrieved);
                 $pmid.html(pmid);
-                $coreid.html(coreid);
                 $modal.modal('show');
             });
+        },
+        closeModal: function () {
+
+            this.$modalClose.on('click', function () {
+
+            });
+        }
+
+    };
+    var ecRefModal_obj = {
+        init: function (element, stated_in, retrieved) {
+            console.log(element);
+            this.cacheDom();
+            this.openModal(element, stated_in, retrieved);
+            this.closeModal();
+        },
+        cacheDom: function () {
+            this.$modal = $('#wdECRefModal');
+            this.$modalClose = this.$modal.find('#modalRefClose');
+            this.$refStated = this.$modal.find('#main-ref-statedin');
+            this.$refRetrieved = this.$modal.find('#main-ref-retrieved');
+
+
+        },
+        openModal: function (element, stated_in, retrieved) {
+            var $modal = this.$modal;
+            var $stated = this.$refStated;
+            var $retrieved = this.$refRetrieved;
+            console.log(element);
+
+            element.off("click").click(function (e) {
+                e.preventDefault();
+                console.log("clicking ref button");
+            });
+
+            //element.on('click', function () {
+            //    console.log("clicking ref button");
+            //    $stated.html(stated_in);
+            //    $retrieved.html(retrieved);
+            //    $modal.modal('show');
+            //});
         },
         closeModal: function () {
 
@@ -1260,9 +1324,9 @@ $(document).ready(function () {
 
     var interProRefModal_obj = {
         init: function (element, stated_in, refurl) {
-            console.log("interp ref obj thingy");
+            //console.log("interp ref obj thingy");
             this.cacheDom();
-            this.openModal(element, stated_in,refurl);
+            this.openModal(element, stated_in, refurl);
             this.closeModal();
         },
         cacheDom: function () {
@@ -1273,7 +1337,7 @@ $(document).ready(function () {
             this.$refURL = this.$modal.find('#main-ref-url');
 
         },
-        openModal: function (element, stated_in,refurl) {
+        openModal: function (element, stated_in, refurl) {
             var $modal = this.$modal;
             var $stated = this.$refStated;
             var $refURL = this.$refURL;
@@ -1306,7 +1370,7 @@ $(document).ready(function () {
             this.render(taxid, refseq, coords, name);
 
         },
-        url: "/static/cmod_main/JBrowse-1.12.1-dev/index.html?data=sparql_data/sparql_data_",
+        url: "/static/cmod_main/JBrowse-1.12.1/index.html?data=sparql_data/sparql_data_",
         coordPrefix: "&tracks=genes_canvas_mod,operons_canvas_mod&menu=0&loc=",
         cacheDOM: function () {
             this.$jb = $("#jbrowseModule");
@@ -1419,8 +1483,8 @@ $(document).ready(function () {
             this.getECNumberCounts();
 
 
-            console.log(annotations.annotations_data);
-            console.log(annotations.annotations_list);
+            //console.log(annotations.annotations_data);
+            //console.log(annotations.annotations_list);
 
         },
 
@@ -1473,7 +1537,7 @@ $(document).ready(function () {
                 url: annotations.endpoint + queryentity,
                 dataType: 'json',
                 success: function (data) {
-                    console.log("OperonSuccess");
+                    //console.log("OperonSuccess");
                     var dataDict = {
                         "label": "Operons",
                         "value": 0
@@ -1608,7 +1672,7 @@ $(document).ready(function () {
             });
         },
         renderGenesProteins: function (data) {
-            console.log(data['Genes'], data['Proteins']);
+            //console.log(data['Genes'], data['Proteins']);
             $('#genecount').html("<span>" + data['Genes'] + "</span>");
             $('#proteincount').html("<span>" + data['Proteins'] + "</span>");
 

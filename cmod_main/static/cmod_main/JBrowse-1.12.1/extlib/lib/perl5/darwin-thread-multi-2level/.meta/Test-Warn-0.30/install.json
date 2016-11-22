@@ -1,0 +1,1 @@
+{"name":"Test::Warn","pathname":"C/CH/CHORNY/Test-Warn-0.30.tar.gz","version":"0.30","target":"Test::Warn","dist":"Test-Warn-0.30","provides":{"Test::Warn::Categorization":{"version":"0.30","file":"Warn.pm"},"Test::Warn":{"version":"0.30","file":"Warn.pm"}}}

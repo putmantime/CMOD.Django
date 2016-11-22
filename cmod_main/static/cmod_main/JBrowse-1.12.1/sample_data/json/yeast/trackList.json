@@ -1,0 +1,70 @@
+{
+   "names" : {
+      "url" : "names/",
+      "type" : "Hash"
+   },
+   "tracks" : [
+      {
+         "storeClass" : "JBrowse/Store/Sequence/StaticChunked",
+         "type" : "SequenceTrack",
+         "category" : "Reference sequence",
+         "urlTemplate" : "seq/{refseq_dirpath}/{refseq}-",
+         "key" : "Reference sequence",
+         "chunkSize" : 20000,
+         "label" : "DNA"
+      },
+      {
+         "storeClass" : "JBrowse/Store/SeqFeature/NCList",
+         "style" : {
+            "subfeatureClasses" : {
+               "CDS" : "transcript-CDS"
+            },
+            "className" : "feature5",
+            "arrowheadClass" : "transcript-arrowhead"
+         },
+         "label" : "Genes",
+         "subfeatures" : true,
+         "type" : "FeatureTrack",
+         "feature" : [
+            "gene"
+         ],
+         "track" : "Genes",
+         "key" : "Protein-coding genes",
+         "compress" : 0,
+         "autocomplete" : "all",
+         "urlTemplate" : "tracks/Genes/{refseq}/trackData.json",
+         "category" : "Genes"
+      },
+      {
+         "label" : "transcript_with_no_features",
+         "compress" : 0,
+         "key" : "Exonerate predictions (misconfigured for test, and with a long description)",
+         "autocomplete" : "all",
+         "urlTemplate" : "tracks/transcript_with_no_features/{refseq}/trackData.json",
+         "category" : "Genes",
+         "subfeatures" : true,
+         "type" : "FeatureTrack",
+         "feature" : [
+            "mRNA"
+         ],
+         "track" : "transcript_with_no_features",
+         "description" : 1,
+         "style" : {
+            "subfeatureClasses" : {
+               "UTR" : "transcript-UTR",
+               "CDS" : "transcript-CDS"
+            },
+            "arrowheadClass" : "transcript-arrowhead",
+            "className" : "transcript"
+         },
+         "storeClass" : "JBrowse/Store/SeqFeature/NCList"
+      }
+   ],
+   "dataset_id" : "yeast",
+   "plugins" : [
+      "NeatHTMLFeatures",
+      "NeatCanvasFeatures",
+      "HideTrackLabels"
+   ],
+   "formatVersion" : 1
+}
