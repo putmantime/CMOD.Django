@@ -47,10 +47,10 @@
 
                 <div class='main-data' id="main-ref-statedin">
                 </div>
-                <h5>Retrieved:</h5>
+                <!--<h5>Retrieved:</h5>-->
 
-                <div class='main-data' id="main-ref-retrieved">
-                </div>
+                <!--<div class='main-data' id="main-ref-retrieved">-->
+                <!--</div>-->
             </div>
             <div class="modal-footer">
                 <button id='modalRefClose' type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -125,6 +125,14 @@
             <div class="modal-body">
                 <h5>Stated in:</h5>
                 <div class='main-data' id="main-ref-statedin">
+                </div>
+                <h5>Retrieved:</h5>
+                <div class='main-data' id="main-ref-retrieved">
+                </div>
+                <h4> Reaction</h4>
+                <h5>Stated in:</h5>
+                <div class='main-data'>
+                    <a href="http://enzyme.expasy.org/">Expasy Enzyme</a>
                 </div>
                 <h5>Retrieved:</h5>
                 <div class='main-data' id="main-ref-retrieved">
@@ -470,13 +478,13 @@
                             </div>
                             <div id="operondata" class="main-operon-data"></div>
                             <div class="main-operon-genes-box row main-annotations">
-                                <div class="col-xs-5"><h5>Gene Name</h5></div>
+                                <div class="col-xs-4"><h5>Gene Name</h5></div>
                                 <div class="col-xs-1"><h5>Entrez ID</h5></div>
                                 <div class="col-xs-1"><h5>Locus Tag</h5></div>
                                 <div class="col-xs-1"><h5>Wikidata</h5></div>
                                 <div class="col-xs-1"><h5>Genomic Start</h5></div>
                                 <div class="col-xs-1"><h5>Genomic End</h5></div>
-                                <div class="col-xs-1"><h5>Strand</h5></div>
+                                <div class="col-xs-2"><h5>Strand</h5></div>
                                 <div class="col-xs-1"><h5>Reference</h5></div>
 
                             </div>
@@ -621,8 +629,8 @@
             </div>
             <div class="modal-body">
                 <p>All the data hosted in WikiGenomes and <a href="wikidata.org">Wikidata</a> are <a
-                        href="https://wiki.creativecommons.org/wiki/CC0">CC-0 Public Domain</a>. This means that all may
-                    use it in anyway, with no restrictions. </p>
+                        href="https://wiki.creativecommons.org/wiki/CC0">CC-0 Public Domain</a>, with the exception of enzyme reactions,
+                    which come from <a href="http://enzyme.expasy.org/">Expasy Enzyme</a> and are subject to their terms of use: <a href="http://enzyme.expasy.org/enzuser.txt">Expasy User Manual</a> </p>.
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

@@ -1,17 +1,16 @@
 var endpoint = "https://query.wikidata.org/sparql?format=json&query=";
 
 
-
 //get list of organisms from Wikidata with sparql query
 var getOrgs = function (callbackOnSuccess) {
     var taxids = {};
     var sc = {
-                    "name": "Saccharomyces cerevisiae S288c",
-                    "value": "Saccharomyces cerevisiae S288c" + " | " + "559292" + " | " + "Q27510868",
-                    "taxid": "559292",
-                    "refseq": '',
-                    'qid': "Q27510868"
-                };
+        "name": "Saccharomyces cerevisiae S288c",
+        "value": "Saccharomyces cerevisiae S288c" + " | " + "559292" + " | " + "Q27510868",
+        "taxid": "559292",
+        "refseq": '',
+        'qid': "Q27510868"
+    };
     var orgTags = [sc];
     var queryOrgs = [
         "SELECT ?species ?speciesLabel ?taxid ?RefSeq",
@@ -87,7 +86,6 @@ var getGenes = function (taxid, callbackOnSuccess) {
                 var gqid = gdid.slice(-1)[0];
 
 
-
                 genes = {
                     'name': element['geneLabel']['value'],
                     'value': element['geneLabel']['value'] + " | " + element['locustag']['value'] + " | " + gqid + " | " + element['entrezid']['value'],
@@ -99,9 +97,9 @@ var getGenes = function (taxid, callbackOnSuccess) {
                     'gqid': gqid
                 };
 
-                if (element.hasOwnProperty('refSeqChromosome')){
+                if (element.hasOwnProperty('refSeqChromosome')) {
                     genes['chromosome'] = element['refSeqChromosome']['value']
-                } else{
+                } else {
                     genes['chromosome'] = 'None'
                 }
 
@@ -198,9 +196,6 @@ var getInterPro = function (uniprot, callBackonSuccess) {
     ].join(" ");
 
 
-
-
-
     $.ajax({
         type: "GET",
         url: endpoint + ipQuery,
@@ -220,6 +215,30 @@ var getInterPro = function (uniprot, callBackonSuccess) {
     });
 
 };
+var getReaction = function (ecNumber, callBackonSuccess) {
+    var newDIct = {};
+    var expasy_endpoint = 'http://enzyme.expasy.org/EC/{ecnumber}.txt';
+    var exurl = expasy_endpoint.replace('{ecnumber}', ecNumber);
+
+    $.ajax({
+        type: "GET",
+        url: exurl,
+        dataType: 'text',
+        success: function (data) {
+            var rxnDict = [];
+            var newdata = data.split("\n");
+            $.each(newdata, function (key, element) {
+                if (element.match("^CA ")) {
+                    rxnDict.push(element.substr(4));
+                }
+            });
+            newDIct['reactions'] = rxnDict.join("");
+            callBackonSuccess(newDIct);
+        }
+    });
+
+};
+
 
 var getEvidenceCodes = function (callBackonSuccess) {
     var codeslist = [];

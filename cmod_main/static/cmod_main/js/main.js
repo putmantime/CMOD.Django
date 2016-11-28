@@ -786,6 +786,7 @@ $(document).ready(function () {
         init: function (gene) {
             this.cacheDOM();
             this.render(gene);
+            geneRefModal_obj.init(gene);
         },
         cacheDOM: function () {
             this.$gp = $('#genPosData');
@@ -794,7 +795,7 @@ $(document).ready(function () {
             var data = {
                 "accession": gene_data[7],
                 "genStart": gene_data[4],
-                "genEnd": gene_data[5],
+                "genEnd": gene_data[5]
 
             };
             if (gene_data[6] === 'http://www.wikidata.org/entity/Q22809711') {
@@ -813,6 +814,7 @@ $(document).ready(function () {
                 "<div class='col-xs-2'><h5><%= strand %></h5></div>" +
                 "<div class='col-xs-2'></div>" +
                 "<div id='main-ref-button'class='col-xs-2'>" +
+                "<button type='button' id='genPosRef' class='main-button-ref btn btn-default div-ref-but' ></button>" +
                 "</div></div>"
             );
 
@@ -920,7 +922,7 @@ $(document).ready(function () {
             $biop.html('');
             var $celc = this.$cc;
             $celc.html('');
-            var ecNumbers = [];
+            var ecNumbers = {};
 
             var nodata = {
                 'gotermValueLabel': {'value': 'No Data Available'},
@@ -944,7 +946,11 @@ $(document).ready(function () {
 
                         }
                         else {
-                            ecNumbers.push(element);
+                            ecNumbers[element['ecnumber']['value']] = {
+                                'ec': element['ecnumber']['value'],
+                                'statedIn': element['reference_stated_inLabel']['value'],
+                                'retrieved': element['reference_retrievedLabel']['value']
+                            };
                         }
                     }
                 });
@@ -963,7 +969,11 @@ $(document).ready(function () {
 
                         }
                         else {
-                            ecNumbers.push(element);
+                            ecNumbers[element['ecnumber']['value']] = {
+                                'ec': element['ecnumber']['value'],
+                                'statedIn': element['reference_stated_inLabel']['value'],
+                                'retrieved': element['reference_retrievedLabel']['value']
+                            };
                         }
                     }
 
@@ -983,7 +993,11 @@ $(document).ready(function () {
 
                         }
                         else {
-                            ecNumbers.push(element);
+                            ecNumbers[element['ecnumber']['value']] = {
+                                'ec': element['ecnumber']['value'],
+                                'statedIn': element['reference_stated_inLabel']['value'],
+                                'retrieved': element['reference_retrievedLabel']['value']
+                            };
                         }
                     }
                 });
@@ -992,71 +1006,196 @@ $(document).ready(function () {
                 $celc.html(goData.generate_go_template(nodata, 'cc_' + ' '));
             }
 
-            var uniqueECs = _.uniq(ecNumbers, false);
-            console.log(uniqueECs);
-            EnzymeData.init(uniqueECs);
+            //var uniqueECs = _.uniq(ecNumbers, false);
+
+            $('#ezTab').text('Enzyme Class (' + Object.keys(ecNumbers).length + ')');
+
+            if (Object.keys(ecNumbers).length > 0) {
+                $.each(ecNumbers, function (key, element) {
+                    EnzClassData.init(element);
+                });
+            }
+            else {
+                EnzClassData.init('None');
+            }
+
         }
 
     };
 
-    var EnzymeData = {
-        init: function (enzData) {
-            console.log(enzData);
+    //var EnzymeData = {
+    //    init: function (enzData) {
+    //        this.cacheDOM();
+    //        this.$ecnum.html('');
+    //        this.render(enzData);
+    //
+    //    },
+    //    cacheDOM: function () {
+    //
+    //        this.$ecnum = $('#enzymeprodata');
+    //        this.$ezTab = $('#ezTab');
+    //    },
+    //    generate_ec_template: function (tempdata) {
+    //        var data = {
+    //            'ecnumber': tempdata['ecnumber'],
+    //            'ecselector': tempdata['ecnumber'].replace(/\./g, ''),
+    //            'reaction': tempdata['reaction']
+    //        };
+    //        var ec_template = _.template(
+    //            "<div class='row main-dataul'>" +
+    //            "<div class='col-xs-2'><h5><%= ecnumber %></h5></div>" +
+    //            "<div class='col-xs-8'><%= reaction %></div>" +
+    //            "<div id='main-ref-button'class='col-xs-2'>" +
+    //            "<button type='button' id='<%= ecselector %>' class='main-button-ref btn btn-default div-ref-but' ></button></div>" +
+    //            "</div></div>");
+    //        return (ec_template(data))
+    //
+    //    },
+    //    getReaction1: function (ecNumber, callBackOnSuccess) {
+    //        var expasy_endpoint = 'http://enzyme.expasy.org/EC/{ecnumber}.txt';
+    //        var exurl = expasy_endpoint.replace('{ecnumber}', ecNumber);
+    //        var newDIct = {'reaction': []};
+    //        $.ajax({
+    //            type: "GET",
+    //            datatype: "text",
+    //            url: exurl,
+    //            success: function (data) {
+    //
+    //                var newdata = data.split("\n");
+    //
+    //                $.each(newdata, function (key, element) {
+    //                    if (element.match("^CA ")) {
+    //                        newDIct.reaction.push(element.substr(4));
+    //                    }
+    //
+    //                });
+    //                newDIct['reaction'] = newDIct['reaction'].join(" ");
+    //                callBackOnSuccess(newDIct);
+    //            }
+    //
+    //        });
+    //
+    //    },
+    //    getReaction: function (ecNumber, callBackonSuccess) {
+    //        var expasy_endpoint = 'http://enzyme.expasy.org/EC/{ecnumber}.txt';
+    //        var exurl = expasy_endpoint.replace('{ecnumber}', ecNumber);
+    //        var newDIct = {'reaction': []};
+    //
+    //
+    //        $.ajax({
+    //            type: "GET",
+    //            url: exurl,
+    //            dataType: 'text',
+    //            success: function (data) {
+    //                var newdata = data.split("\n");
+    //                $.each(newdata, function (key, element) {
+    //                    if (element.match("^CA ")) {
+    //                        newDIct.reaction.push(element.substr(4));
+    //                    }
+    //
+    //                });
+    //                newDIct['reaction'] = newDIct['reaction'].join(" ");
+    //
+    //
+    //                //console.log(bp);
+    //                callBackonSuccess(newDIct);
+    //            }
+    //        });
+    //
+    //    },
+    //    render: function (enzData) {
+    //        var $enz = this.$ecnum;
+    //        var allEC = [];
+    //        var newAllEC = [];
+    //
+    //
+    //        if (enzData.length === 0) {
+    //            var templateData = {
+    //                'ecnumber': 'No Enzyme Data Available'
+    //            };
+    //            allEC.push(EnzymeData.generate_ec_template(templateData));
+    //            $enz.html(allEC.join(" "));
+    //
+    //        }
+    //        else {
+    //            $.each(enzData, function (index, ec) {
+    //                var templateData = {
+    //                    'ecnumber': ec['ecnumber']['value']
+    //                };
+    //                var textReaction = EnzymeData.getReaction(ec['ecnumber']['value']);
+    //                templateData['reaction'] = textReaction['reaction'];
+    //                console.log(textReaction['reaction']);
+    //                allEC.push(EnzymeData.generate_ec_template(templateData));
+    //                newAllEC = _.uniq(allEC, false);
+    //                $enz.html(newAllEC.join(" "));
+    //                ecRefModal_obj.init(ec);
+    //
+    //
+    //            });
+    //
+    //
+    //        }
+    //
+    //        //$enz.html(newAllEC.join(" "));
+    //        if (enzData.length === 0) {
+    //            this.$ezTab.text('Enzyme Class (' + 0 + ')');
+    //        }
+    //        else {
+    //            this.$ezTab.text('Enzyme Class (' + newAllEC.length + ')');
+    //        }
+    //    }
+    //};
+    var EnzClassData = {
+        init: function (ecNumber) {
             this.cacheDOM();
             this.$ecnum.html('');
-            this.render(enzData);
+            if (ecNumber != 'None') {
+                this.reactionData(ecNumber);
+            }
+            else {
+                this.render('None', 'None');
+            }
+
         },
         cacheDOM: function () {
 
             this.$ecnum = $('#enzymeprodata');
             this.$ezTab = $('#ezTab');
         },
-        generate_ec_template: function (ecnumb) {
+        generate_ec_template: function (ecnumber, reaction) {
             var data = {
-                'ecnumber': ecnumb,
-                'ecselector': ecnumb.replace(/\./g, '')
+                'ecnumber': ecnumber,
+                'ecselector': ecnumber.replace(/\./g, ''),
+                'reaction': reaction
             };
             var ec_template = _.template(
                 "<div class='row main-dataul'>" +
                 "<div class='col-xs-2'><h5><%= ecnumber %></h5></div>" +
-                "<div class='col-xs-8'></div>" +
+                "<div class='col-xs-8'><a href='http://enzyme.expasy.org/EC/<%= ecnumber %>.txt'><%= reaction %></a></div>" +
                 "<div id='main-ref-button'class='col-xs-2'>" +
                 "<button type='button' id='<%= ecselector %>' class='main-button-ref btn btn-default div-ref-but' ></button></div>" +
                 "</div></div>");
             return (ec_template(data))
 
         },
-        render: function (enzData) {
+        reactionData: function (ecNumber) {
+            console.log(ecNumber);
+            getReaction(ecNumber['ec'], function (rxnData) {
+                EnzClassData.render(ecNumber['ec'], rxnData);
+                ecRefModal_obj.init(ecNumber);
+            });
+
+        },
+        render: function (ecNumber, reaction) {
             var $enz = this.$ecnum;
-            var allEC = [];
-            var newAllEC = [];
+            console.log(ecNumber);
+            console.log(reaction);
+            $enz.append(EnzClassData.generate_ec_template(ecNumber, reaction['reactions']));
 
 
-            if (enzData.length === 0) {
-                allEC.push(EnzymeData.generate_ec_template('No Enzyme Data Available'));
-                $enz.html(allEC.join(" "));
-
-            }
-            else {
-                $.each(enzData, function (index, ec) {
-                    allEC.push(EnzymeData.generate_ec_template(ec['ecnumber']['value']));
-                    newAllEC = _.uniq(allEC, false);
-                    $enz.html(newAllEC.join(" "));
-                    ecRefModal_obj.init(ec);
-
-                });
-
-
-            }
-
-            //$enz.html(newAllEC.join(" "));
-            if (enzData.length === 0) {
-                this.$ezTab.text('Enzyme Class (' + 0 + ')');
-            }
-            else {
-                this.$ezTab.text('Enzyme Class (' + newAllEC.length + ')');
-            }
         }
+
+
     };
 
     var interProData = {
@@ -1214,9 +1353,9 @@ $(document).ready(function () {
 // /////////////////////////////////////Begin reference modules///////////////////////////////////////////////////////
 
     var geneRefModal_obj = {
-        init: function (element, stated_in, retrieved) {
+        init: function (geneData) {
             this.cacheDom();
-            this.openModal(element, stated_in, retrieved);
+            this.openModal(geneData);
             this.closeModal();
         },
         cacheDom: function () {
@@ -1226,15 +1365,14 @@ $(document).ready(function () {
             this.$refRetrieved = this.$modal.find('#main-ref-retrieved');
 
         },
-        openModal: function (element, stated_in, retrieved) {
+        openModal: function (geneData) {
             var $modal = this.$modal;
             var $stated = this.$refStated;
             var $retrieved = this.$refRetrieved;
             //console.log(element.find('.div-ref-but'));
-            element.find('.div-ref-but').on('click', function () {
+            $('#genPosRef').on('click', function () {
                 //console.log("clicking ref button");
-                $stated.html(stated_in);
-                $retrieved.html(retrieved);
+                $stated.html("<span><a href='http://www.ncbi.nlm.nih.gov/gene/?term=" + geneData[1] +"'><h5>NCBI Gene</h5></a>");
                 $modal.modal('show');
             });
         },
@@ -1299,12 +1437,13 @@ $(document).ready(function () {
 
         },
         openModal: function (enzData) {
+            console.log(enzData);
             var $modal = this.$modal;
             var $stated = this.$refStated;
             var $retrieved = this.$refRetrieved;
-            var $element = $('#' + enzData['ecnumber']['value'].replace(/\./g, ''));
-            var stated_in = enzData['reference_stated_inLabel']['value'];
-            var retrieved = enzData['reference_retrievedLabel']['value'];
+            var $element = $('#' + enzData['ec'].replace(/\./g, ''));
+            var stated_in = enzData['statedIn'];
+            var retrieved = enzData['retrieved'];
 
             $element.on('click', function () {
                 $stated.html(stated_in);
