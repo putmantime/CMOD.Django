@@ -371,6 +371,12 @@ iframe {
     background-repeat: no-repeat;
 }
 
+#geneform.ui-autocomplete-loading {
+    background-image: url('../img/spin.gif');
+    background-position: left center;
+    background-repeat: no-repeat;
+}
+
 .form-control {
     padding-left: 25px;
     margin-top: 5px;
