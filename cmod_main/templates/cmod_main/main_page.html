@@ -100,9 +100,11 @@
             </div>
             <div class="modal-body">
                 <h5>Stated in:</h5>
+
                 <div class='main-data' id="main-ref-statedin">
                 </div>
                 <h5>Reference URL:</h5>
+
                 <div class='main-data' id="main-ref-url">
                 </div>
             </div>
@@ -124,17 +126,21 @@
             </div>
             <div class="modal-body">
                 <h5>Stated in:</h5>
+
                 <div class='main-data' id="main-ref-statedin">
                 </div>
                 <h5>Retrieved:</h5>
+
                 <div class='main-data' id="main-ref-retrieved">
                 </div>
                 <h4> Reaction</h4>
                 <h5>Stated in:</h5>
+
                 <div class='main-data'>
                     <a href="http://enzyme.expasy.org/">Expasy Enzyme</a>
                 </div>
                 <h5>Retrieved:</h5>
+
                 <div class='main-data' id="main-ref-retrieved">
                 </div>
             </div>
@@ -292,24 +298,41 @@
 
                     </div>
                 </div>
-                <div id="orgData" class="org-data-box">
+                <div class="tab-data">
+                    <ul id='org-ano-tabs' class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#org-tab" aria-controls="org"
+                                                                  role="tab"
+                                                                  data-toggle="tab">Organism</a>
+                        </li>
+                        <li role="presentation"><a href="#ano-tab" aria-controls="annotations" role="tab"
+                                                   data-toggle="tab">Annotation Landscape</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="org-tab">
+                            <div id="orgData" class="org-data-box">
 
-                    <div id="taxid" class="main-data"></div>
-                    <div id="QID" class="main-data"></div>
-                    <div class="main-data" style="text-align: center; margin-top: 20px">
+                                <div id="taxid" class="main-data"></div>
+                                <div id="QID" class="main-data"></div>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="ano-tab">
+                            <div class="main-data" style="text-align: center; margin-top: 20px">
 
-                        <div class="row">
-                            <div class="col-xs-6"><strong>Proteins</strong></div>
-                            <div class="col-xs-6"><strong>Genes</strong></div>
+                                <div class="row">
+                                    <div class="col-xs-6"><strong>Proteins</strong></div>
+                                    <div class="col-xs-6"><strong>Genes</strong></div>
+                                </div>
+                                <div class="row">
+                                    <div id='genecount' class="col-xs-6"></div>
+                                    <div id='proteincount' class="col-xs-6"></div>
+                                </div>
+                                <div><h5><strong>Annotations</strong></h5></div>
+                            </div>
+                            <div style="overflow: auto" id="chart_div"></div>
                         </div>
-                        <div class="row">
-                            <div id='genecount' class="col-xs-6"></div>
-                            <div id='proteincount' class="col-xs-6"></div>
-                        </div>
-                        <div><h5><strong>Annotations</strong></h5></div>
+
                     </div>
-                    <div id="chart_div"></div>
-
                 </div>
             </div>
         </div>
@@ -526,7 +549,8 @@
 
                 <ul class="nav nav-pills">
                     <div class="centerText col-xs-1"></div>
-                    <li class="centerText col-xs-2"><a href="#aboutWG" data-toggle="modal">About WikiGenomes</a></li>
+                    <li class="centerText col-xs-2"><a href="#aboutWG" data-toggle="modal">About WikiGenomes</a>
+                    </li>
                     <li class="centerText col-xs-2"><a href="#help" data-toggle="modal">Help</a></li>
                     <li class="centerText col-xs-2"><a href="#code" data-toggle="modal">Source</a></li>
                     <li class="centerText col-xs-2"><a href="#licensing" data-toggle="modal">Terms of Use</a></li>
@@ -553,8 +577,10 @@
             <div class="modal-body">
                 <h4>WikiGenomes</h4>
 
-                <p>WikiGenomes is a portal to the biological content in the <a href="wikidata.org">Wikidata</a> project.
-                    It currently hosts the genes, proteins, and a variety of functional annotations for 1 yeast and 120
+                <p>WikiGenomes is a portal to the biological content in the <a href="wikidata.org">Wikidata</a>
+                    project.
+                    It currently hosts the genes, proteins, and a variety of functional annotations for 1 yeast and
+                    120
                     bacteria genomes.
                     WikiGenomes is designed to be both a resource for basic researchers to browse the collective
                     knowledge of a variety of
@@ -589,7 +615,8 @@
                 <h4 class="modal-title">Help</h4>
             </div>
             <div class="modal-body">
-                <p>Walkthrough video available <a href="https://drive.google.com/open?id=0Bz6pVfjuj2bhWUR6emFIUy1PNVk"><u>here</u></a></p>
+                <p>Walkthrough video available <a
+                        href="https://drive.google.com/open?id=0Bz6pVfjuj2bhWUR6emFIUy1PNVk"><u>here</u></a></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -629,8 +656,12 @@
             </div>
             <div class="modal-body">
                 <p>All the data hosted in WikiGenomes and <a href="wikidata.org">Wikidata</a> are <a
-                        href="https://wiki.creativecommons.org/wiki/CC0">CC-0 Public Domain</a>, with the exception of enzyme reactions,
-                    which come from <a href="http://enzyme.expasy.org/">Expasy Enzyme</a> and are subject to their terms of use: <a href="http://enzyme.expasy.org/enzuser.txt">Expasy User Manual</a> </p>.
+                        href="https://wiki.creativecommons.org/wiki/CC0">CC-0 Public Domain</a>, with the exception
+                    of
+                    enzyme reactions,
+                    which come from <a href="http://enzyme.expasy.org/">Expasy Enzyme</a> and are subject to their
+                    terms
+                    of use: <a href="http://enzyme.expasy.org/enzuser.txt">Expasy User Manual</a></p>.
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

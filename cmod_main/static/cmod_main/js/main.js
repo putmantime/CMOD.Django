@@ -1753,7 +1753,7 @@ $(document).ready(function () {
                 dataType: 'json',
                 success: function (data) {
                     var dataDict = {
-                        "label": "InterPro",
+                        "label": "IP",
                         "value": 0
                     };
                     var dataList = ["InterPro"];
@@ -1789,7 +1789,7 @@ $(document).ready(function () {
                 dataType: 'json',
                 success: function (data) {
                     var dataDict = {
-                        "label": "ECNumber",
+                        "label": "EC",
                         "value": 0
                     };
                     var dataList = ['EC Number'];
@@ -1842,16 +1842,19 @@ $(document).ready(function () {
                     legend: 'none',
                     bar: {groupWidth: '95%'},
                     vAxis: {
-                        gridlines: {count: 4},
-
-
+                        gridlines: {count: 4}
                     },
                     hAxis: {
-                        textPosition: 'out',
-                        textStyle: {bold: true}
+                        //textStyle: {bold: true},
+                        //direction:-1,
+                        //slantedText:true,
+                        //slantedTextAngle:90,
+                        textPosition: 'none'
+
                     },
                     chartArea: {'width': '80%', 'height': '60%'}
                 };
+
 
                 // Instantiate and draw our chart, passing in some options.
                 var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
