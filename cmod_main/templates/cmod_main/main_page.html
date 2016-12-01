@@ -298,9 +298,9 @@
 
                     </div>
                 </div>
-                <div class="tab-data">
+                <div class="tab-data" style="height: 100%">
                     <ul id='org-ano-tabs' class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active"><a href="#org-tab" aria-controls="org"
+                        <li role="presentation"   class="active"><a href="#org-tab" aria-controls="org"
                                                                   role="tab"
                                                                   data-toggle="tab">Organism</a>
                         </li>
@@ -308,15 +308,8 @@
                                                    data-toggle="tab">Annotation Landscape</a>
                         </li>
                     </ul>
-                    <div class="tab-content">
+                    <div style="height: 100%" class="tab-content">
                         <div role="tabpanel" class="tab-pane active" id="org-tab">
-                            <div id="orgData" class="org-data-box">
-
-                                <div id="taxid" class="main-data"></div>
-                                <div id="QID" class="main-data"></div>
-                            </div>
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="ano-tab">
                             <div class="main-data" style="text-align: center; margin-top: 20px">
 
                                 <div class="row">
@@ -327,9 +320,16 @@
                                     <div id='genecount' class="col-xs-6"></div>
                                     <div id='proteincount' class="col-xs-6"></div>
                                 </div>
-                                <div><h5><strong>Annotations</strong></h5></div>
                             </div>
-                            <div style="overflow: auto" id="chart_div"></div>
+                            <div id="orgData" class="org-data-box">
+
+                                <div id="taxid" class="main-data"></div>
+                                <div id="QID" class="main-data"></div>
+                            </div>
+
+                        </div>
+                        <div  style="height:100%" role="tabpanel" class="tab-pane" id="ano-tab">
+                            <div id="chart_div" style="height: 65%; overflow: auto"></div>
                         </div>
 
                     </div>

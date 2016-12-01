@@ -1372,7 +1372,7 @@ $(document).ready(function () {
             //console.log(element.find('.div-ref-but'));
             $('#genPosRef').on('click', function () {
                 //console.log("clicking ref button");
-                $stated.html("<span><a href='http://www.ncbi.nlm.nih.gov/gene/?term=" + geneData[1] +"'><h5>NCBI Gene</h5></a>");
+                $stated.html("<span><a href='http://www.ncbi.nlm.nih.gov/gene/?term=" + geneData[1] + "'><h5>NCBI Gene</h5></a>");
                 $modal.modal('show');
             });
         },
@@ -1838,21 +1838,23 @@ $(document).ready(function () {
 
                 var options = {
                     width: '100%',
-                    height: '80%',
+                    height: '100%',
                     legend: 'none',
                     bar: {groupWidth: '95%'},
                     vAxis: {
-                        gridlines: {count: 4}
+                        gridlines: {count: 4},
                     },
                     hAxis: {
-                        //textStyle: {bold: true},
-                        //direction:-1,
-                        //slantedText:true,
-                        //slantedTextAngle:90,
-                        textPosition: 'none'
+                        textStyle: {
+                            bold: true,
+                            fontSize: 7
+                        },
+                        slantedText: true,
+                        slantedTextAngle: 45,
+                        textPosition: 'out'
 
                     },
-                    chartArea: {'width': '80%', 'height': '60%'}
+                    chartArea: {left: '10%', width: '75%', height: '65%'}
                 };
 
 
@@ -1860,6 +1862,19 @@ $(document).ready(function () {
                 var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
 
                 chart.draw(data, options);
+                function resizeChart() {
+                    chart.draw(data, options);
+                }
+
+                if (document.addEventListener) {
+                    window.addEventListener('resize', resizeChart);
+                }
+                else if (document.attachEvent) {
+                    window.attachEvent('onresize', resizeChart);
+                }
+                else {
+                    window.resize = resizeChart;
+                }
                 annotations.renderGenesProteins(annotations.annotations_data);
             }
 
