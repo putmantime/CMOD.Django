@@ -166,6 +166,7 @@ def wd_go_edit(request):
 @ensure_csrf_cookie
 def wd_operon_edit(request):
     edit_status = {}
+
     operonProp = {
         'operon': 'Q139677'
     }
@@ -236,8 +237,7 @@ def wd_operon_edit(request):
 
     #
     def operon_wd_item(operon_data, login, auth1):
-        if operon_data['operonName'][
-            0] == 'None':  # if the user has not supplied an operon name, generate one from concatenating the locustags
+        if operon_data['operonName'][0] == 'None':  # if the user has not supplied an operon name, generate one from concatenating the locustags
             operon_label = 'operon_' + "_".join(operon_data['locusTags[]'])
             print(operon_label)
         else:

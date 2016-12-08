@@ -246,7 +246,7 @@ $(document).ready(function () {
                             "wdt:P686 ?goID.",
                             "FILTER(lang(?goterm_label) = \"en\")",
                             "FILTER(CONTAINS(LCASE(?goterm_label), \"" +
-                            request.term +
+                            request.term.toLowerCase() +
                             "\" ))}"].join(" "),
                         datatype: 'json',
                         success: function (data) {
@@ -473,7 +473,7 @@ $(document).ready(function () {
                             "rdfs:label ?gene_label. " +
                             "FILTER(lang(?gene_label) = \"en\") " +
                             "FILTER(CONTAINS(LCASE(?gene_label), \"" +
-                            request.term +
+                            request.term.toLowerCase() +
                             "\" ))}"
                         ].join(" "),
                         datatype: 'json',
@@ -531,7 +531,7 @@ $(document).ready(function () {
                             "; rdfs:label ?operon_label. " +
                             "FILTER(lang(?operon_label) = \"en\") " +
                             "FILTER(CONTAINS(LCASE(?operon_label), \"" +
-                            request.term + "\")) }"
+                            request.term.toLowerCase() + "\")) }"
                         ].join(" "),
 
                         datatype: 'json',
