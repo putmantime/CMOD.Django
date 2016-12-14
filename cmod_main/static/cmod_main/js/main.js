@@ -668,7 +668,7 @@ $(document).ready(function () {
         sendToServer: function (data,urlsuf) {
             console.log("send to server");
             console.log(data);
-            var csrftoken = getCookie('csrfOperontoken');
+            var csrftoken = getCookie('csrftoken');
             console.log(csrftoken);
             $.ajax({
                 type: "POST",
