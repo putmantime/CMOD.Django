@@ -423,7 +423,6 @@ $(document).ready(function () {
             this.geneOperonAC();
             this.pmidForm();
             this.editWD();
-
             this.resetForm();
 
 
@@ -448,6 +447,9 @@ $(document).ready(function () {
             });
             this.$op_modal_button.off("click").click(function (e) {
                 e.preventDefault();
+                if (verified === 'False') {
+                    alert("To make an annotation, you must first authorize WikiGenome.org to edit Wikidata. Please click the 'Authorize to Edit Wikidata' button to do so");
+                }
                 operonFormAll.operonFormData["PMID"] = {};
                 operonFormAll.operonFormData["otherGenes"] = [];
                 operonFormAll.operonFormData["locusTags"] = [];
@@ -593,7 +595,6 @@ $(document).ready(function () {
                 $('#opNameStaging').html("<span><h5><strong>" + operonFormAll.operonFormData["operonName"] + "</strong></h5>");
             });
         },
-
         pmidForm: function () {
             //form for looking a publication to provide as a reference using eutils
             this.$pmid_input.autocomplete({
@@ -662,10 +663,11 @@ $(document).ready(function () {
 
 
         },
-        sendToServer: function (data, urlsuf) {
+        sendToServer: function (data,urlsuf) {
             console.log("send to server");
             console.log(data);
-            var csrftoken = getCookie('csrftoken');
+            var csrftoken = getCookie('csrfOperontoken');
+            console.log(csrftoken);
             $.ajax({
                 type: "POST",
                 url: window.location.pathname + urlsuf,
@@ -675,14 +677,13 @@ $(document).ready(function () {
                 success: function (data) {
                     console.log("operon data success");
                     console.log(data);
-                    //alert("Successful interaction with the server");
                     if (data['write'] === "success") {
                         alert("Wikidata item succesfully edited!\nIt may take a few minutes for it to show up here.");
                     }
                     else {
+                        console.log(csrftoken);
                         alert("Could not edit Wikidata at this time");
                     }
-
                 },
                 error: function (data) {
                     console.log("operon data error");
@@ -700,6 +701,7 @@ $(document).ready(function () {
 
 ////////////////////////////////////Begin data rendering modules////////////////////////////////////////////////////////
 //////render the organism data in the Organism box//////
+
     var orgData = {
         init: function (taxData) {
             this.cacheDOM();
@@ -735,7 +737,9 @@ $(document).ready(function () {
 
         }
     };
+
 //////render the gene data in Gene box//////
+
     var geneData = {
         init: function (gene) {
             this.cacheDOM();
@@ -822,7 +826,9 @@ $(document).ready(function () {
 
         }
     };
+
 //////render the protein dat in the Protein box///////
+
     var proteinData = {
         init: function (protein) {
             this.cacheDOM();
@@ -858,6 +864,7 @@ $(document).ready(function () {
         }
 
     };
+
     var goData = {
         init: function (uniprot) {
             this.cacheDOM();
@@ -1023,128 +1030,6 @@ $(document).ready(function () {
 
     };
 
-    //var EnzymeData = {
-    //    init: function (enzData) {
-    //        this.cacheDOM();
-    //        this.$ecnum.html('');
-    //        this.render(enzData);
-    //
-    //    },
-    //    cacheDOM: function () {
-    //
-    //        this.$ecnum = $('#enzymeprodata');
-    //        this.$ezTab = $('#ezTab');
-    //    },
-    //    generate_ec_template: function (tempdata) {
-    //        var data = {
-    //            'ecnumber': tempdata['ecnumber'],
-    //            'ecselector': tempdata['ecnumber'].replace(/\./g, ''),
-    //            'reaction': tempdata['reaction']
-    //        };
-    //        var ec_template = _.template(
-    //            "<div class='row main-dataul'>" +
-    //            "<div class='col-xs-2'><h5><%= ecnumber %></h5></div>" +
-    //            "<div class='col-xs-8'><%= reaction %></div>" +
-    //            "<div id='main-ref-button'class='col-xs-2'>" +
-    //            "<button type='button' id='<%= ecselector %>' class='main-button-ref btn btn-default div-ref-but' ></button></div>" +
-    //            "</div></div>");
-    //        return (ec_template(data))
-    //
-    //    },
-    //    getReaction1: function (ecNumber, callBackOnSuccess) {
-    //        var expasy_endpoint = 'http://enzyme.expasy.org/EC/{ecnumber}.txt';
-    //        var exurl = expasy_endpoint.replace('{ecnumber}', ecNumber);
-    //        var newDIct = {'reaction': []};
-    //        $.ajax({
-    //            type: "GET",
-    //            datatype: "text",
-    //            url: exurl,
-    //            success: function (data) {
-    //
-    //                var newdata = data.split("\n");
-    //
-    //                $.each(newdata, function (key, element) {
-    //                    if (element.match("^CA ")) {
-    //                        newDIct.reaction.push(element.substr(4));
-    //                    }
-    //
-    //                });
-    //                newDIct['reaction'] = newDIct['reaction'].join(" ");
-    //                callBackOnSuccess(newDIct);
-    //            }
-    //
-    //        });
-    //
-    //    },
-    //    getReaction: function (ecNumber, callBackonSuccess) {
-    //        var expasy_endpoint = 'http://enzyme.expasy.org/EC/{ecnumber}.txt';
-    //        var exurl = expasy_endpoint.replace('{ecnumber}', ecNumber);
-    //        var newDIct = {'reaction': []};
-    //
-    //
-    //        $.ajax({
-    //            type: "GET",
-    //            url: exurl,
-    //            dataType: 'text',
-    //            success: function (data) {
-    //                var newdata = data.split("\n");
-    //                $.each(newdata, function (key, element) {
-    //                    if (element.match("^CA ")) {
-    //                        newDIct.reaction.push(element.substr(4));
-    //                    }
-    //
-    //                });
-    //                newDIct['reaction'] = newDIct['reaction'].join(" ");
-    //
-    //
-    //                //console.log(bp);
-    //                callBackonSuccess(newDIct);
-    //            }
-    //        });
-    //
-    //    },
-    //    render: function (enzData) {
-    //        var $enz = this.$ecnum;
-    //        var allEC = [];
-    //        var newAllEC = [];
-    //
-    //
-    //        if (enzData.length === 0) {
-    //            var templateData = {
-    //                'ecnumber': 'No Enzyme Data Available'
-    //            };
-    //            allEC.push(EnzymeData.generate_ec_template(templateData));
-    //            $enz.html(allEC.join(" "));
-    //
-    //        }
-    //        else {
-    //            $.each(enzData, function (index, ec) {
-    //                var templateData = {
-    //                    'ecnumber': ec['ecnumber']['value']
-    //                };
-    //                var textReaction = EnzymeData.getReaction(ec['ecnumber']['value']);
-    //                templateData['reaction'] = textReaction['reaction'];
-    //                console.log(textReaction['reaction']);
-    //                allEC.push(EnzymeData.generate_ec_template(templateData));
-    //                newAllEC = _.uniq(allEC, false);
-    //                $enz.html(newAllEC.join(" "));
-    //                ecRefModal_obj.init(ec);
-    //
-    //
-    //            });
-    //
-    //
-    //        }
-    //
-    //        //$enz.html(newAllEC.join(" "));
-    //        if (enzData.length === 0) {
-    //            this.$ezTab.text('Enzyme Class (' + 0 + ')');
-    //        }
-    //        else {
-    //            this.$ezTab.text('Enzyme Class (' + newAllEC.length + ')');
-    //        }
-    //    }
-    //};
     var EnzClassData = {
         init: function (ecNumber) {
             this.cacheDOM();
@@ -1242,7 +1127,6 @@ $(document).ready(function () {
                 "</div>";
         }
     };
-
 
     var operonData = {
         init: function (entrez) {
@@ -1422,6 +1306,7 @@ $(document).ready(function () {
         }
 
     };
+
     var ecRefModal_obj = {
         init: function (enzData) {
             this.cacheDom();
@@ -1496,13 +1381,11 @@ $(document).ready(function () {
 
     };
 
-
 /////////////////////////////////////////End reference modules//////////////////////////////////////////////////////////
 
 //////////////////////////////////////////Begin JBrowse Module//////////////////////////////////////////////////////////
 
     var jbrowse = {
-
         init: function (taxid, refseq, coords, name) {
             this.cacheDOM();
             this.render(taxid, refseq, coords, name);
@@ -1516,7 +1399,6 @@ $(document).ready(function () {
             this.$orgTitle = this.$jb.find('#main-organism-name');
             this.$name = this.$orgTitle.find('i');
 
-
         },
         render: function (taxid, refseq, coords, name) {
             var data = {
@@ -1526,8 +1408,6 @@ $(document).ready(function () {
             this.$browser.html("<iframe src=\"" + data.url + "\"><iframe>");
             this.$name.html(name);
             //console.log(data.url);
-
-
         }
 
 
@@ -1535,7 +1415,6 @@ $(document).ready(function () {
 
 /////////////////////////////////////////////////End Jbrowse module/////////////////////////////////////////////////////
 // ///////////////////////////////////////////////Begin Authentication module///////////////////////////////////////////
-
 
     var getCookie = function (name) {
         var cookieValue = null;

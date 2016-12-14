@@ -165,6 +165,8 @@ def wd_go_edit(request):
 
 @ensure_csrf_cookie
 def wd_operon_edit(request):
+
+    print('operon1')
     edit_status = {}
 
     operonProp = {
