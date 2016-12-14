@@ -221,11 +221,15 @@ $(document).ready(function () {
 
             };
             var goClassButtonElem;
-            $('.main-goButton').on('click', function () {
+            $('.main-goButton').on('click', function (e) {
+                if (verified === 'False') {
+                    alert("To make an annotation, you must first authorize WikiGenome.org to edit Wikidata. " +
+                        "Please click the 'Authorize to Edit Wikidata' button to begin the process");
+                    e.stopPropagation();
+                }
                 goClassButtonElem = goClassButton[$(this).attr('id')];
                 goFormAll.goFormData["goClass"] = goClassButtonElem[0];
                 $('#myGOModalLabel').html("<span>Add a " + goClassButtonElem[1] + " to this protein</span>");
-
 
             });
 
@@ -449,7 +453,7 @@ $(document).ready(function () {
                 e.preventDefault();
                 if (verified === 'False') {
                     alert("To make an annotation, you must first authorize WikiGenome.org to edit Wikidata. " +
-                        "Please click the 'Authorize to Edit Wikidata' button to do so");
+                        "Please click the 'Authorize to Edit Wikidata' button to begin the process");
                     e.stopPropagation();
                 }
                 operonFormAll.operonFormData["PMID"] = {};
@@ -665,7 +669,7 @@ $(document).ready(function () {
 
 
         },
-        sendToServer: function (data,urlsuf) {
+        sendToServer: function (data, urlsuf) {
             console.log("send to server");
             console.log(data);
             var csrftoken = getCookie('csrftoken');
@@ -1419,6 +1423,8 @@ $(document).ready(function () {
 // ///////////////////////////////////////////////Begin Authentication module///////////////////////////////////////////
 
     var getCookie = function (name) {
+        console.log('testing getCookie');
+        console.log('name');
         var cookieValue = null;
         if (document.cookie && document.cookie !== '') {
             var cookies = document.cookie.split(';');
