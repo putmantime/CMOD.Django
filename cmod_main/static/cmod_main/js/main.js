@@ -448,7 +448,9 @@ $(document).ready(function () {
             this.$op_modal_button.off("click").click(function (e) {
                 e.preventDefault();
                 if (verified === 'False') {
-                    alert("To make an annotation, you must first authorize WikiGenome.org to edit Wikidata. Please click the 'Authorize to Edit Wikidata' button to do so");
+                    alert("To make an annotation, you must first authorize WikiGenome.org to edit Wikidata. " +
+                        "Please click the 'Authorize to Edit Wikidata' button to do so");
+                    e.stopPropagation();
                 }
                 operonFormAll.operonFormData["PMID"] = {};
                 operonFormAll.operonFormData["otherGenes"] = [];
