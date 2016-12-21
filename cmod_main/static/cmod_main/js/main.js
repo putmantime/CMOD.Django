@@ -1165,11 +1165,11 @@ $(document).ready(function () {
             this.$opGenes = this.$opBox.find('#operonGenesdata');
         },
         generate_operon_template: function (operon_identifier) {
-            var wdid = operon_identifier['Operon'][0]['operon']['value'].split("/");
+            var wdid = operon_identifier['Operon'][0]['operonItem']['value'].split("/");
             var operonQID = wdid.slice(-1)[0];
             var data = {
-                'operon_label': operon_identifier['Operon'][0]['operonLabel']['value'],
-                'operon_wduri': operon_identifier['Operon'][0]['operon']['value'],
+                'operon_label': operon_identifier['Operon'][0]['operonItemLabel']['value'],
+                'operon_wduri': operon_identifier['Operon'][0]['operonItem']['value'],
                 'operon_qid': operonQID
             };
 
@@ -1177,7 +1177,7 @@ $(document).ready(function () {
                 "<div style='margin-bottom: 10px' class='row main-data'>" +
                 "<div class='col-xs-8'><%= operon_label %></div> " +
                 "<div class='col-xs-2'><a target='_blank' href='<%= operon_wduri %>'><%= operon_qid %> </a></div> " +
-                "<div class='col-xs-2'></div>  " +
+                "<div id='main-ref-button' class=\"col-xs-2\"> <button type='button' class='main-button-ref btn btn-default div-ref-but' ></button></div>" +
 
                 "</div>"
             );
@@ -1216,22 +1216,30 @@ $(document).ready(function () {
                 "<div class='col-xs-1 dat-space-bottom'><%= genStart %></div>" +
                 "<div class='col-xs-1 dat-space-bottom'><%= genEnd %></div>" +
                 "<div class='col-xs-2 dat-space-bottom'><%= strand %></div>" +
-                "<div class='col-xs-1 dat-space-bottom'></div>" +
+                "<div id='main-ref-button' class=\"col-xs-1\"> <button type='button' class='main-button-ref btn btn-default div-ref-but' ></button></div>" +
                 "</div>"
             );
             return (op_gene_template(data));
         },
 
         renderOP: function (operon) {
+            console.log(operon);
             this.$opTab.text("Operon (1)");
+            var opD = this.$opData;
+            console.log(opD);
             this.$opData.html(this.generate_operon_template(operon));
+            operonRefModal_obj.init(opD, operon.Operon[0]['reference_stated_inLabel']['value'], operon.Operon[0]['reference_stated_in']['value'],  operon.Operon[0]['reference_pmid']['value']);
         },
 
         renderOPGenes: function (operonGenes) {
             //console.log(operonGenes);
+            var opGD = this.$opGenes;
             $.each(operonGenes['Operon'], function (key, element) {
                 //console.log(element);
                 operonData.$opGenes.append(operonData.generate_opGenes_template(element));
+                console.log(operonGenes);
+                operonRefModal_obj.init(opGD, element['reference_stated_inLabel']['value'], element['reference_stated_in']['value'],  element['reference_pmid']['value']);
+
             });
 
         }
@@ -1375,6 +1383,43 @@ $(document).ready(function () {
                 //console.log("clicking ref button");
                 $stated.html(stated_in);
                 $refURL.html(refurl);
+                $modal.modal('show');
+            });
+        },
+        closeModal: function () {
+
+            this.$modalClose.on('click', function () {
+
+            });
+        }
+
+    };
+
+    var operonRefModal_obj = {
+        init: function (element, stated_in, qid, PMID) {
+            //console.log("interp ref obj thingy");
+            this.cacheDom();
+            this.openModal(element, stated_in, qid, PMID);
+            this.closeModal();
+        },
+        cacheDom: function () {
+            this.$modal = $('#wdOPRefModal');
+            this.$modalClose = this.$modal.find('#modalRefClose');
+            this.$refStated = this.$modal.find('#main-ref-statedin');
+            this.$refPMID = this.$modal.find("#main-ref-PMID");
+
+
+        },
+        openModal: function (element, stated_in, qid, PMID) {
+            console.log(PMID);
+            var $modal = this.$modal;
+            var $stated = this.$refStated;
+            var $PMID = this.$refPMID;
+
+            element.find('.div-ref-but').on('click', function () {
+                //console.log("clicking ref button");
+                $stated.html("<a href='" + qid + "'>" + stated_in + "</a>");
+                $PMID.html("<a href='https://www.ncbi.nlm.nih.gov/pubmed/" + PMID + "'>" + PMID + "</a>");
                 $modal.modal('show');
             });
         },

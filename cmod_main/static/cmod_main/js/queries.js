@@ -11,7 +11,26 @@ var getOrgs = function (callbackOnSuccess) {
         "refseq": '',
         'qid': "Q27510868"
     };
-    var orgTags = [sc];
+
+    var c_mur = {
+        "name": "Chlamydia muridarum Nigg",
+        "value": "Chlamydia muridarum Nigg" + " | " + "243161" + " | " + "Q21398805",
+        "taxid": "243161",
+        "refseq": '',
+        'qid': "Q21398805"
+
+    };
+    var c_psit = {
+        "name": "Chlamydia psittaci 6BC",
+        "value": "Chlamydia psittaci 6BC" + " | " + "331636" + " | " + "Q27944478",
+        "taxid": "331636",
+        "refseq": '',
+        'qid': "Q27944478"
+
+    };
+
+
+    var orgTags = [sc, c_psit, c_mur];
     var queryOrgs = [
         "SELECT ?species ?speciesLabel ?taxid ?RefSeq",
         "WHERE { ?species wdt:P171* wd:Q10876;",
@@ -71,7 +90,7 @@ var getGenes = function (taxid, callbackOnSuccess) {
         "bd:serviceParam wikibase:language \"en\" .",
         "}}"
     ].join(" ");
-    //console.log(queryGenes);
+    console.log(queryGenes);
     $.ajax({
         type: "GET",
         url: endpoint + queryGenes,
@@ -194,7 +213,7 @@ var getInterPro = function (uniprot, callBackonSuccess) {
         "filter (lang(?interPro_label) = \"en\") .}"
 
     ].join(" ");
-
+    console.log(ipQuery);
 
     $.ajax({
         type: "GET",
@@ -278,23 +297,27 @@ var getEvidenceCodes = function (callBackonSuccess) {
 var getOperonData = function (entrez, callBackonSuccess) {
     var operonGenes = {};
     var opQuery = [
-        "SELECT ?gene ?locusTag ?entrez ?operon ?operonLabel ?genStart",
-        "?genEnd ?strand ?strandLabel ?op_genes ?op_genesLabel",
-        "WHERE {",
-        "?gene wdt:P351 '" + entrez + "';",
-        "wdt:P361 ?operon.",
-        "?operon wdt:P527 ?op_genes.",
-        "?op_genes wdt:P2393 ?locusTag;",
-        "wdt:P351 ?entrez;",
-        "wdt:P644 ?genStart;",
-        "wdt:P645 ?genEnd;",
-        "wdt:P2548 ?strand.",
-        "SERVICE wikibase:label {",
-        "bd:serviceParam wikibase:language \"en\" .",
-        "}}"
-    ].join(" ");
-    //console.log(opQuery);
+        " SELECT ?gene ?locusTag ?entrez ?operon ?operonLabel ?operonItem "
+        + " ?genStart ?genEnd ?strand ?strandLabel ?op_genes ?reference_stated_in ?reference_stated_inLabel  "
+        + " ?op_genesLabel ?reference_pmid "
+        + " WHERE {  "
+        + "   ?gene wdt:P351 '" + entrez + "';",
+        "         p:P361 ?operon. "
+        + "   ?operon ps:P361 ?operonItem. "
+        + "   ?operonItem wdt:P279 wd:Q139677; "
+        + "               wdt:P527 ?op_genes.  "
+        + "   ?op_genes wdt:P2393 ?locusTag;  "
+        + "             wdt:P351 ?entrez;  "
+        + "             wdt:P644 ?genStart;  "
+        + "             wdt:P645 ?genEnd;  "
+        + "             wdt:P2548 ?strand. "
+        + "    "
+        + "   ?operon prov:wasDerivedFrom/pr:P248 ?reference_stated_in. "
+        + "   ?reference_stated_in wdt:P698 ?reference_pmid. "
+        + "   SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\" . } "
+        + " } "].join(" ");
 
+    console.log(opQuery);
     $.ajax({
         type: "GET",
         url: endpoint + opQuery,
@@ -315,18 +338,21 @@ var getOperonData = function (entrez, callBackonSuccess) {
 
 };
 
+
+
 var getOperon = function (entrez, callBackonSuccess) {
     var operon = {};
     var operonQuery = [
-        "SELECT ?operon ?operonLabel",
-        "WHERE {",
+        "SELECT ?operon ?operonItem ?operonItemLabel ?reference_stated_in  ?reference_stated_inLabel ?reference_pmid " +
+        "WHERE {  " +
         "?gene wdt:P351 '" + entrez + "';",
-        "wdt:P361 ?operon.",
-        "SERVICE wikibase:label {",
-        "bd:serviceParam wikibase:language \"en\" .",
-        "}}"
+        "p:P361 ?operon.  " +
+        "?operon ps:P361 ?operonItem.  " +
+        "?operon prov:wasDerivedFrom/pr:P248 ?reference_stated_in.  " +
+        "?reference_stated_in wdt:P698 ?reference_pmid. " +
+        "SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\" . }}"
     ].join(" ");
-    //console.log(operonQuery);
+    console.log(operonQuery);
 
     $.ajax({
         type: "GET",

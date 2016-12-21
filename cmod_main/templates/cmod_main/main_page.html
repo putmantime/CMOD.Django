@@ -115,6 +115,32 @@
         </div>
     </div>
 </div>
+<!--op reference Modal-->
+<div class="modal" id="wdOPRefModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <img class="wd-logo" src="{% static 'cmod_main/img/GeneWikidata-logo-en.png' %}">
+                <h4 class="modal-title" id="refModal">Wikidata Statement Reference</h4>
+            </div>
+            <div class="modal-body">
+                <h5>Stated in:</h5>
+
+                <div class='main-data' id="main-ref-statedin">
+                </div>
+                <h5>PMID:</h5>
+
+                <div class='main-data' id="main-ref-PMID">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id='modalRefClose' type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
 <!--EC reference Modal-->
 <div class="modal" id="wdECRefModal" tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel" aria-hidden="true">

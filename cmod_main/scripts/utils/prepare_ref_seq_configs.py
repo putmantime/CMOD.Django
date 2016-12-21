@@ -27,11 +27,11 @@ class PrepareRefSeqs(object):
                     temp.write(current_fasta)
                     temp.flush()
 
-                    prep_rs = '/Users/timputman/django-projects/cmod_dev/CMOD.Django/cmod_main/static/cmod_main/JBrowse-1.12.1-dev/bin/prepare-refseqs.pl'
+                    prep_rs = '/Users/timputman/CODE/wikigenomes_revisions/CMOD.Django/cmod_main/static/cmod_main/JBrowse-1.12.1/bin/prepare-refseqs.pl'
                     sub_args = [prep_rs, "--fasta", temp.name, "--out",
-                                '/Users/timputman/django-projects/cmod_dev/CMOD.Django/cmod_main/static/cmod_main/JBrowse-1.12.1-dev/sparql_data/sparql_data_{}/'.format(tid)]
+                                '/Users/timputman/CODE/wikigenomes_revisions/CMOD.Django/cmod_main/static/cmod_main/JBrowse-1.12.1/sparql_data/sparql_data_{}/'.format(
+                                    tid)]
                     subprocess.call(sub_args)
-
 
     @staticmethod
     def execute_query():
@@ -46,7 +46,7 @@ class PrepareRefSeqs(object):
                 wdt:P279 wd:Q7187.
                 }"""
 
-        taxids = []
+        taxids = ['243161', '331636']
         endpoint = SPARQLWrapper(endpoint="https://query.wikidata.org/sparql")
         endpoint.setQuery(tid_query)
         endpoint.setReturnFormat(JSON)
@@ -65,12 +65,12 @@ class PrepareRefSeqs(object):
         """
         ftp_list = ['ftp://ftp.ncbi.nlm.nih.gov/genomes/refseq/fungi/Saccharomyces_cerevisiae/assembly_summary.txt',
                     'ftp://ftp.ncbi.nlm.nih.gov/genomes/refseq/bacteria/assembly_summary.txt'
-                   ]
+                    ]
         columns = ['assembly_accession', 'bioproject', 'biosample', 'wgs_master', 'refseq_category', 'taxid',
-                       'species_taxid', 'organism_name', 'infraspecific_name', 'isolate', 'version_status',
-                       'assembly_level',
-                       'release_type', 'genome_rep', 'seq_rel_date', 'asm_name', 'submitter', 'gbrs_paired_asm',
-                       'paired_asm_comp', 'ftp_path', 'excluded_from_refseq']
+                   'species_taxid', 'organism_name', 'infraspecific_name', 'isolate', 'version_status',
+                   'assembly_level',
+                   'release_type', 'genome_rep', 'seq_rel_date', 'asm_name', 'submitter', 'gbrs_paired_asm',
+                   'paired_asm_comp', 'ftp_path', 'excluded_from_refseq']
         ftp_data = []
         for ftp_url in ftp_list:
             assembly = urllib.request.urlretrieve(ftp_url)
@@ -119,19 +119,19 @@ class PrepareRefSeqs(object):
 
         # sparql query is in one long line...jbrowse was only taking first line of query when it was multiline (this held me up for a while)
         querygenes = [
-                  "queryTemplate = PREFIX wdt: <http://www.wikidata.org/prop/direct/> PREFIX wd: <http://www.wikidata.org/entity/>",
-                  "PREFIX qualifier: <http://www.wikidata.org/prop/qualifier/>",
-                  "SELECT ?start ?end ?uniqueID ?strand ?uri ?entrezGeneID ?name ?description ?refSeq",
-                  "WHERE { ?gene wdt:P279 wd:Q7187; wdt:P703 ?strain; wdt:P351 ?uniqueID; wdt:P351 ?entrezGeneID;",
-                  "wdt:P2393 ?name; rdfs:label ?description; wdt:P644 ?start; wdt:P645 ?end; wdt:P2548 ?wdstrand ;",
-                  "p:P644 ?chr.",
-                  "OPTIONAL {?chr qualifier:P2249 ?refSeq.} FILTER(?refSeq = \"{ref}\") "
-                  "?strain wdt:P685",
-                  "'" + taxid + "'.",
-                  "bind( IF(?wdstrand = wd:Q22809680, '1', '-1') as ?strand). bind(str(?gene) as ?uri).",
-                  "filter ( !(xsd:integer(?start) > {end} || xsd:integer(?end) < {start}))",
-                  "}"
-                  ]
+            "queryTemplate = PREFIX wdt: <http://www.wikidata.org/prop/direct/> PREFIX wd: <http://www.wikidata.org/entity/>",
+            "PREFIX qualifier: <http://www.wikidata.org/prop/qualifier/>",
+            "SELECT ?start ?end ?uniqueID ?strand ?uri ?entrezGeneID ?name ?description ?refSeq",
+            "WHERE { ?gene wdt:P279 wd:Q7187; wdt:P703 ?strain; wdt:P351 ?uniqueID; wdt:P351 ?entrezGeneID;",
+            "wdt:P2393 ?name; rdfs:label ?description; wdt:P644 ?start; wdt:P645 ?end; wdt:P2548 ?wdstrand ;",
+            "p:P644 ?chr.",
+            "OPTIONAL {?chr qualifier:P2249 ?refSeq.} FILTER(?refSeq = \"{ref}\") "
+            "?strain wdt:P685",
+            "'" + taxid + "'.",
+            "bind( IF(?wdstrand = wd:Q22809680, '1', '-1') as ?strand). bind(str(?gene) as ?uri).",
+            "filter ( !(xsd:integer(?start) > {end} || xsd:integer(?end) < {start}))",
+            "}"
+        ]
         querygenes = " ".join(querygenes)
 
         jbrowse_genes_conf_prefix.append(querygenes)
@@ -188,7 +188,6 @@ class PrepareRefSeqs(object):
         for i in jbrowse_operons_conf_prefix:
             print(i, file=tracks_conf)
         tracks_conf.close()
-
 
 
 
