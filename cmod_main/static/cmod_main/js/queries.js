@@ -107,7 +107,9 @@ var getGenes = function (taxid, callbackOnSuccess) {
 
                 genes = {
                     'name': element['geneLabel']['value'],
-                    'value': element['geneLabel']['value'] + " | " + element['locustag']['value'] + " | " + gqid + " | " + element['entrezid']['value'],
+                    'value': element['geneLabel']['value'] + " | " + element['locustag']['value'] + " | " +
+                    gqid + " | " + element['entrezid']['value'] + "|" + element['uniprot']['value'] + "|" +
+                    element['refseqProtein']['value'],
                     'locustag': element['locustag']['value'],
                     'id': element['entrezid']['value'],
                     'genomicstart': element['genomicstart']['value'],
