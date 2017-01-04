@@ -1174,12 +1174,13 @@ $(document).ready(function () {
             };
 
             var op_template = _.template(
-                "<div style='margin-bottom: 10px' class='row main-data'>" +
-                "<div class='col-xs-8'><%= operon_label %></div> " +
-                "<div class='col-xs-2'><a target='_blank' href='<%= operon_wduri %>'><%= operon_qid %> </a></div> " +
-                "<div id='main-ref-button' class=\"col-xs-2\"> <button type='button' class='main-button-ref btn btn-default div-ref-but' ></button></div>" +
+                '<h3 class="dat-space-bottom main-data" style="padding-bottom: 3px"><%= operon_label %></h3>'
 
-                "</div>"
+                //"<div style='margin-bottom: 10px' class='row main-data'>" +
+                //"<div class='col-xs-8'><%= operon_label %></div> " +
+                //"<div class='col-xs-2'><a target='_blank' href='<%= operon_wduri %>'><%= operon_qid %> </a></div> " +
+                //"<div id='main-ref-button' class=\"col-xs-2\"> <button type='button' class='main-button-ref btn btn-default div-ref-but' ></button></div>" +
+                //"</div>"
             );
             return (op_template(data));
         },
@@ -1208,15 +1209,15 @@ $(document).ready(function () {
             }
 
             var op_gene_template = _.template(
-                "<div class='row main-data'>" +
-                "<div class='col-xs-4 dat-space-bottom'><%= gene_label %></div>" +
-                "<div class='col-xs-1 dat-space-bottom'><a target='_blank' href='http://www.ncbi.nlm.nih.gov/gene/?term=<%= entrez %>'><%= entrez %></a></div>" +
-                "<div class='col-xs-1 dat-space-bottom'><a target='_blank' href='http://www.ncbi.nlm.nih.gov/gene/?term=<%= locus_tag %>'><%= locus_tag %></a></div>" +
-                "<div class='col-xs-1 dat-space-bottom'><a target='_blank' href='<%= gene %>'><%= geneQID %></a></div>" +
-                "<div class='col-xs-1 dat-space-bottom'><%= genStart %></div>" +
-                "<div class='col-xs-1 dat-space-bottom'><%= genEnd %></div>" +
-                "<div class='col-xs-2 dat-space-bottom'><%= strand %></div>" +
-                "<div id='main-ref-button' class=\"col-xs-1\"> <button type='button' class='main-button-ref btn btn-default div-ref-but' ></button></div>" +
+                "<div class='row main-annotations main-data'>" +
+                "<div class='col-xs-4' ><%= gene_label %></div>" +
+                "<div class='col-xs-1'><a target='_blank' href='http://www.ncbi.nlm.nih.gov/gene/?term=<%= entrez %>'><%= entrez %></a></div>" +
+                "<div class='col-xs-1'><a target='_blank' href='http://www.ncbi.nlm.nih.gov/gene/?term=<%= locus_tag %>'><%= locus_tag %></a></div>" +
+                "<div class='col-xs-1'><a target='_blank' href='<%= gene %>'><%= geneQID %></a></div>" +
+                "<div class='col-xs-1'><%= genStart %></div>" +
+                "<div class='col-xs-1'><%= genEnd %></div>" +
+                "<div class='col-xs-2'><%= strand %></div>" +
+                "<div class='col-xs-1' id='main-ref-button'> <button type='button' class='main-button-ref btn btn-default div-ref-but' ></button></div>" +
                 "</div>"
             );
             return (op_gene_template(data));
