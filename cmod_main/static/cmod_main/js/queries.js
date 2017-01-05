@@ -104,12 +104,11 @@ var getGenes = function (taxid, callbackOnSuccess) {
                 var gdid = element['gene']['value'].split("/");
                 var gqid = gdid.slice(-1)[0];
 
-
+                console.log(element);
                 genes = {
                     'name': element['geneLabel']['value'],
                     'value': element['geneLabel']['value'] + " | " + element['locustag']['value'] + " | " +
-                    gqid + " | " + element['entrezid']['value'] + "|" + element['uniprot']['value'] + "|" +
-                    element['refseqProtein']['value'],
+                    gqid + " | " + element['entrezid']['value'],
                     'locustag': element['locustag']['value'],
                     'id': element['entrezid']['value'],
                     'genomicstart': element['genomicstart']['value'],
@@ -314,8 +313,8 @@ var getOperonData = function (entrez, callBackonSuccess) {
         + "             wdt:P645 ?genEnd;  "
         + "             wdt:P2548 ?strand. "
         + "    "
-        + "   ?operon prov:wasDerivedFrom/pr:P248 ?reference_stated_in. "
-        + "   ?reference_stated_in wdt:P698 ?reference_pmid. "
+        + "   OPTIONAL {?operon prov:wasDerivedFrom/pr:P248 ?reference_stated_in. "
+        + "   ?reference_stated_in wdt:P698 ?reference_pmid. }"
         + "   SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\" . } "
         + " } "].join(" ");
 
@@ -350,8 +349,8 @@ var getOperon = function (entrez, callBackonSuccess) {
         "?gene wdt:P351 '" + entrez + "';",
         "p:P361 ?operon.  " +
         "?operon ps:P361 ?operonItem.  " +
-        "?operon prov:wasDerivedFrom/pr:P248 ?reference_stated_in.  " +
-        "?reference_stated_in wdt:P698 ?reference_pmid. " +
+        "OPTIONAL { ?operon prov:wasDerivedFrom/pr:P248 ?reference_stated_in.  " +
+        "?reference_stated_in wdt:P698 ?reference_pmid.} " +
         "SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\" . }}"
     ].join(" ");
     console.log(operonQuery);
