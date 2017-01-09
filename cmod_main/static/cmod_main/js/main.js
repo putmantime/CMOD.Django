@@ -1224,10 +1224,8 @@ $(document).ready(function () {
         },
 
         renderOP: function (operon) {
-            console.log(operon);
             this.$opTab.text("Operon (1)");
             var opD = this.$opData;
-            console.log(opD);
             this.$opData.html(this.generate_operon_template(operon));
             operonRefModal_obj.init(opD, operon.Operon[0]['reference_stated_inLabel']['value'], operon.Operon[0]['reference_stated_in']['value'],  operon.Operon[0]['reference_pmid']['value']);
         },
@@ -1238,7 +1236,6 @@ $(document).ready(function () {
             $.each(operonGenes['Operon'], function (key, element) {
                 //console.log(element);
                 operonData.$opGenes.append(operonData.generate_opGenes_template(element));
-                console.log(operonGenes);
                 operonRefModal_obj.init(opGD, element['reference_stated_inLabel']['value'], element['reference_stated_in']['value'],  element['reference_pmid']['value']);
 
             });
@@ -1304,7 +1301,6 @@ $(document).ready(function () {
             var $retrieved = this.$refRetrieved;
             var $pmid = this.$pmid;
 
-            console.log(element.find('.div-ref-but'));
             element.on('click', function () {
                 //console.log("clicking ref button");
                 $stated.html(stated_in);
@@ -1337,7 +1333,6 @@ $(document).ready(function () {
 
         },
         openModal: function (enzData) {
-            console.log(enzData);
             var $modal = this.$modal;
             var $stated = this.$refStated;
             var $retrieved = this.$refRetrieved;
@@ -1362,7 +1357,6 @@ $(document).ready(function () {
 
     var interProRefModal_obj = {
         init: function (element, stated_in, refurl) {
-            //console.log("interp ref obj thingy");
             this.cacheDom();
             this.openModal(element, stated_in, refurl);
             this.closeModal();
@@ -1412,7 +1406,6 @@ $(document).ready(function () {
 
         },
         openModal: function (element, stated_in, qid, PMID) {
-            console.log(PMID);
             var $modal = this.$modal;
             var $stated = this.$refStated;
             var $PMID = this.$refPMID;
@@ -1469,8 +1462,6 @@ $(document).ready(function () {
 // ///////////////////////////////////////////////Begin Authentication module///////////////////////////////////////////
 
     var getCookie = function (name) {
-        console.log('testing getCookie');
-        console.log('name');
         var cookieValue = null;
         if (document.cookie && document.cookie !== '') {
             var cookies = document.cookie.split(';');
@@ -1516,7 +1507,7 @@ $(document).ready(function () {
                 dataType: 'json',
                 headers: {'X-CSRFToken': csrftoken},
                 success: function (data) {
-                    console.log("OAuth Handshake Success:" + data);
+                    //console.log("OAuth Handshake Success:" + data);
 
                     window.location.replace(data);
                 },

@@ -90,7 +90,7 @@ var getGenes = function (taxid, callbackOnSuccess) {
         "bd:serviceParam wikibase:language \"en\" .",
         "}}"
     ].join(" ");
-    console.log(queryGenes);
+    //console.log(queryGenes);
     $.ajax({
         type: "GET",
         url: endpoint + queryGenes,
@@ -103,12 +103,25 @@ var getGenes = function (taxid, callbackOnSuccess) {
                 gene_count += 1;
                 var gdid = element['gene']['value'].split("/");
                 var gqid = gdid.slice(-1)[0];
+                var protIDs = {};
 
-                console.log(element);
+                if (element.hasOwnProperty('refseqProtein')) {
+                    console.log(element['refseqProtein']['value']);
+                    protIDs['refseqProtein'] = element['refseqProtein']['value']
+                } else {
+                    protIDs['refseqProtein'] = 'None'
+                }
+
+                if (element.hasOwnProperty('uniprot')) {
+                    protIDs['uniprot'] = element['uniprot']['value']
+                } else {
+                    protIDs['uniprot'] = 'None'
+                }
+
                 genes = {
                     'name': element['geneLabel']['value'],
                     'value': element['geneLabel']['value'] + " | " + element['locustag']['value'] + " | " +
-                    gqid + " | " + element['entrezid']['value'],
+                    gqid + " | " + element['entrezid']['value'] + " | " + protIDs['uniprot'] + " | " + protIDs['refseqProtein'],
                     'locustag': element['locustag']['value'],
                     'id': element['entrezid']['value'],
                     'genomicstart': element['genomicstart']['value'],
@@ -117,6 +130,11 @@ var getGenes = function (taxid, callbackOnSuccess) {
                     'gqid': gqid
                 };
 
+
+
+
+
+                console.log(genes);
                 if (element.hasOwnProperty('refSeqChromosome')) {
                     genes['chromosome'] = element['refSeqChromosome']['value']
                 } else {
@@ -214,7 +232,7 @@ var getInterPro = function (uniprot, callBackonSuccess) {
         "filter (lang(?interPro_label) = \"en\") .}"
 
     ].join(" ");
-    console.log(ipQuery);
+    //console.log(ipQuery);
 
     $.ajax({
         type: "GET",
@@ -318,7 +336,7 @@ var getOperonData = function (entrez, callBackonSuccess) {
         + "   SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\" . } "
         + " } "].join(" ");
 
-    console.log(opQuery);
+    //console.log(opQuery);
     $.ajax({
         type: "GET",
         url: endpoint + opQuery,
@@ -353,7 +371,7 @@ var getOperon = function (entrez, callBackonSuccess) {
         "?reference_stated_in wdt:P698 ?reference_pmid.} " +
         "SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\" . }}"
     ].join(" ");
-    console.log(operonQuery);
+    //console.log(operonQuery);
 
     $.ajax({
         type: "GET",
