@@ -1021,7 +1021,7 @@ $(document).ready(function () {
 
             //var uniqueECs = _.uniq(ecNumbers, false);
 
-            $('#ezTab').text('Enzyme Class (' + Object.keys(ecNumbers).length + ')');
+            $('#ezTab').text('Enzyme Activity (' + Object.keys(ecNumbers).length + ')');
 
             if (Object.keys(ecNumbers).length > 0) {
                 $.each(ecNumbers, function (key, element) {
