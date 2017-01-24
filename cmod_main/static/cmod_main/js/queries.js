@@ -30,7 +30,8 @@ var getOrgs = function (callbackOnSuccess) {
     };
 
 
-    var orgTags = [sc, c_psit, c_mur];
+    //var orgTags = [sc, c_psit, c_mur];
+    var orgTags = [];
     var queryOrgs = [
         "SELECT ?species ?speciesLabel ?taxid ?RefSeq",
         "WHERE { ?species wdt:P171* wd:Q10876;",
