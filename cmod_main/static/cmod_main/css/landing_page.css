@@ -1,6 +1,6 @@
 /** {border: dashed black 1px}*/
 html, body{
-    height:100%
+
 }
 .form-control {
     padding-left: 25px;
@@ -22,7 +22,6 @@ html, body{
     height: 100%;
     width: 100%;
     background-color: #385d94;
-    color: whitesmoke;
     padding-top: 5em;
     padding-left: 50px;
     padding-right: 50px;
@@ -51,4 +50,8 @@ html, body{
 }
 #footerList a:hover{
     color: #385d94;
+}
+
+*[class^='col-']{
+    color: whitesmoke;
 }

@@ -28,6 +28,7 @@ def index(request):
 @ensure_csrf_cookie
 def main_page(request):
     main_page_data = {'verified': "False"}
+
     if 'oauth_verifier' in request.GET.keys():
         main_page_data['verified'] = "True"
         request.session['oauth_verifier'] = request.GET['oauth_verifier']
@@ -329,6 +330,7 @@ def wd_oauth(request):
         oauth = json.dumps(request.POST)
         client_message = json.loads(oauth)
         request.session['oauth'] = client_message['oauth']
+
         consumer_token = ConsumerToken(oauth_config.consumer_key, oauth_config.consumer_secret)
 
         request.session['consumer_token'] = {'key': consumer_token.key, 'secret': consumer_token.secret}

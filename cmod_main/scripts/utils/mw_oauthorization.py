@@ -17,6 +17,7 @@ def wd_oauth_handshake_1():
 
 
 
+
     # redirect(mw_redirect)
     # Step 2: Authorize -- send user to MediaWiki to confirm authorization
     # print("Point your browser to: %s" % mw_redirect) #
